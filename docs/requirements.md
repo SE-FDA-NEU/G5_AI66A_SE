@@ -98,6 +98,10 @@ _Business rules: written in #34._
 | `/budget`           | Set and read monthly caps per kind of spending                         | **U**  | P1       |
 | `/stats`            | Breakdown of one month by kind of spending                             | **U**  | P2       |
 
+Seven screens against the required five. **No `A` screen exists this semester:** every account
+sees only its own records (BR4), so there is no administrator role to build. This is stated so
+the absence reads as a decision rather than an omission.
+
 ### Flow
 
 _Flow diagram: written in #31._
