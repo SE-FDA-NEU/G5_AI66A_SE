@@ -24,7 +24,7 @@ month **visible straight after saving**, with no further step.
 - Two of the three have never written their spending down. The third relies on an e-wallet's
   monthly list and still overspends a fund now and then.
 
-*Survey evidence: added in #36 after the survey closes on 17/09.*
+_Survey evidence: added in #36 after the survey closes on 17/09._
 
 **Out of scope this semester:** automatic bank sync, shared ledgers, currencies other than VND,
 PDF report export, and rewards for recording. One interviewee would only use an app that gives
@@ -38,21 +38,21 @@ entry, not a perk.
 Both personas come from the three interviews in `docs/research/interviews.md`. Interviewees are
 identified by number only, because this repository is public.
 
-### Persona 1 — The student on a family allowance *(primary)*
+### Persona 1 — The student on a family allowance _(primary)_
 
-*Persona 1: written in #29.*
+_Persona 1: written in #29._
 
-### Persona 2 — The student who also works *(secondary)*
+### Persona 2 — The student who also works _(secondary)_
 
-*Persona 2: written in #33.*
+_Persona 2: written in #33._
 
 ### How the two differ
 
-*How the two differ: written in #33.*
+_How the two differ: written in #33._
 
 ### Interview note
 
-*Interview note: written in #32.*
+_Interview note: written in #32._
 
 ---
 
@@ -60,34 +60,44 @@ identified by number only, because this repository is public.
 
 ### Scenario 1 — The student on an allowance decides whether a jacket can wait
 
-*Scenario 1: written in #29.*
+_Scenario 1: written in #29._
 
 ### Scenario 2 — The working student keeps a fund away from their savings
 
-*Scenario 2: written in #33.*
+_Scenario 2: written in #33._
 
 ---
 
 ## 4. User stories
 
-*Story table: written in #27.*
+_Story table: written in #27._
 
 ---
 
-*Acceptance criteria for US01 to US10: written in #37.*
+_Acceptance criteria for US01 to US10: written in #37._
 
 ---
 
 ## 5. Business rules
 
-*Business rules: written in #34.*
+_Business rules: written in #34._
 
 ---
 
 ## 6. Screens and flow
 
-*Screens table: written in #30.*
+**Access:** `G` guest, not signed in · `U` signed-in user · `A` administrator
+
+| Route               | Purpose                                                                | Access | Priority |
+| ------------------- | ---------------------------------------------------------------------- | ------ | -------- |
+| `/login`            | Sign in to reach your own records                                      | **G**  | P0       |
+| `/register`         | Create an account and enter immediately                                | **G**  | P0       |
+| `/`                 | This month's income, spending, remainder; cap warnings; recent entries | **U**  | P0       |
+| `/transactions/new` | Log one amount of money spent or received                              | **U**  | P0       |
+| `/transactions/:id` | Correct or remove one entry                                            | **U**  | P1       |
+| `/budget`           | Set and read monthly caps per kind of spending                         | **U**  | P1       |
+| `/stats`            | Breakdown of one month by kind of spending                             | **U**  | P2       |
 
 ### Flow
 
-*Flow diagram: written in #31.*
+_Flow diagram: written in #31._
