@@ -104,9 +104,18 @@ In short, Persona 1 needs **visibility**, while Persona 2 needs **control** over
 8. They put the jacket off until next month's money arrives, rather than go short on meals at the
    end of this one.
 
-### Scenario 2 — The working student keeps a fund away from their savings
+### Scenario 2 — The student keeps their entertainment spending within its monthly limit
 
-_Scenario 2: written in #33._
+1. At the start of the month, the student sets a 1,000,000 ₫ monthly limit for going out with friends and records this limit in the system.
+2. They record each outing when it happens, including a film, a game night, and a birthday karaoke.
+3. By the 18th, after several outings including a 150,000 ₫ cinema trip, their entertainment spending reaches 820,000 ₫.
+4. Without being asked, the system tells them that only 180,000 ₫ of the monthly limit remains, while there are still 12 days left in the month.
+5. When friends suggest a karaoke outing costing 200,000 ₫ per person that weekend, the student checks the remaining amount and decides not to join because the cost would exceed the remaining limit.
+6. On the 30th, they record one final 140,000 ₫ outing, bringing their entertainment spending to 960,000 ₫ for the month, so they do not need to take money from their savings.
+7. They review their spending and see that entertainment accounted for 960,000 ₫ of their 4,800,000 ₫ total spending, or 20%.
+8. For the following month, they keep the entertainment limit at 1,000,000 ₫.
+
+The amounts in this scenario are illustrative and are used to demonstrate the scenario flow; they are not reported figures from Interviewee 2.
 
 ---
 
