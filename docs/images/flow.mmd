@@ -1,10 +1,24 @@
-Every screen in the table above appears below and is reachable from `/login`.
+flowchart TD
+Start([Open]) --> Check{Session valid?}
+Check -- no --> Login["/login"]
+Check -- yes --> Home
 
-![Screen flow: every screen is reachable from /login](images/flow.png)
+    Login -- "no account yet" --> Register["/register"]
+    Register -- created --> Home
+    Login -- correct --> Home["/ overview"]
+    Login -- wrong --> Login
 
-Source of the diagram: [`docs/images/flow.mmd`](images/flow.mmd). Edit that file, then export the image again.
+    Home -- "log something" --> New["/transactions/new"]
+    New -- stored --> Home
+    New -- abandoned --> Home
 
-**Three things this flow fixes.** No route reaches a `U` screen without a valid session, which is
-BR4 expressed as navigation. Every path returns to `/` — both scenarios in section 3 begin and
-end there. Creating an account leads straight to `/`, never back through `/login`, which is the
-first acceptance criterion of US01.
+    Home -- "pick an entry" --> Edit["/transactions/:id"]
+    Edit -- "corrected or removed" --> Home
+
+    Home --> Budget["/budget"]
+    Budget -- "cap saved" --> Home
+
+    Home --> Stats["/stats"]
+    Stats --> Home
+
+    Home -- "sign out" --> Login
