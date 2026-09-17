@@ -40,6 +40,12 @@ identified by number only, because this repository is public.
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
+**Role:** Second-year university student living away from home, supported entirely by a monthly family allowance of 4,000,000 ₫ to 5,000,000 ₫.
+
+- **Goal:** Make the allowance last the full calendar month without running out before the next transfer, and know immediately whether a discretionary purchase is safe to make.
+- **What blocks them:** Does not keep a regular spending log or write purchases down; calculates expenses casually in their head and often overspends discretionary money early in the month.
+- **Technical context:** Uses a smartphone daily on campus and in shared student accommodation; prefers quick mobile interactions over complicated bookkeeping or desktop tools.
+
 **In their words.** _"Bởi vì em là một người chi tiêu hơi hoang phí và cũng không hay tính toán lắm, cho nên là nhiều khi nó sẽ có nhiều thứ bị hơi lố."_ (Interviewee 1, 01:47) — "Because I spend rather lavishly and don't calculate much, things often get a bit out of hand."
 
 ### Persona 2 — The student who also works _(secondary)_
