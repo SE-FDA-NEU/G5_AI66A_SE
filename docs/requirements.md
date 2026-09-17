@@ -40,7 +40,19 @@ identified by number only, because this repository is public.
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
-_Persona 1: written in #29._
+### Persona 1 — The student on a family allowance _(primary)_
+
+**Mai — university student living away from home**
+
+Receives a fixed family allowance of 4,000,000 ₫ per month, spending roughly 3,000,000 ₫ on food and 1,000,000 ₫ on other living expenses. She does not write down what she spends and keeps mental estimates instead, so she often finds out she has overspent only when the money is almost gone before the next transfer.
+
+**Goal:** make her monthly allowance last until the next transfer and know immediately whether a purchase is safe to make.
+
+**Blocked by:** no regular spending record; relying on mental calculations makes it easy to lose track and overspend early in the month.
+
+**In her words:** _"Bởi vì em là một người chi tiêu hơi hoang phí và cũng không hay tính toán lắm, cho nên là nhiều khi nó sẽ có nhiều thứ bị hơi lố."_ (Interviewee 1, 01:47) — "Because I spend rather lavishly and don't calculate much, things often get a bit out of hand."
+
+**Technical context:** phone only, uses it on campus and in her room; never opens a laptop to log daily expenses. The interface has to be fast and work on a small screen.
 
 ### Persona 2 — The student who also works _(secondary)_
 
@@ -60,7 +72,20 @@ _Interview note: written in #32._
 
 ### Scenario 1 — The student on an allowance decides whether a jacket can wait
 
-_Scenario 1: written in #29._
+1. On 1 November the student's family sends the month's 4,000,000 ₫, and that evening the student
+   writes it down as money received.
+2. Each evening before bed they write down what they spent that day, usually about 100,000 ₫ on
+   food; each purchase takes a few seconds to write down.
+3. After each one they see how much of the month's money is left, without adding anything up.
+4. On the 10th they realise they skipped an evening, look back over the last few days, find that a
+   45,000 ₫ lunch is missing and add it, checking that nothing has been written down twice.
+5. On the 12th a lecturer asks the class to buy a 180,000 ₫ textbook. Before paying, they check:
+   2,530,000 ₫ is left for the 19 days until the end of the month.
+6. They buy the textbook and write it down, and 2,350,000 ₫ is left.
+7. They had planned to buy a 450,000 ₫ jacket that weekend. That would leave 1,900,000 ₫, exactly
+   100,000 ₫ a day, which is what they spend on food alone.
+8. They put the jacket off until next month's money arrives, rather than go short on meals at the
+   end of this one.
 
 ### Scenario 2 — The working student keeps a fund away from their savings
 
