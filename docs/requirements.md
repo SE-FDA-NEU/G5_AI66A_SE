@@ -95,7 +95,20 @@ _Scenario 2: written in #33._
 
 ## 4. User stories
 
-_Story table: written in #27._
+| ID | Story | Priority | Points |
+| --- | --- | --- | --- |
+| US01 | As a new user, I want to create an account with an email and a password, so that my spending stays private to me. | P0 | 3 |
+| US02 | As a returning user, I want to sign in once and stay signed in, so that logging a purchase is never delayed by a password. | P0 | 3 |
+| US03 | As someone who has just spent or received money, I want to write it down in seconds, so that I do it before I forget. | P0 | 5 |
+| US04 | As a user, I want to see this month's income, spending and what is left, so that I know where I stand without adding it up. | P0 | 3 |
+| US05 | As a user, I want to look back over recent entries, so that I can check for mistakes and duplicates. | P0 | 3 |
+| US06 | As a user, I want to correct or remove an entry I got wrong, so that my totals are not skewed. | P1 | 3 |
+| US07 | As someone writing down a purchase, I want the kind of spending suggested from the words I type, so that I do not have to search a list for it. | P1 | 5 |
+| US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under. | P1 | 5 |
+| US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do. | P2 | 5 |
+| US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut. | P2 | 5 |
+
+**Five P0 · three P1 · two P2 · 40 points total.**
 
 ---
 
