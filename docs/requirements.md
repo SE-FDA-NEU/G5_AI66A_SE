@@ -40,7 +40,7 @@ identified by number only, because this repository is public.
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
-_Persona 1: written in #29._
+**In their words.** _"Bởi vì em là một người chi tiêu hơi hoang phí và cũng không hay tính toán lắm, cho nên là nhiều khi nó sẽ có nhiều thứ bị hơi lố."_ (Interviewee 1, 01:47) — "Because I spend rather lavishly and don't calculate much, things often get a bit out of hand."
 
 ### Persona 2 — The student who also works _(secondary)_
 
