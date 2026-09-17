@@ -35,7 +35,7 @@ entry, not a perk.
 
 ## 2. Personas
 
-Both personas come from the three interviews in `docs/research/interviews.md`. 
+Both personas come from the three interviews in `docs/research/interviews.md`.
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
@@ -61,18 +61,27 @@ Studies and works at the same time. Pays for rent, food, coffee and outings with
 
 **Blocked by:** spending can exceed a fund's limit before they realise it, leaving them to use savings to cover the difference.
 
-**In their words:** *"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."* (Interviewee 2, 02:22)
+**In their words:** _"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."_ (Interviewee 2, 02:22)
 
 **Technical skill:** regularly uses a mobile e-wallet that automatically categorises spending.
 
-
 ### How the two differ
 
-_How the two differ: written in #33._
+Persona 1 needs to **see** what is left of a fixed monthly amount with as little effort as possible, because she has no regular habit of recording expenses.
+
+Persona 2 already tracks spending through an e-wallet and separates money into different funds. They need to **control** these funds and avoid exceeding their planned spending limits.
+
+In short, Persona 1 needs **visibility**, while Persona 2 needs **control** over spending limits.
 
 ### Interview note
 
-_Interview note: written in #32._
+|                           |                                                                                                                                                                                                                                                       |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Spoke to**              | Interviewee 1, first-year student · 14/09/2026 · 02:00 minutes · by @levanduc36<br>Interviewee 2, studies and works · 14/09/2026 · 02:30 minutes · by @levanduc36<br>Interviewee 3, second-year student · 14/09/2026 · 02:00 minutes · by @levanduc36 |
+| **Method**                | Open questions about monthly spending, the last time money ran out early, whether they record spending, and any limit they keep. Recorded on video, with spoken consent at the start.                                                                 |
+| **Stated limitation**     | Interviewees 1 and 3 were also asked whether they would use such an app. An answer to a hypothetical question is weak evidence, so the personas rest on what the interviewees described doing, not on those two answers.                              |
+| **Where the notes are**   | `docs/research/interviews.md`. The videos stay in the team's drive and are not committed, because this repository is public.                                                                                                                          |
+| **Cross-checked against** | _Added in #36 after the survey closes on 17/09._                                                                                                                                                                                                      |
 
 ---
 
