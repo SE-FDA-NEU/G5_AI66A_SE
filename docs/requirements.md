@@ -108,6 +108,8 @@ _Scenario 2: written in #33._
 | US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do. | P2 | 5 |
 | US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut. | P2 | 5 |
 
+**Five P0 · three P1 · two P2 · 40 points total.**
+
 ---
 
 _Acceptance criteria for US01 to US10: written in #37._
