@@ -35,10 +35,7 @@ entry, not a perk.
 
 ## 2. Personas
 
-Both personas come from the three interviews in `docs/research/interviews.md`. Interviewees are
-identified by number only, because this repository is public.
-
-### Persona 1 — The student on a family allowance _(primary)_
+Both personas come from the three interviews in `docs/research/interviews.md`.
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
@@ -56,15 +53,35 @@ Receives a fixed family allowance of 4,000,000 ₫ per month, spending roughly 3
 
 ### Persona 2 — The student who also works _(secondary)_
 
-_Persona 2: written in #33._
+**Thanh — student and worker, manages shared and personal funds**
+
+Studies and works at the same time. Pays for rent, food, coffee and outings with friends, and everyday necessities. They divide their money into personal and shared funds and use an e-wallet to track spending by category each month. Even with this system, they sometimes spend more than planned and have to take money from savings to cover the difference.
+
+**Goal:** keep each spending fund within its monthly limit without using savings to cover overspending.
+
+**Blocked by:** spending can exceed a fund's limit before they realise it, leaving them to use savings to cover the difference.
+
+**In their words:** _"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."_ (Interviewee 2, 02:22)
+
+**Technical skill:** regularly uses a mobile e-wallet that automatically categorises spending.
 
 ### How the two differ
 
-_How the two differ: written in #33._
+Persona 1 needs to **see** what is left of a fixed monthly amount with as little effort as possible, because she has no regular habit of recording expenses.
+
+Persona 2 already tracks spending through an e-wallet and separates money into different funds. They need to **control** these funds and avoid exceeding their planned spending limits.
+
+In short, Persona 1 needs **visibility**, while Persona 2 needs **control** over spending limits.
 
 ### Interview note
 
-_Interview note: written in #32._
+|                           |                                                                                                                                                                                                                                                       |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Spoke to**              | Interviewee 1, first-year student · 14/09/2026 · 02:00 minutes · by @levanduc36<br>Interviewee 2, studies and works · 14/09/2026 · 02:30 minutes · by @levanduc36<br>Interviewee 3, second-year student · 14/09/2026 · 02:00 minutes · by @levanduc36 |
+| **Method**                | Open questions about monthly spending, the last time money ran out early, whether they record spending, and any limit they keep. Recorded on video, with spoken consent at the start.                                                                 |
+| **Stated limitation**     | Interviewees 1 and 3 were also asked whether they would use such an app. An answer to a hypothetical question is weak evidence, so the personas rest on what the interviewees described doing, not on those two answers.                              |
+| **Where the notes are**   | `docs/research/interviews.md`. The videos stay in the team's drive and are not committed, because this repository is public.                                                                                                                          |
+| **Cross-checked against** | _Added in #36 after the survey closes on 17/09._                                                                                                                                                                                                      |
 
 ---
 
@@ -87,9 +104,18 @@ _Interview note: written in #32._
 8. They put the jacket off until next month's money arrives, rather than go short on meals at the
    end of this one.
 
-### Scenario 2 — The working student keeps a fund away from their savings
+### Scenario 2 — The student keeps their entertainment spending within its monthly limit
 
-_Scenario 2: written in #33._
+1. At the start of the month, the student sets a 1,000,000 ₫ monthly limit for going out with friends and records this limit in the system.
+2. They record each outing when it happens, including a film, a game night, and a birthday karaoke.
+3. By the 18th, after several outings including a 150,000 ₫ cinema trip, their entertainment spending reaches 820,000 ₫.
+4. Without being asked, the system tells them that only 180,000 ₫ of the monthly limit remains, while there are still 12 days left in the month.
+5. When friends suggest a karaoke outing costing 200,000 ₫ per person that weekend, the student checks the remaining amount and decides not to join because the cost would exceed the remaining limit.
+6. On the 30th, they record one final 140,000 ₫ outing, bringing their entertainment spending to 960,000 ₫ for the month, so they do not need to take money from their savings.
+7. They review their spending and see that entertainment accounted for 960,000 ₫ of their 4,800,000 ₫ total spending, or 20%.
+8. For the following month, they keep the entertainment limit at 1,000,000 ₫.
+
+The amounts in this scenario are illustrative and are used to demonstrate the scenario flow; they are not reported figures from Interviewee 2.
 
 ---
 
