@@ -60,7 +60,20 @@ _Interview note: written in #32._
 
 ### Scenario 1 — The student on an allowance decides whether a jacket can wait
 
-_Scenario 1: written in #29._
+1. On 1 November the student's family sends the month's 4,000,000 ₫, and that evening the student
+   writes it down as money received.
+2. Each evening before bed they write down what they spent that day, usually about 100,000 ₫ on
+   food; each purchase takes a few seconds to write down.
+3. After each one they see how much of the month's money is left, without adding anything up.
+4. On the 10th they realise they skipped an evening, look back over the last few days, find that a
+   45,000 ₫ lunch is missing and add it, checking that nothing has been written down twice.
+5. On the 12th a lecturer asks the class to buy a 180,000 ₫ textbook. Before paying, they check:
+   2,530,000 ₫ is left for the 19 days until the end of the month.
+6. They buy the textbook and write it down, and 2,350,000 ₫ is left.
+7. They had planned to buy a 450,000 ₫ jacket that weekend. That would leave 1,900,000 ₫, exactly
+   100,000 ₫ a day, which is what they spend on food alone.
+8. They put the jacket off until next month's money arrives, rather than go short on meals at the
+   end of this one.
 
 ### Scenario 2 — The working student keeps a fund away from their savings
 
