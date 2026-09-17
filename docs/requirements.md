@@ -35,10 +35,7 @@ entry, not a perk.
 
 ## 2. Personas
 
-Both personas come from the three interviews in `docs/research/interviews.md`. Interviewees are
-identified by number only, because this repository is public.
-
-### Persona 1 — The student on a family allowance _(primary)_
+Both personas come from the three interviews in `docs/research/interviews.md`. 
 
 ### Persona 1 — The student on a family allowance _(primary)_
 
@@ -56,7 +53,18 @@ Receives a fixed family allowance of 4,000,000 ₫ per month, spending roughly 3
 
 ### Persona 2 — The student who also works _(secondary)_
 
-_Persona 2: written in #33._
+**Thanh — student and worker, manages shared and personal funds**
+
+Studies and works at the same time. Pays for rent, food, coffee and outings with friends, and everyday necessities. They divide their money into personal and shared funds and use an e-wallet to track spending by category each month. Even with this system, they sometimes spend more than planned and have to take money from savings to cover the difference.
+
+**Goal:** keep each spending fund within its monthly limit without using savings to cover overspending.
+
+**Blocked by:** spending can exceed a fund's limit before they realise it, leaving them to use savings to cover the difference.
+
+**In their words:** *"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."* (Interviewee 2, 02:22)
+
+**Technical skill:** regularly uses a mobile e-wallet that automatically categorises spending.
+
 
 ### How the two differ
 
