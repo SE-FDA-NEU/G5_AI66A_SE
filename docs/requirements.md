@@ -145,8 +145,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   second sign-in**.
 - Given `hoa@example.com` is already registered, when the user tries the same address again,
   then the message reads exactly **"Email này đã được đăng ký"** and no second account exists.
-- Given a password of **5 characters**, when the user submits, then it is rejected, the message
-  names the password field, and no account is created. _(BR2)_
+- Given a password of **5 characters**, when the user submits, then it is rejected with **"Password must be 6 to 128 characters"** and no account is created. _(BR2)_
 
 ### US02 — Sign in and stay signed in · P0 · 3 points · `/login`
 
@@ -212,8 +211,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   again, then it still reads **3,000,000**.
 - Given that cap already exists, when **2,000,000** is saved for food for the same month, then
   there is **exactly one** cap record for food this month and it reads **2,000,000**. _(BR7)_
-- Given an income category such as **"Lương"** is chosen, when a cap of **5,000,000** is
-  submitted, then it is rejected and the message says caps apply to spending only. _(BR8)_
+- Given an income category such as **"Salary"** is chosen, when a cap of **5,000,000** is submitted, then it is rejected with **"Caps apply to spending only"**. _(BR8)_
 
 ### US09 — Warn before the cap is reached · P2 · 5 points · `/`
 
