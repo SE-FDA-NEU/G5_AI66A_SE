@@ -121,24 +121,114 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 ## 4. User stories
 
-| ID | Story | Priority | Points |
-| --- | --- | --- | --- |
-| US01 | As a new user, I want to create an account with an email and a password, so that my spending stays private to me. | P0 | 3 |
-| US02 | As a returning user, I want to sign in once and stay signed in, so that logging a purchase is never delayed by a password. | P0 | 3 |
-| US03 | As someone who has just spent or received money, I want to write it down in seconds, so that I do it before I forget. | P0 | 5 |
-| US04 | As a user, I want to see this month's income, spending and what is left, so that I know where I stand without adding it up. | P0 | 3 |
-| US05 | As a user, I want to look back over recent entries, so that I can check for mistakes and duplicates. | P0 | 3 |
-| US06 | As a user, I want to correct or remove an entry I got wrong, so that my totals are not skewed. | P1 | 3 |
-| US07 | As someone writing down a purchase, I want the kind of spending suggested from the words I type, so that I do not have to search a list for it. | P1 | 5 |
-| US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under. | P1 | 5 |
-| US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do. | P2 | 5 |
-| US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut. | P2 | 5 |
+| ID   | Story                                                                                                                                           | Priority | Points |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------ |
+| US01 | As a new user, I want to create an account with an email and a password, so that my spending stays private to me.                               | P0       | 3      |
+| US02 | As a returning user, I want to sign in once and stay signed in, so that logging a purchase is never delayed by a password.                      | P0       | 3      |
+| US03 | As someone who has just spent or received money, I want to write it down in seconds, so that I do it before I forget.                           | P0       | 5      |
+| US04 | As a user, I want to see this month's income, spending and what is left, so that I know where I stand without adding it up.                     | P0       | 3      |
+| US05 | As a user, I want to look back over recent entries, so that I can check for mistakes and duplicates.                                            | P0       | 3      |
+| US06 | As a user, I want to correct or remove an entry I got wrong, so that my totals are not skewed.                                                  | P1       | 3      |
+| US07 | As someone writing down a purchase, I want the kind of spending suggested from the words I type, so that I do not have to search a list for it. | P1       | 5      |
+| US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under.                        | P1       | 5      |
+| US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do.                                               | P2       | 5      |
+| US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut.                                                     | P2       | 5      |
 
 **Five P0 · three P1 · two P2 · 40 points total.**
 
 ---
 
-_Acceptance criteria for US01 to US10: written in #37._
+### US01 — Create an account · P0 · 3 points · `/register`
+
+- Given no account exists for `hoa@example.com`, when the user registers that address with an
+  8-character password, then the account is created and they reach the overview **without a
+  second sign-in**.
+- Given `hoa@example.com` is already registered, when the user tries the same address again,
+  then the message reads exactly **"Email này đã được đăng ký"** and no second account exists.
+- Given a password of **5 characters**, when the user submits, then it is rejected, the message
+  names the password field, and no account is created. _(BR2)_
+
+### US02 — Sign in and stay signed in · P0 · 3 points · `/login`
+
+- Given the correct email and password, when the user signs in, then the overview appears within
+  **3 seconds**.
+- Given the user signed in and the application was fully closed, when it is opened again **within
+  7 days**, then they are still signed in and are not asked for a password. _(BR10)_
+- Given a wrong password, **or** an email that was never registered, when the user submits, then
+  both cases return exactly **"Email hoặc mật khẩu không đúng"**. _(BR3)_
+
+### US03 — Log a purchase in seconds · P0 · 5 points · `/transactions/new`
+
+- Given a person who has never used the system, when timing from the moment they begin an entry
+  to the moment it appears in their list, then the elapsed time is **under 15 seconds**.
+- Given an amount of **55,000** and the note **"tra sua"**, when the entry is stored, then the
+  month's spending total increases by **exactly 55,000** and the entry is filed under food and
+  drink. _(BR6)_
+- Given **4,000,000** is entered as money received, when it is stored, then the month's income
+  increases by **exactly 4,000,000** and the spending total does not change.
+- Given the amount is left empty, or is **0**, or is **−20,000**, when the user submits, then it
+  is rejected with **"Nhập số tiền lớn hơn 0"** and nothing is stored. _(BR5)_
+
+### US04 — This month's position · P0 · 3 points · `/`
+
+- Given income of **4,000,000** and spending of **55,000** and **150,000** this month, when the
+  overview loads, then it shows income **4,000,000**, spending **205,000** and remaining
+  **3,795,000**.
+- Given **3,795,000** is left this month, when an entry of **30,000** is saved, then the overview
+  appears straight away showing **3,765,000** left, with no further step.
+- Given no entries at all this month, when the overview loads, then it shows
+  **"Tháng này chưa có giao dịch nào"** rather than three zeros.
+
+### US05 — Look back over recent entries · P0 · 3 points · `/`
+
+- Given **25 entries** this month, when the list loads, then the **20 most recent** are shown,
+  newest first, each with its amount, note, kind of spending and date.
+- Given the phone has no network, when the user refreshes the list, then the message reads
+  **"Không có mạng, kéo xuống để thử lại"** and the previously loaded entries stay on screen.
+
+### US06 — Correct or remove an entry · P1 · 3 points · `/transactions/:id`
+
+- Given an entry stored as **150,000** that should be **50,000**, when it is corrected, then the
+  month's spending total drops by **exactly 100,000**.
+- Given the user asks to remove an entry, when they are asked to confirm, then the entry is
+  removed **only after a second confirmation** and not before.
+- Given entry id **412** belongs to another account, when this user requests it by id, then the
+  response is **"not found"** and none of its content is returned. _(BR4)_
+
+### US07 — Suggest the kind of spending · P1 · 5 points · `/transactions/new`
+
+- Given the note **"tra sua"**, when the user finishes typing it, then **"Ăn uống"** is suggested;
+  given **"shopee"**, **"Mua sắm"** is suggested.
+- Given **"Ăn uống"** was suggested and the user changes it to **"Giải trí"** before saving, when
+  the entry is stored, then it is stored as **"Giải trí"**. _(BR6)_
+- Given a test set of **20 typical notes**, when each is processed, then **at least 14**
+  suggestions are correct.
+- Given the note **"zzz"**, which matches nothing, when the user finishes typing it, then
+  **nothing is suggested** and the kind of spending is left empty for the user to choose. _(BR6)_
+
+### US08 — Cap spending for a month · P1 · 5 points · `/budget`
+
+- Given a cap of **3,000,000** on food for this month, when it is saved and the page is opened
+  again, then it still reads **3,000,000**.
+- Given that cap already exists, when **2,000,000** is saved for food for the same month, then
+  there is **exactly one** cap record for food this month and it reads **2,000,000**. _(BR7)_
+- Given an income category such as **"Lương"** is chosen, when a cap of **5,000,000** is
+  submitted, then it is rejected and the message says caps apply to spending only. _(BR8)_
+
+### US09 — Warn before the cap is reached · P2 · 5 points · `/`
+
+- Given a cap of **3,000,000** and **2,500,000** already spent, when the overview loads, then an
+  amber warning states that **500,000** is left. _(BR9)_
+- Given **3,200,000** spent against the same cap, when the overview loads, then the warning is
+  red and states **200,000 over**.
+- Given no cap has been set, when the overview loads, then **no warning appears at all**.
+
+### US10 — See which kinds of spending took the most · P2 · 5 points · `/stats`
+
+- Given food of **3,000,000** out of **4,000,000** total spending for the month, when the
+  breakdown loads, then food is listed **first** at **75%**.
+- Given a month with no entries, when the breakdown loads, then it shows
+  **"Tháng này chưa có dữ liệu"** and no empty chart is drawn.
 
 ---
 
