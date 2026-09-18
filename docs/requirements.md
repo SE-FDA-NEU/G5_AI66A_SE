@@ -216,6 +216,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 - Given a cap of **3,000,000** and **2,500,000** already spent, when the overview loads, then an
   amber warning states that **500,000** is left. _(BR9)_
+- Given exactly **3,000,000** spent against the same cap, when the overview loads, then the
+  warning is still **amber** and states that **0** is left. _(BR9)_
 - Given **3,200,000** spent against the same cap, when the overview loads, then the warning is
   red and states **200,000 over**.
 - Given no cap has been set, when the overview loads, then **no warning appears at all**.
