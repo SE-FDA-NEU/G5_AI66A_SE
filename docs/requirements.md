@@ -160,9 +160,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 - Given a person who has never used the system, when timing from the moment they begin an entry
   to the moment it appears in their list, then the elapsed time is **under 15 seconds**.
-- Given an amount of **55,000** and the note **"tra sua"**, when the entry is stored, then the
-  month's spending total increases by **exactly 55,000** and the entry is filed under food and
-  drink. _(BR6)_
+- Given an amount of **55,000** and the note **"tra sua"** (milk tea), when the entry is stored, then the
+  month's spending total increases by **exactly 55,000** and the entry is filed under **"Food"**. _(BR6)_
 - Given **4,000,000** is entered as money received, when it is stored, then the month's income
   increases by **exactly 4,000,000** and the spending total does not change.
 - Given the amount is left empty, or is **0**, or is **−20,000**, when the user submits, then it
@@ -189,8 +188,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 - Given an entry stored as **150,000** that should be **50,000**, when it is corrected, then the
   month's spending total drops by **exactly 100,000**.
-- Given the user asks to remove an entry, when they are asked to confirm, then the entry is
-  removed **only after a second confirmation** and not before.
+- Given the user asks to remove an entry and the question **"Delete this entry?"** appears, when they
+  choose **Cancel**, then the entry stays; when they choose **Delete**, then it is removed.
 - Given entry id **412** belongs to another account, when this user requests it by id, then the
   response is **"not found"** and none of its content is returned. _(BR4)_
 
@@ -200,8 +199,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   given **"shopee"**, **"Mua sắm"** is suggested.
 - Given **"Ăn uống"** was suggested and the user changes it to **"Giải trí"** before saving, when
   the entry is stored, then it is stored as **"Giải trí"**. _(BR6)_
-- Given a test set of **20 typical notes**, when each is processed, then **at least 14**
-  suggestions are correct.
+- Given the **10 test notes** listed in `docs/research/competitors.md`, when each is processed, then
+  **at least 7** suggestions are correct.
 - Given the note **"zzz"**, which matches nothing, when the user finishes typing it, then
   **nothing is suggested** and the kind of spending is left empty for the user to choose. _(BR6)_
 
