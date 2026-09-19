@@ -24,7 +24,7 @@ month **visible straight after saving**, with no further step.
 - Two of the three have never written their spending down. The third relies on an e-wallet's
   monthly list and still overspends a fund now and then.
 
-_Survey evidence: added in #36 after the survey closes on 17/09._
+**Survey evidence:** Shown in `docs/research/survey.md`
 
 **Out of scope this semester:** automatic bank sync, shared ledgers, currencies other than VND,
 PDF report export, and rewards for recording. One interviewee would only use an app that gives
@@ -81,7 +81,7 @@ In short, Persona 1 needs **visibility**, while Persona 2 needs **control** over
 | **Method**                | Open questions about monthly spending, the last time money ran out early, whether they record spending, and any limit they keep. Recorded on video, with spoken consent at the start.                                                                 |
 | **Stated limitation**     | Interviewees 1 and 3 were also asked whether they would use such an app. An answer to a hypothetical question is weak evidence, so the personas rest on what the interviewees described doing, not on those two answers.                              |
 | **Where the notes are**   | `docs/research/interviews.md`. The videos stay in the team's drive and are not committed, because this repository is public.                                                                                                                          |
-| **Cross-checked against** | _Added in #36 after the survey closes on 17/09._                                                                                                                                                                                                      |
+| **Cross-checked against** | 9 survey responses, `docs/research/survey.md`                                                                                                                                                                                                         |
 
 ---
 
