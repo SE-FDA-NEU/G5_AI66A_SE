@@ -28,3 +28,21 @@ Note: Reviews were collected from the App Store. Each review is assigned to one 
 | Login                   |           — |                1 |          — |
 | Others                  |           — |                1 |          3 |
 | _Total_                 |        _20_ |             _20_ |       _20_ |
+
+## Test notes for US07
+
+US07 uses these ten notes as its test set. A note is typed as a user would type it, and a
+suggestion is right when it matches the expected kind of spending.
+
+| Note, as typed | Means            | Expected      |
+| -------------- | ---------------- | ------------- |
+| tra sua        | milk tea         | Food          |
+| com trua       | lunch            | Food          |
+| ca phe         | coffee           | Food          |
+| grab           | a Grab ride      | Transport     |
+| xang xe        | petrol           | Transport     |
+| shopee         | a Shopee order   | Shopping      |
+| sieu thi       | supermarket      | Shopping      |
+| tien dien      | electricity bill | Bills         |
+| xem phim       | cinema           | Entertainment |
+| karaoke        | karaoke          | Entertainment |
