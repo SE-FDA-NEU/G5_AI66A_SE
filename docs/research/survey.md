@@ -170,5 +170,14 @@ Complaints that appear both there and in survey question G3: Too many fields per
 
 ## What changed in requirements.md because of this
 
-Add file destination to Survey evidence
-Change "Cross-checked against" content in Interview note
+| Line                                     | Before                                          | After                                                    | Evidence                                                               |
+| ---------------------------------------- | ----------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
+| §1 Why we believe this                   | placeholder for survey evidence                 | three survey findings and the app test                   | D1, D2, D3, E4; competitors.md                                         |
+| §1 Out of scope                          | not mentioned                                   | caps for a single occasion                               | D6: 3 of 4 who set caps set them per occasion                          |
+| §2 Interview note, Cross-checked against | placeholder                                     | 9 survey responses                                       | Responses                                                              |
+| BR9                                      | warns at 80%                                    | warns at 70%                                             | E3: 70% chosen by 4 of 9, 80% by 3 of 9                                |
+| US09                                     | no criterion at the threshold                   | a criterion at exactly 2,100,000, 70% of a 3,000,000 cap | E3                                                                     |
+| US07                                     | P1                                              | unchanged                                                | E2: 3 of 9 prefer to choose, under the 40% threshold                   |
+| US07 examples, BR6                       | "tra sua" and "shopee"; eight kinds of spending | unchanged, already cover the top four                    | D4: eating out 6, online shopping 5, bills and rent 4, entertainment 4 |
+| US03                                     | under 15 seconds                                | unchanged                                                | E1: median 15 s over all 9                                             |
+| Scenario 1                               | written down in the evening                     | unchanged, now confirmed                                 | D5: none of the 3 who gave a time records right after paying           |
