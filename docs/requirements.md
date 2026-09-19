@@ -268,4 +268,13 @@ the absence reads as a decision rather than an omission.
 
 ### Flow
 
-_Flow diagram: written in #31._
+Every screen in the table above appears below and is reachable from `/login`.
+
+![Screen flow: every screen is reachable from /login](images/flow.png)
+
+Source of the diagram: [`docs/images/flow.mmd`](images/flow.mmd). Edit that file, then export the image again.
+
+**Three things this flow fixes.** No route reaches a `U` screen without a valid session, which is
+BR4 expressed as navigation. Every path returns to `/` — both scenarios in section 3 begin and
+end there. Creating an account leads straight to `/`, never back through `/login`, which is the
+first acceptance criterion of US01.
