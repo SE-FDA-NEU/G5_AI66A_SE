@@ -24,7 +24,7 @@ month **visible straight after saving**, with no further step.
 - Two of the three have never written their spending down. The third relies on an e-wallet's
   monthly list and still overspends a fund now and then.
 
-_Survey evidence: added in #36 after the survey closes on 17/09._
+**Survey evidence:** Shown in `docs/research/survey.md`
 
 **Out of scope this semester:** automatic bank sync, shared ledgers, currencies other than VND,
 PDF report export, and rewards for recording. One interviewee would only use an app that gives
@@ -81,7 +81,7 @@ In short, Persona 1 needs **visibility**, while Persona 2 needs **control** over
 | **Method**                | Open questions about monthly spending, the last time money ran out early, whether they record spending, and any limit they keep. Recorded on video, with spoken consent at the start.                                                                 |
 | **Stated limitation**     | Interviewees 1 and 3 were also asked whether they would use such an app. An answer to a hypothetical question is weak evidence, so the personas rest on what the interviewees described doing, not on those two answers.                              |
 | **Where the notes are**   | `docs/research/interviews.md`. The videos stay in the team's drive and are not committed, because this repository is public.                                                                                                                          |
-| **Cross-checked against** | _Added in #36 after the survey closes on 17/09._                                                                                                                                                                                                      |
+| **Cross-checked against** | 9 survey responses, `docs/research/survey.md`                                                                                                                                                                                                         |
 
 ---
 
@@ -121,18 +121,18 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 ## 4. User stories
 
-| ID | Story | Priority | Points |
-| --- | --- | --- | --- |
-| US01 | As a new user, I want to create an account with an email and a password, so that my spending stays private to me. | P0 | 3 |
-| US02 | As a returning user, I want to sign in once and stay signed in, so that logging a purchase is never delayed by a password. | P0 | 3 |
-| US03 | As someone who has just spent or received money, I want to write it down in seconds, so that I do it before I forget. | P0 | 5 |
-| US04 | As a user, I want to see this month's income, spending and what is left, so that I know where I stand without adding it up. | P0 | 3 |
-| US05 | As a user, I want to look back over recent entries, so that I can check for mistakes and duplicates. | P0 | 3 |
-| US06 | As a user, I want to correct or remove an entry I got wrong, so that my totals are not skewed. | P1 | 3 |
-| US07 | As someone writing down a purchase, I want the kind of spending suggested from the words I type, so that I do not have to search a list for it. | P1 | 5 |
-| US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under. | P1 | 5 |
-| US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do. | P2 | 5 |
-| US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut. | P2 | 5 |
+| ID   | Story                                                                                                                                           | Priority | Points |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------ |
+| US01 | As a new user, I want to create an account with an email and a password, so that my spending stays private to me.                               | P0       | 3      |
+| US02 | As a returning user, I want to sign in once and stay signed in, so that logging a purchase is never delayed by a password.                      | P0       | 3      |
+| US03 | As someone who has just spent or received money, I want to write it down in seconds, so that I do it before I forget.                           | P0       | 5      |
+| US04 | As a user, I want to see this month's income, spending and what is left, so that I know where I stand without adding it up.                     | P0       | 3      |
+| US05 | As a user, I want to look back over recent entries, so that I can check for mistakes and duplicates.                                            | P0       | 3      |
+| US06 | As a user, I want to correct or remove an entry I got wrong, so that my totals are not skewed.                                                  | P1       | 3      |
+| US07 | As someone writing down a purchase, I want the kind of spending suggested from the words I type, so that I do not have to search a list for it. | P1       | 5      |
+| US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under.                        | P1       | 5      |
+| US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do.                                               | P2       | 5      |
+| US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut.                                                     | P2       | 5      |
 
 **Five P0 · three P1 · two P2 · 40 points total.**
 

@@ -1,13 +1,12 @@
 # Survey and competitor comparison
 
-|                         |                                                                                                 |
-| ----------------------- | ----------------------------------------------------------------------------------------------- |
-| **Open**                | 13/09/2026 to 17/09/2026, 20:00                                                                 |
-| **Responses**           | ‹from survey-tables.md: n total · n students · n in work · n did not say›                       |
-| **Distributed through** | ‹class group, family groups, internship group, …›                                               |
-| **Sampling caveat**     | ‹for example: mostly students, because the team's own networks are mostly students›             |
-| **Raw data**            | Private Google Sheet, team only. Not committed, because free-text answers could identify people |
-| **Decision rules**      | Fixed before the survey opened, in the team's survey plan, and applied without adjustment       |
+|                     |                                                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| **Open**            | 13/09/2026 to 17/09/2026, 20:00                                                                 |
+| **Responses**       | 9 total · 8 students · 1 in work                                                                |
+| **Sampling caveat** | mostly students, because the team's own networks are mostly students                            |
+| **Raw data**        | Private Google Sheet, team only. Not committed, because free-text answers could identify people |
+| **Decision rules**  | Fixed before the survey opened, in the team's survey plan, and applied without adjustment       |
 
 ## Results
 
@@ -171,8 +170,5 @@ Complaints that appear both there and in survey question G3: ‹each complaint, 
 
 ## What changed in requirements.md because of this
 
-| Line                                     | Before                          | After                | Evidence               |
-| ---------------------------------------- | ------------------------------- | -------------------- | ---------------------- |
-| §1 Why we believe this                   | placeholder for survey evidence | ‹the survey bullets› | ‹questions and counts› |
-| §2 Interview note, Cross-checked against | placeholder                     | ‹N› survey responses | Responses table        |
-| ‹line›                                   | ‹before›                        | ‹after›              | ‹question: n of N›     |
+Add file destination to Survey evidence
+Change "Cross-checked against" content in Interview note
