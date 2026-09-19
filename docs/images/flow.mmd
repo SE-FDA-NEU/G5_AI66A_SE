@@ -1,11 +1,14 @@
 flowchart TD
-Start([Open]) --> Check{Session valid?}
-Check -- no --> Login["/login"]
-Check -- yes --> Home
+    Start([Open]) --> Check{Session valid?}
+
+    Check -- no --> Login["/login"]
+    Check -- yes --> Home["/"]
 
     Login -- "no account yet" --> Register["/register"]
     Register -- created --> Home
-    Login -- correct --> Home["/ overview"]
+    Register -- abandoned --> Login
+
+    Login -- correct --> Home
     Login -- wrong --> Login
 
     Home -- "log something" --> New["/transactions/new"]
@@ -14,9 +17,11 @@ Check -- yes --> Home
 
     Home -- "pick an entry" --> Edit["/transactions/:id"]
     Edit -- "corrected or removed" --> Home
+    Edit -- abandoned --> Home
 
     Home --> Budget["/budget"]
     Budget -- "cap saved" --> Home
+    Budget -- "abandoned" --> Home
 
     Home --> Stats["/stats"]
     Stats --> Home
