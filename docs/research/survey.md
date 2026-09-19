@@ -166,7 +166,7 @@ No story changes priority. The only rule that changes is BR9, from 80% to 70%, a
 ## Existing apps
 
 The hands-on tests and the store review counts are in [`competitors.md`](competitors.md).
-Complaints that appear both there and in survey question G3: ‹each complaint, with its count from both sources›.
+Complaints that appear both there and in survey question G3: Too many fields per entry, data lost on a new phone.
 
 ## What changed in requirements.md because of this
 
