@@ -233,7 +233,13 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 ## 5. Business rules
 
-_Business rules: written in #34._
+| ID      | Rule                                                                                             | Worked example                                                                                                                                                                                                                |
+| ------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **BR1** | An email address identifies exactly one account, ignoring capitalisation.                        | `TUAN@X.COM` is registered on 12/09. On 13/09 someone registers `tuan@x.com` → rejected as already taken.                                                                                                                     |
+| **BR2** | A password is 6 to 128 characters and is never stored or shown as plain text.                    | `abc12` (5 characters) → rejected. `abc123` (6) → accepted, and what is stored is a one-way hash of it: no response and no stored field ever contains `abc123`. A password of 129 characters → rejected.                      |
+| **BR3** | A failed sign-in returns the same message whether the email is unknown or the password is wrong. | `ghost@x.com` was never registered → 401, "Incorrect email or password". `tuan@x.com`, registered with `abc123`, signs in with `abc124` → the same 401 and the identical message. An attacker cannot tell which emails exist. |
+| **BR4** | An account can read and change only its own entries.                                             | Entry 412 belongs to account 7. Account 9 requests entry 412 → "not found". Not "forbidden", because that would confirm 412 exists.                                                                                           |
+| **BR5** | An amount is a whole number of dong, greater than zero.                                          | 55,000 → accepted. 0 → rejected. −20,000 → rejected. 55,000.50 → rejected; VND has no subunit in use.                                                                                                                         |
 
 ---
 
