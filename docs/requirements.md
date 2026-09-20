@@ -1,6 +1,6 @@
-# Requirements — Sổ chi tiêu G5
+# Requirements — Personal Expense Management App
 
-**Team 05 · AI66A · Personal expense tracking app**
+**Team 05 · AI66A**
 Milestone 1 · Sprint 1 · Weeks 5–6
 
 ---
@@ -9,7 +9,7 @@ Milestone 1 · Sprint 1 · Weeks 5–6
 
 For Vietnamese students who live on a fixed amount each month, whether an allowance from family
 or wages from a job alongside their studies, and who find out they have overspent only once the money has gone,
-**Sổ chi tiêu G5** shows how much of the month's money is left each time a purchase is written
+the **Personal Expense Management App** shows how much of the month's money is left each time a purchase is written
 down, in under 15 seconds, so that a textbook, a jacket or a night out does not quietly use up
 the rest of the month. Keeping a notebook is a chore few people keep up, and a banking app lists
 transfers but not what was paid in cash.
@@ -24,12 +24,23 @@ month **visible straight after saving**, with no further step.
 - Two of the three have never written their spending down. The third relies on an e-wallet's
   monthly list and still overspends a fund now and then.
 
-**Survey evidence:** Shown in `docs/research/survey.md`
+From the survey in `docs/research/survey.md`, 9 responses:
+
+- None of the 9 knows exactly what they spent last month, and 8 of 9 ran out of money earlier
+  than planned, this month or last.
+- 8 of 9 pay mainly by bank transfer and 6 of 9 in cash, and cash never appears in a banking
+  app's history.
+- Asked for the one job an app should do well, 5 of 9 chose knowing what has been spent this
+  month and what is left.
+
+From the team's own test of three existing expense apps, in `docs/research/competitors.md`, logging
+one purchase took 8 to 31 taps and about 44 to 136 seconds, against the 15 seconds this product is
+measured by.
 
 **Out of scope this semester:** automatic bank sync, shared ledgers, currencies other than VND,
 PDF report export, and rewards for recording. One interviewee would only use an app that gives
 something concrete back; what this product gives back is the amount left, shown after every
-entry, not a perk.
+entry, not a perk. Caps for a single occasion, such as a trip, are left out too: three of the four survey respondents who set caps set them per occasion, but an occasion has no fixed period for BR7 and BR9 to measure against.
 
 ---
 
@@ -61,7 +72,7 @@ Studies and works at the same time. Pays for rent, food, coffee and outings with
 
 **Blocked by:** spending can exceed a fund's limit before they realise it, leaving them to use savings to cover the difference.
 
-**In their words:** _"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."_ (Interviewee 2, 02:22)
+**In their words:** _"Tuy nhiên, cũng có nhiều lúc bị tiêu lố và phải lấy khoản tiết kiệm ra để bù vào."_ (Interviewee 2, 02:22) — "Even so, there are many times I overspend and have to take money out of my savings to cover it."
 
 **Technical skill:** regularly uses a mobile e-wallet that automatically categorises spending.
 
@@ -144,7 +155,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   8-character password, then the account is created and they reach the overview **without a
   second sign-in**.
 - Given `hoa@example.com` is already registered, when the user tries the same address again,
-  then the message reads exactly **"Email này đã được đăng ký"** and no second account exists.
+  then the message reads exactly **"This email is already registered"** and no second account exists.
 - Given a password of **5 characters**, when the user submits, then it is rejected with **"Password must be 6 to 128 characters"** and no account is created. _(BR2)_
 
 ### US02 — Sign in and stay signed in · P0 · 3 points · `/login`
@@ -154,7 +165,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 - Given the user signed in and the application was fully closed, when it is opened again **within
   7 days**, then they are still signed in and are not asked for a password. _(BR10)_
 - Given a wrong password, **or** an email that was never registered, when the user submits, then
-  both cases return exactly **"Email hoặc mật khẩu không đúng"**. _(BR3)_
+  both cases return exactly **"Incorrect email or password"**. _(BR3)_
 
 ### US03 — Log a purchase in seconds · P0 · 5 points · `/transactions/new`
 
@@ -165,7 +176,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 - Given **4,000,000** is entered as money received, when it is stored, then the month's income
   increases by **exactly 4,000,000** and the spending total does not change.
 - Given the amount is left empty, or is **0**, or is **−20,000**, when the user submits, then it
-  is rejected with **"Nhập số tiền lớn hơn 0"** and nothing is stored. _(BR5)_
+  is rejected with **"Enter an amount greater than 0"** and nothing is stored. _(BR5)_
 
 ### US04 — This month's position · P0 · 3 points · `/`
 
@@ -175,14 +186,14 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 - Given **3,795,000** is left this month, when an entry of **30,000** is saved, then the overview
   appears straight away showing **3,765,000** left, with no further step.
 - Given no entries at all this month, when the overview loads, then it shows
-  **"Tháng này chưa có giao dịch nào"** rather than three zeros.
+  **"No transactions yet this month"** rather than three zeros.
 
 ### US05 — Look back over recent entries · P0 · 3 points · `/`
 
 - Given **25 entries** this month, when the list loads, then the **20 most recent** are shown,
   newest first, each with its amount, note, kind of spending and date.
 - Given the phone has no network, when the user refreshes the list, then the message reads
-  **"Không có mạng, kéo xuống để thử lại"** and the previously loaded entries stay on screen.
+  **"No connection. Pull down to try again"** and the previously loaded entries stay on screen.
 
 ### US06 — Correct or remove an entry · P1 · 3 points · `/transactions/:id`
 
@@ -195,10 +206,10 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 ### US07 — Suggest the kind of spending · P1 · 5 points · `/transactions/new`
 
-- Given the note **"tra sua"**, when the user finishes typing it, then **"Ăn uống"** is suggested;
-  given **"shopee"**, **"Mua sắm"** is suggested.
-- Given **"Ăn uống"** was suggested and the user changes it to **"Giải trí"** before saving, when
-  the entry is stored, then it is stored as **"Giải trí"**. _(BR6)_
+- Given the note **"tra sua"** (milk tea), when the user finishes typing it, then **"Food"** is suggested;
+  given **"shopee"**, **"Shopping"** is suggested.
+- Given **"Food"** was suggested and the user changes it to **"Entertainment"** before saving, when
+  the entry is stored, then it is stored as **"Entertainment"**. _(BR6)_
 - Given the **10 test notes** listed in `docs/research/competitors.md`, when each is processed, then
   **at least 7** suggestions are correct.
 - Given the note **"zzz"**, which matches nothing, when the user finishes typing it, then
@@ -214,6 +225,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 ### US09 — Warn before the cap is reached · P2 · 5 points · `/`
 
+- Given a cap of **3,000,000**, when spending reaches exactly **2,100,000**, 70% of the cap,
+  then the amber warning appears; at **2,099,999** no warning appears. _(BR9)_
 - Given a cap of **3,000,000** and **2,500,000** already spent, when the overview loads, then an
   amber warning states that **500,000** is left. _(BR9)_
 - Given exactly **3,000,000** spent against the same cap, when the overview loads, then the
@@ -227,7 +240,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 - Given food of **3,000,000** out of **4,000,000** total spending for the month, when the
   breakdown loads, then food is listed **first** at **75%**.
 - Given a month with no entries, when the breakdown loads, then it shows
-  **"Tháng này chưa có dữ liệu"** and no empty chart is drawn.
+  **"No data yet this month"** and no empty chart is drawn.
 
 ---
 
