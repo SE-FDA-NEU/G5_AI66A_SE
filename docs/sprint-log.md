@@ -6,57 +6,77 @@ evidence that the process was real.
 
 ---
 
-## Sprint N - <start date> to <end date>
+## Sprint 1 - 08/09/2026 to 21/09/2026
 
-<!-- Sprint 1: weeks 5-6 | Sprint 2: 7-8 | Sprint 3: 9-10 | Sprint 4: 11-12 | Sprint 5: 13-14 -->
+**Committed 0 · Completed 0 · Velocity: not applicable (requirements sprint)**
 
 ### Sprint goal
 
-<One sentence. If you cannot state the goal in one sentence, the sprint
-has no goal and you are just doing tasks.>
+The team agrees what the product is: every user story can be checked, and every business rule is fixed.
 
-### Hai chore issue bắt buộc
+### The two required chore issues
 
-| Issue | Người làm | Đã đóng? |
-|-------|-----------|----------|
-| [Chore] Refine backlog cho Sprint N | @ (PO) | |
-| [Chore] Sprint N wrap-up | @ (SM) | |
+| Issue                                   | Owner               | Closed?    |
+| --------------------------------------- | ------------------- | ---------- |
+| #24 [Chore] Refine backlog for Sprint 1 | @Chidokato5376 (PO) | yes, 17/09 |
+| #25 [Chore] Sprint 1 wrap-up            | @vantran2801 (SM)   | yes, 20/09 |
 
 ### Committed
 
-| Issue | Story | Points | Owner |
-|-------|-------|--------|-------|
-| #     |       |        | @     |
+No story was committed for building. Sprint 1 delivered `docs/requirements.md`. The ten story
+issues, #14 to #23, 40 points in total, were written and estimated this sprint, not built.
 
-**Total committed: __ points**
+| Issue | Story                                                | Points | Owner |
+| ----- | ---------------------------------------------------- | ------ | ----- |
+| none  | Requirements sprint: no story committed for building | 0      |       |
+
+**Total committed: 0 points**
 
 ### Result
 
-| Issue | Points | Status | If not done, why |
-|-------|--------|--------|------------------|
-| #     |        | Done / Carried over | |
+| Issue | Deliverable                                                                          | Owner            | Status    | If not done, why              |
+| ----- | ------------------------------------------------------------------------------------ | ---------------- | --------- | ----------------------------- |
+| #26   | Section 1 product vision and the `docs/requirements.md` skeleton                     | @Chidokato5376   | Done      |                               |
+| #27   | Section 4 user story table                                                           | @Chidokato5376   | Done      |                               |
+| #28   | Completed `docs/requirements.md`, final review, PDF with cover block, LMS submission | @Chidokato5376   | In review | Merges last, after this issue |
+| #29   | Section 2 persona 1, section 3 scenario 1                                            | @vantran2801     | Done      |                               |
+| #30   | Section 6 screens table                                                              | @vantran2801     | Done      |                               |
+| #31   | Section 6 flow diagram                                                               | @vantran2801     | Done      |                               |
+| #32   | Interview notes and interview note                                                   | @nguyennhien2412 | Done      |                               |
+| #33   | Section 2 persona 2, section 3 scenario 2                                            | @nguyennhien2412 | Done      |                               |
+| #34   | Section 5 business rules with worked examples                                        | @nguyennhien2412 | Done      |                               |
+| #35   | Acceptance criteria audit                                                            | @nguyennhien2412 | Done      |                               |
+| #36   | Survey and competitor comparison                                                     | @levanduc36      | Done      |                               |
+| #37   | Section 4 acceptance criteria for all ten stories                                    | @levanduc36      | Done      |                               |
+| #38   | README: Definition of Done and team table                                            | @levanduc36      | Done      |                               |
+| #39   | Repository checklist verification                                                    | @levanduc36      | Done      |                               |
 
-**Completed: __ points. Velocity this sprint: __**
+**Completed: 0 points. Velocity this sprint: not applicable (requirements sprint)**
+
+### Why the figures are zero
+
+Sprint 1 delivered a document, not working software. Counting the 40 estimated story points as
+completed would inflate the velocity that Sprint 2 is planned against, which is the number this file
+exists to protect. The ten stories are the backlog Sprint 2 and Sprint 3 draw from; they are not
+carried over, because they were never committed to Sprint 1 for building.
 
 ### Sprint Review
 
-- What we demonstrated:
-- Feedback received:
-- Backlog changes as a result:
+- What we demonstrated: `docs/requirements.md` on GitHub, section by section, with the research behind it in `docs/research/`
+- Feedback received: the lecturer confirmed the team number, the topic name in English, and that the cover names the pull request that completed `docs/requirements.md`
+- Backlog changes as a result: after the survey, BR9 and US09 warn at 70% of a cap instead of 80%, and caps for a single occasion are out of scope. No story changed priority
 
 ### Retrospective
 
-| Keep doing | Stop doing | Start doing |
-|------------|------------|-------------|
-|            |            |             |
-
-**One concrete action for next sprint (with an owner):**
-
-<!-- A retro that produces no action item is a complaint session.
-     Exactly one action, one owner, checked at the next retro. -->
+See Sprint 1 in `docs/retro.md`.
 
 ### Attendance
 
-| Member | Planning | Review | Retro |
-|--------|----------|--------|-------|
-| @      |          |        |       |
+| Member           | Planning | Review | Retro |
+| ---------------- | -------- | ------ | ----- |
+| @Chidokato5376   | yes      | yes    | yes   |
+| @vantran2801     | yes      | yes    | yes   |
+| @nguyennhien2412 | yes      | yes    | yes   |
+| @levanduc36      | yes      | yes    | yes   |
+
+**Scrum Master for Sprint 2:** @nguyennhien2412
