@@ -9,25 +9,22 @@ exactly one owner, checked at the start of the next retro.
 
 ---
 
-## Sprint 1 - <start date> to <end date>
+## Sprint 1 - 08/09/2026 to 21/09/2026
 
-**Scrum Master:** @
+**Scrum Master:** @vantran2801
 
 ### Keep / Stop / Start
 
 | Keep doing | Stop doing | Start doing |
 |------------|------------|-------------|
-|            |            |             |
+| One pull request per section, each replacing only its own placeholder, so four people worked in parallel without a single conflict | Pasting from an outdated copy of the shared pack: #37 merged old criteria that had to be corrected later | Asking for a reviewer the moment a pull request is opened |
+| Fixing the survey's decision rules before the answers came in, then applying them unchanged | Leaving a pull request with no reviewer requested: #39 sat for eighteen hours because nobody was asked | Turning format-on-save off for Markdown, so saving a file does not reformat the whole document |
 
 ### Action for next sprint
 
 | Action | Owner | Checked at |
 |--------|-------|------------|
-|        | @     | Sprint 2 retro |
-
-<!-- One action. Concrete enough that at the next retro anyone can say
-     "done" or "not done" without arguing. "Communicate better" is not an
-     action. "Nhien posts the daily note before 21:00" is. -->
+| Every pull request names its reviewer when it is opened, and the reviewer answers within 12 hours | @nguyennhien2412 | Sprint 2 retro |
 
 ### Did last sprint's action happen?
 
@@ -35,7 +32,7 @@ Not applicable - first sprint.
 
 ### Velocity
 
-Committed: __ points · Completed: __ points
+Committed: 0 points · Completed: 0 points
 
 ---
 
