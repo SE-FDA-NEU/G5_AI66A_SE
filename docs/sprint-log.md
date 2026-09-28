@@ -80,3 +80,43 @@ See Sprint 1 in `docs/retro.md`.
 | @levanduc36      | yes      | yes    | yes   |
 
 **Scrum Master for Sprint 2:** @nguyennhien2412
+
+---
+
+## Sprint 2 - 22/09/2026 to 05/10/2026
+
+**Committed 9 (6 at planning, 3 added on 28/09) · Completed ** · Velocity: ** points**
+
+### Sprint goal
+
+A signed-in user sees their 20 most recent entries, read from the real database, on a phone and in
+a browser, and `docs/design.md` and `docs/SETUP.md` let a machine that has never seen the project
+run it.
+
+### Planning
+
+Planning met on 26/09. The iteration opened on 22/09; the Sprint 2 issues #55 to #71 were written
+on 27 and 28/09, and the review rotation and merge order were posted on #55 on 28/09.
+
+### The two required chore issues
+
+| Issue                                   | Owner                 | Closed? |
+| --------------------------------------- | --------------------- | ------- |
+| #55 [Chore] Refine backlog for Sprint 2 | @Chidokato5376 (PO)   |         |
+| #56 [Chore] Sprint 2 wrap-up            | @nguyennhien2412 (SM) |         |
+
+### Committed
+
+| Issue | Story                                                 | Points | Owner          |
+| ----- | ----------------------------------------------------- | ------ | -------------- |
+| #15   | US02 Sign in and stay signed in                       | 3      | @Chidokato5376 |
+| #18   | US05 Look back over recent entries                    | 3      | @vantran2801   |
+| #72   | US11 The app in English or Vietnamese, added on 28/09 | 3      | @vantran2801   |
+
+**Total committed: 9 points**, 6 at planning and 3 added on 28/09
+
+US11 joined the sprint on 28/09 at the Product Owner's request (`docs/changelog.md`). If its task
+#73 has not merged by 03/10 at 20:00, it moves to Sprint 3 with the label `carried-over`.
+
+The task issues #57 to #71 build these two stories, the walking skeleton and `docs/design.md`.
+Tasks carry hours, not points, so velocity counts story points only, as in Sprint 1.
