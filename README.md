@@ -4,7 +4,7 @@ An application designed for individuals who want to **manage their daily income 
 
 **Group:** G5_AI66A
 **Product Owner (fixed for the entire semester):** @Chidokato5376
-**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1)
+**Scrum Master (rotates every sprint):** @nguyennhien2412 (Sprint 2) · @vantran2801 (Sprint 1)
 **Board:** [Sprint Board — Personal Expense Management App](https://github.com/orgs/SE-FDA-NEU/projects/12/views/1)
 
 ## Team
@@ -39,8 +39,11 @@ An issue is Done only when every line below is true. No exceptions, including fo
 7. No secrets, `.env` files, database dumps, interview recordings or personal data in the diff
 8. Story IDs and issue numbers in the documents match the board
 
-Sprint 1 produces documents rather than code, so criteria 3 and 4 do not apply to its issues.
-The other six stand unchanged. Full text: [docs/definition-of-done.md](docs/definition-of-done.md).
+Sprint 1 produced documents rather than code, so criteria 3 and 4 did not apply to its issues.
+From Sprint 2 all eight apply. Criterion 3 is checked per story: backend tests belong to the testing
+owner, so a story's tests come from the testing task that names it as parent (#63 in Sprint 2), and
+the story closes only after that task has merged. Every pull request, documents included, still
+needs CI green. Full text: [docs/definition-of-done.md](docs/definition-of-done.md).
 
 ## Documents
 
