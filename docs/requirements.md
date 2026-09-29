@@ -3,6 +3,9 @@
 **Team 05 · AI66A**
 Milestone 1 · Sprint 1 · Weeks 5–6
 
+_Updated in Sprint 2: BR11 and its criterion on US03, criterion 2 of US05, and the new story US11._
+_Each change is recorded in `docs/changelog.md`._
+
 ---
 
 ## 1. Product vision
@@ -144,8 +147,9 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | US08 | As someone saving money, I want to cap spending on one kind of thing for a month, so that I have a number to stay under.                        | P1       | 5      |
 | US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do.                                               | P2       | 5      |
 | US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut.                                                     | P2       | 5      |
+| US11 | As a user, I want to choose the app's language, so that I understand every screen and message in the language I read best.                      | P2       | 3      |
 
-**Five P0 · three P1 · two P2 · 40 points total.**
+**Five P0 · three P1 · three P2 · 43 points total.** US11 was added in Sprint 2, on 28/09.
 
 ---
 
@@ -177,6 +181,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   increases by **exactly 4,000,000** and the spending total does not change.
 - Given the amount is left empty, or is **0**, or is **−20,000**, when the user submits, then it
   is rejected with **"Enter an amount greater than 0"** and nothing is stored. _(BR5)_
+- Given today is **12/11/2026**, when an entry dated **13/11/2026** is submitted, then it is
+  rejected with **"The date cannot be in the future"** and nothing is stored. _(BR11)_
 
 ### US04 — This month's position · P0 · 3 points · `/`
 
@@ -192,8 +198,8 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 
 - Given **25 entries** this month, when the list loads, then the **20 most recent** are shown,
   newest first, each with its amount, note, kind of spending and date.
-- Given the phone has no network, when the user refreshes the list, then the message reads
-  **"No connection. Pull down to try again"** and the previously loaded entries stay on screen.
+- Given the phone has no network, when the user taps **Refresh**, then the message reads
+  **"No connection. Tap Refresh to try again"** and the previously loaded entries stay on screen.
 
 ### US06 — Correct or remove an entry · P1 · 3 points · `/transactions/:id`
 
@@ -242,6 +248,24 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 - Given a month with no entries, when the breakdown loads, then it shows
   **"No data yet this month"** and no empty chart is drawn.
 
+### US11 — Choose the app's language · P2 · 3 points · every screen
+
+- Given the app has never been opened on this device, when it opens, then every text is in
+  **English** and the language switch lists every language the app offers, **EN** and **VI** in
+  this release, with **EN** chosen.
+- Given the sign-in screen is open with an email already typed, when the user chooses another
+  language, then every text on the screen changes to that language and the typed email is still
+  there: with **VI**, the button reads **"Đăng nhập"** (Sign in) and the password label reads
+  **"Mật khẩu"** (Password).
+- Given a language other than English is chosen, when a sign-in fails, then the message is in that
+  language and does not say which field was wrong: in Vietnamese it reads exactly
+  **"Email hoặc mật khẩu không đúng"** (Incorrect email or password). _(BR3)_
+- Given a language was chosen, when the app is fully closed and opened again, then it opens in
+  that language.
+- Given Vietnamese is chosen, when an entry of **55,000** on Food with the note "tra sua" is listed,
+  then the kind of spending reads **"Ăn uống"** (Food) and the amount **"−55.000 ₫"**, while the
+  note stays **"tra sua"** exactly as typed.
+
 ---
 
 ## 5. Business rules
@@ -258,6 +282,7 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | **BR8**  | A cap applies only to spending, never to money received: Salary, Bonus or Other income.                                                                                                                                                | Choosing "Salary" and submitting 5,000,000 → rejected. Receiving more money than expected is never something to warn about, so a cap on income has no meaning.                                                                                                     |
 | **BR9**  | A cap warns at 70% of the figure and turns to an over-budget warning above 100%.                                                                                                                                                       | Cap 3,000,000. Spent 2,100,000 = exactly 70% → amber. Spent 3,000,000 = exactly 100% → still amber, not yet over. Spent 3,000,001 → over-budget. Both states carry text as well as colour, so they are readable without colour vision.                             |
 | **BR10** | A session lasts 7 days from sign-in, then the password is required again.                                                                                                                                                              | Signed in 12/09 at 21:00. On 19/09 at 20:00 the application opens still signed in. On 19/09 at 22:00 it asks for the password.                                                                                                                                     |
+| **BR11** | An entry cannot be dated later than today.                                                                                                                                                                                             | Today is 12/11/2026. An entry dated 12/11/2026 → accepted. Dated 13/11/2026 → rejected with "The date cannot be in the future". Dated 28/10/2026, last month → accepted: a purchase written down late is still recorded (Scenario 1, step 4).                      |
 
 ---
 
