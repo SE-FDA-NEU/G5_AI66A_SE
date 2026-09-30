@@ -71,7 +71,34 @@ _Written in #68._
 
 ## 5. Design decisions
 
-_Written in #69._
+Three decisions that shape everything else. Each lists the options we weighed, what we chose,
+why, the quality it buys and what it costs, and what would make us change our mind.
+
+### ADR 1 — A SQLite file instead of PostgreSQL
+
+**Options.** PostgreSQL in Docker, which our spike used · PostgreSQL installed on each machine · a
+SQLite file.
+
+**Chose.** A SQLite file, `backend/expense.db`, reached through SQLAlchemy and built by Alembic
+migrations.
+
+**Why.** The M2 check runs `docs/SETUP.md` on a machine that has never seen the project, and a
+failed install fails the milestone. Docker on Windows needs WSL 2, virtualisation switched on in
+the firmware, administrator rights and a download of several gigabytes; any one of them missing
+ends the check before our code runs. A local PostgreSQL adds a service, a password and a database
+driver, and the driver our spike pinned had no ready-built package for Python 3.14. SQLite ships
+inside Python, so there is nothing to install. It still enforces every constraint our rules need:
+UNIQUE for BR1 and BR7, CHECK for BR1 and BR5, and FOREIGN KEY for BR4 once each connection
+switches it on. One student writes about a hundred entries a month, far below what SQLite handles.
+
+**Quality it buys.** Maintainability: one file, nothing to install or keep running, so anyone can
+set the project up in minutes. It costs scalability, since SQLite takes one write at a time.
+
+**What would change our mind.** Serving several users from one shared server, where concurrent
+writes queue behind SQLite's single writer; or a rule SQLite cannot express as a constraint. Because
+the app talks to the database only through SQLAlchemy and every table comes from a migration, the
+switch is a new `DATABASE_URL` and a rerun of the tests.
+
 
 ---
 
