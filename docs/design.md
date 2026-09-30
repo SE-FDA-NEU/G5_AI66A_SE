@@ -123,6 +123,29 @@ such as scanning a receipt with the camera, while the browser check still matter
 page becoming something real users sign in to, where the token belongs in an HttpOnly cookie
 instead of localStorage.
 
+### ADR 3 — PBKDF2-SHA256 from Python's standard library for passwords
+
+**Options.** bcrypt · Argon2 · PBKDF2-SHA256 from `hashlib`.
+
+**Chose.** PBKDF2-SHA256 with 600,000 iterations, a random 16-byte salt per password and a
+constant-time comparison, stored as `pbkdf2_sha256$<iterations>$<salt>$<hash>` (BR2).
+
+**Why.** BR2 accepts passwords of up to 128 characters, but bcrypt reads only the first 72 bytes,
+so two long passwords sharing their start would both open the account, and bcrypt 5 refuses longer
+input outright. Our spike had already moved off bcrypt because of its clashes with passlib, a
+wrapper that is no longer maintained, so we dropped passlib as well. Argon2 and bcrypt are compiled
+packages: one more download that must exist for the instructor's Python version. PBKDF2 is built
+into Python and approved by NIST (SP 800-132), and 600,000 iterations is OWASP's current advice for
+SHA-256. On a team laptop a hash takes about 155 ms and a whole sign-in 0.37 s, well inside the
+3 seconds of US02.
+
+**Quality it buys.** Security: a copied database does not give the passwords away, and all 128
+characters of a password count. It costs performance on purpose, about 155 ms at every sign-in.
+
+**What would change our mind.** A sign-in slower than one second on the demo laptop, or a server
+open to the internet, where Argon2's memory-hard design matters more. The scheme name stored with
+each hash lets old and new hashes live side by side, each password re-hashed at its next sign-in.
+
 ---
 
 ## 6. What changed since M1
