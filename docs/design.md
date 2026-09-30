@@ -41,16 +41,16 @@ well-formed request that breaks a business rule, checked in the service (BR2, BR
 an account is `POST /api/users`. Signing in creates no stored row and fits no collection, so it is
 a small sub-resource named as a noun, a login: `POST /api/auth/login`.
 
-| # | Method | Path | Input | Success output | Error codes | Story | Built in |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | POST | `/api/users` | JSON `email`, `password` | **201** · `access_token`, `expires_at`, `user {id, email}`: the new account is already signed in | **409** "This email is already registered" _(BR1)_ · **422** "Password must be 6 to 128 characters" _(BR2)_ · **400** "Enter a valid email address" | US01 | Sprint 3 |
-| 2 | POST | `/api/auth/login` | JSON `email`, `password` | **200** · `access_token`, `token_type` `bearer`, `expires_at` 7 days later _(BR10)_, `user {id, email}` | **401** "Incorrect email or password", the same for an unknown email, a wrong password and a malformed address _(BR3)_ | US02 | **Sprint 2** |
-| 3 | GET | `/api/auth/me` | Bearer token | **200** · `{id, email}` of the signed-in account | **401** "Please sign in again": no token, a forged one, or one older than 7 days _(BR10)_ | US02 | **Sprint 2** |
-| 4 | GET | `/api/transactions` | Bearer token · query `limit`, 1 to 100, 20 by default | **200** · `items`: the account's entries, newest first, each `{id, kind, amount, note, occurred_on, category {id, name, kind} or null}` · `total`: how many it has in all | **401** "Please sign in again" · **400** when `limit` is outside 1 to 100 | US05 _(BR4)_ | **Sprint 2** |
-| 5 | POST | `/api/transactions` | Bearer token · JSON `kind` (`expense` or `income`), `amount`, `note`, `occurred_on`, `category_id` or null | **201** · the stored entry, in the shape of row 4 | **422** "Enter an amount greater than 0" _(BR5)_ · **422** "The date cannot be in the future" _(BR11)_ · **422** "Choose a kind of spending from the list" _(BR6)_ · **401** | US03 | Sprint 3 |
-| 6 | GET | `/api/categories` | Bearer token | **200** · the 11 categories, `{id, name, kind}`, kinds of spending first | **401** "Please sign in again" | US03 | Sprint 3 |
-| 7 | GET | `/api/summary` | Bearer token · query `month` as `YYYY-MM`, this month by default | **200** · `{month, income, spending, remaining, count}` for that month | **401** · **400** "Month must be written YYYY-MM" | US04 _(BR4)_ | Sprint 3 |
-| 8 | GET | `/health` | none | **200** · `{"status": "ok"}` | none | all | **Sprint 2** |
+| #   | Method | Path                | Input                                                                                                      | Success output                                                                                                                                                            | Error codes                                                                                                                                                                  | Story        | Built in     |
+| --- | ------ | ------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------ |
+| 1   | POST   | `/api/users`        | JSON `email`, `password`                                                                                   | **201** · `access_token`, `expires_at`, `user {id, email}`: the new account is already signed in                                                                          | **409** "This email is already registered" _(BR1)_ · **422** "Password must be 6 to 128 characters" _(BR2)_ · **400** "Enter a valid email address"                          | US01         | Sprint 3     |
+| 2   | POST   | `/api/auth/login`   | JSON `email`, `password`                                                                                   | **200** · `access_token`, `token_type` `bearer`, `expires_at` 7 days later _(BR10)_, `user {id, email}`                                                                   | **401** "Incorrect email or password", the same for an unknown email, a wrong password and a malformed address _(BR3)_                                                       | US02         | **Sprint 2** |
+| 3   | GET    | `/api/auth/me`      | Bearer token                                                                                               | **200** · `{id, email}` of the signed-in account                                                                                                                          | **401** "Please sign in again": no token, a forged one, or one older than 7 days _(BR10)_                                                                                    | US02         | **Sprint 2** |
+| 4   | GET    | `/api/transactions` | Bearer token · query `limit`, 1 to 100, 20 by default                                                      | **200** · `items`: the account's entries, newest first, each `{id, kind, amount, note, occurred_on, category {id, name, kind} or null}` · `total`: how many it has in all | **401** "Please sign in again" · **400** when `limit` is outside 1 to 100                                                                                                    | US05 _(BR4)_ | **Sprint 2** |
+| 5   | POST   | `/api/transactions` | Bearer token · JSON `kind` (`expense` or `income`), `amount`, `note`, `occurred_on`, `category_id` or null | **201** · the stored entry, in the shape of row 4                                                                                                                         | **422** "Enter an amount greater than 0" _(BR5)_ · **422** "The date cannot be in the future" _(BR11)_ · **422** "Choose a kind of spending from the list" _(BR6)_ · **401** | US03         | Sprint 3     |
+| 6   | GET    | `/api/categories`   | Bearer token                                                                                               | **200** · the 11 categories, `{id, name, kind}`, kinds of spending first                                                                                                  | **401** "Please sign in again"                                                                                                                                               | US03         | Sprint 3     |
+| 7   | GET    | `/api/summary`      | Bearer token · query `month` as `YYYY-MM`, this month by default                                           | **200** · `{month, income, spending, remaining, count}` for that month                                                                                                    | **401** · **400** "Month must be written YYYY-MM"                                                                                                                            | US04 _(BR4)_ | Sprint 3     |
+| 8   | GET    | `/health`           | none                                                                                                       | **200** · `{"status": "ok"}`                                                                                                                                              | none                                                                                                                                                                         | all          | **Sprint 2** |
 
 Rows 1 to 7 cover all five P0 stories. Four endpoints are built this sprint; the other four are
 designed now so that Sprint 3 builds against a fixed contract.
@@ -99,6 +99,29 @@ writes queue behind SQLite's single writer; or a rule SQLite cannot express as a
 the app talks to the database only through SQLAlchemy and every table comes from a migration, the
 switch is a new `DATABASE_URL` and a rerun of the tests.
 
+### ADR 2 — One Expo codebase for the phone and the browser
+
+**Options.** A phone-only React Native app · a separate web client next to the phone app · Expo
+with its web target, one codebase for both.
+
+**Chose.** Expo SDK 54 with the web target: the same screens run in Expo Go on a phone and as a web
+page at `http://localhost:8081`.
+
+**Why.** Both personas use only a phone, so the product is a phone app. SDK 54 is the newest one
+our demo phone's Expo Go opens; `docs/changelog.md` (13/08) records why we moved down to it. But
+the M2 check opens a route in a browser on the instructor's machine and asks for a screenshot with
+the address bar visible, and a second client would double every screen we build. The web target
+costs two things, both handled: a browser has no pull-down gesture, so US05 refreshes with a
+button (section 6); and SecureStore does not exist in a browser, so there the token sits in
+localStorage.
+
+**Quality it buys.** Maintainability: one set of screens and one set of tests for the phone and the
+browser. It costs some security in the browser, where localStorage is weaker than SecureStore.
+
+**What would change our mind.** A feature that needs a phone-only module with no web version,
+such as scanning a receipt with the camera, while the browser check still matters; or the web
+page becoming something real users sign in to, where the token belongs in an HttpOnly cookie
+instead of localStorage.
 
 ---
 
