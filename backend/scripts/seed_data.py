@@ -1,6 +1,6 @@
-"""Create the database and add the 11 categories. Run from backend/:
+"""Create the database and fill it with demo data. Run from backend/:
 
-    python -m scripts.seed_data    create the tables, then add the categories once
+    python -m scripts.seed_data    create the tables, then add the demo data once
 
 The Alembic migrations run first, so the tables always match app/db/models. Running the script a
 second time adds nothing.
@@ -15,8 +15,13 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.config import BACKEND_DIR, settings
+from app.core.security import hash_password
 from app.db.models import KIND_INCOME, KIND_SPENDING, Budget, Category, Transaction, User
+from app.db.repositories import user_repo
 from app.db.session import make_engine
+
+DEMO_EMAIL = "mai@example.com"
+DEMO_PASSWORD = "demo1234"
 
 # BR6 names the eight kinds of spending; BR8 names the three kinds of money received.
 CATEGORIES = [
@@ -59,6 +64,15 @@ def add_categories(db: Session) -> dict[str, Category]:
     return existing
 
 
+def add_demo_account(db: Session) -> User:
+    account = user_repo.get_by_email(db, DEMO_EMAIL)
+    if account is None:
+        account = user_repo.create(
+            db, email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD)
+        )
+    return account
+
+
 def count_rows(db: Session) -> RowCounts:
     def count(model) -> int:
         return db.scalar(select(func.count()).select_from(model)) or 0
@@ -67,7 +81,7 @@ def count_rows(db: Session) -> RowCounts:
 
 
 def seed(database_url: str) -> RowCounts:
-    """Migrate the database at `database_url`, add the categories once, and count the rows."""
+    """Migrate the database at `database_url`, add the demo data once, and count the rows."""
     config = alembic_config(database_url)
     command.upgrade(config, "head")
 
@@ -75,13 +89,14 @@ def seed(database_url: str) -> RowCounts:
     try:
         with Session(engine) as db:
             add_categories(db)
+            add_demo_account(db)
             return count_rows(db)
     finally:
         engine.dispose()
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(description="Create the database and add the categories.")
+    parser = argparse.ArgumentParser(description="Create the database and fill it with demo data.")
     parser.parse_args(argv)
 
     counts = seed(settings.DATABASE_URL)
@@ -90,6 +105,7 @@ def main(argv: list[str] | None = None) -> None:
     print(f"  users         {counts.users}")
     print(f"  transactions  {counts.transactions}")
     print(f"  budgets       {counts.budgets}")
+    print(f"Sign in as {DEMO_EMAIL} with the password {DEMO_PASSWORD}")
 
 
 if __name__ == "__main__":
