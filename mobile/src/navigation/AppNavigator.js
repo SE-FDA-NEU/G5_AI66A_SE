@@ -7,7 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
 import LoginScreen from '../screens/LoginScreen';
 import OverviewScreen from '../screens/OverviewScreen';
 import { colors } from '../theme';
@@ -25,19 +27,17 @@ const linking = {
   },
 };
 
-const documentTitle = {
-  formatter: (options, route) =>
-    `${options?.title ?? route?.name} · Personal Expense Management App`,
-};
-
 const screenOptions = {
   headerStyle: { backgroundColor: colors.primary },
   headerTintColor: colors.textInverse,
   headerTitleStyle: { fontWeight: '600' },
+  // The language switch sits in the top bar of every screen (US11).
+  headerRight: () => <LanguageSwitch />,
 };
 
 export default function AppNavigator() {
   const { status } = useAuth();
+  const { t } = useLanguage();
 
   // While the stored token is read, show a spinner rather than flash the sign-in screen.
   if (status === 'loading') {
@@ -48,6 +48,11 @@ export default function AppNavigator() {
     );
   }
 
+  // The browser tab reads "<screen> · <app name>", in the chosen language.
+  const documentTitle = {
+    formatter: (options, route) => `${options?.title ?? route?.name} · ${t('app.title')}`,
+  };
+
   return (
     <NavigationContainer linking={linking} documentTitle={documentTitle}>
       <Stack.Navigator screenOptions={screenOptions}>
@@ -55,10 +60,10 @@ export default function AppNavigator() {
           <Stack.Screen
             name="Overview"
             component={OverviewScreen}
-            options={{ title: 'Recent entries' }}
+            options={{ title: t('overview.title') }}
           />
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Sign in' }} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ title: t('login.title') }} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,5 @@
 /**
- * /login: sign in with an email and a password (US02).
+ * /login: sign in with an email and a password (US02), in the chosen language (US11).
  */
 
 import { useState } from 'react';
@@ -14,20 +14,26 @@ import {
   TextInput,
 } from 'react-native';
 
+import { api } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
+import { describeError } from '../i18n/translate';
 import { colors, radius, spacing } from '../theme';
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // Either { key } for a message of this screen, or the error the API client threw. It is
+  // translated when shown, so switching language also switches a message already on screen.
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit() {
     setError(null);
     if (!email.trim() || !password) {
-      setError('Enter your email and password');
+      setError({ key: 'login.missing' });
       return;
     }
 
@@ -35,11 +41,13 @@ export default function LoginScreen() {
     try {
       await signIn(email.trim(), password);
     } catch (err) {
-      // BR3: the API sends "Incorrect email or password" for every failure; show it as it is.
-      setError(err.message);
+      // BR3: the API sends "Incorrect email or password" for every failure.
+      setError(err);
       setSubmitting(false);
     }
   }
+
+  const errorText = error?.key ? t(error.key) : describeError(error, t, api.baseUrl);
 
   return (
     <KeyboardAvoidingView
@@ -48,10 +56,10 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Personal Expense Management App</Text>
-        <Text style={styles.subtitle}>Sign in to see your recent entries.</Text>
+        <Text style={styles.title}>{t('app.title')}</Text>
+        <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
 
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>{t('login.email')}</Text>
         <TextInput
           style={styles.input}
           value={email}
@@ -61,10 +69,10 @@ export default function LoginScreen() {
           keyboardType="email-address"
           placeholder="you@example.com"
           placeholderTextColor={colors.textMuted}
-          accessibilityLabel="Email"
+          accessibilityLabel={t('login.email')}
         />
 
-        <Text style={styles.label}>Password</Text>
+        <Text style={styles.label}>{t('login.password')}</Text>
         <TextInput
           style={styles.input}
           value={password}
@@ -74,12 +82,12 @@ export default function LoginScreen() {
           placeholder="••••••••"
           placeholderTextColor={colors.textMuted}
           onSubmitEditing={handleSubmit}
-          accessibilityLabel="Password"
+          accessibilityLabel={t('login.password')}
         />
 
-        {error ? (
+        {errorText ? (
           <Text style={styles.error} accessibilityRole="alert">
-            {error}
+            {errorText}
           </Text>
         ) : null}
 
@@ -92,7 +100,7 @@ export default function LoginScreen() {
           {submitting ? (
             <ActivityIndicator color={colors.textInverse} />
           ) : (
-            <Text style={styles.buttonText}>Sign in</Text>
+            <Text style={styles.buttonText}>{t('login.submit')}</Text>
           )}
         </Pressable>
       </ScrollView>
