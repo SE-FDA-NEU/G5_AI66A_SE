@@ -1,5 +1,6 @@
 /**
- * The overview at /: the signed-in account's 20 most recent entries, newest first (US05).
+ * The overview at /: the signed-in account's 20 most recent entries, newest first (US05), in
+ * the chosen language (US11).
  *
  * This is the walking skeleton: every row comes from GET /api/transactions, which reads the
  * transactions table. Nothing on this screen comes from an array in the code.
@@ -20,17 +21,21 @@ import {
 import { api } from '../api/client';
 import EntryRow from '../components/EntryRow';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
+import { describeError } from '../i18n/translate';
 import { colors, radius, spacing } from '../theme';
 
 export const RECENT_COUNT = 20;
-export const NO_CONNECTION = 'No connection. Tap Refresh to try again';
 
 export default function OverviewScreen() {
   const { user, signOut } = useAuth();
+  const { t } = useLanguage();
   const [entries, setEntries] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  // Either { key } for "No connection. Tap Refresh to try again", or the error the API client
+  // threw; translated when shown, like the errors on /login.
   const [message, setMessage] = useState(null);
 
   const load = useCallback(async () => {
@@ -46,7 +51,7 @@ export default function OverviewScreen() {
         return;
       }
       // US05: keep whatever is already on screen and say why nothing changed.
-      setMessage(error.status === 0 ? NO_CONNECTION : error.message);
+      setMessage(error.status === 0 ? { key: 'overview.noConnection' } : error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -61,6 +66,8 @@ export default function OverviewScreen() {
     setRefreshing(true);
     load();
   }
+
+  const messageText = message?.key ? t(message.key) : describeError(message, t, api.baseUrl);
 
   if (loading) {
     return (
@@ -90,13 +97,13 @@ export default function OverviewScreen() {
           <View style={styles.accountRow}>
             <Text style={styles.account}>{user?.email ?? ''}</Text>
             <Pressable onPress={signOut} accessibilityRole="button">
-              <Text style={styles.link}>Sign out</Text>
+              <Text style={styles.link}>{t('overview.signOut')}</Text>
             </Pressable>
           </View>
 
           <View style={styles.titleRow}>
             <Text style={styles.count}>
-              {total > 0 ? `The ${entries.length} most recent of ${total} entries` : ' '}
+              {total > 0 ? t('overview.count', { shown: entries.length, total }) : ' '}
             </Text>
             <Pressable
               style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
@@ -104,19 +111,21 @@ export default function OverviewScreen() {
               disabled={refreshing}
               accessibilityRole="button"
             >
-              <Text style={styles.refreshText}>{refreshing ? 'Refreshing…' : 'Refresh'}</Text>
+              <Text style={styles.refreshText}>
+                {refreshing ? t('overview.refreshing') : t('overview.refresh')}
+              </Text>
             </Pressable>
           </View>
 
-          {message ? (
+          {messageText ? (
             <Text style={styles.message} accessibilityRole="alert">
-              {message}
+              {messageText}
             </Text>
           ) : null}
         </View>
       }
       ListEmptyComponent={
-        message ? null : <Text style={styles.empty}>No entries yet.</Text>
+        message ? null : <Text style={styles.empty}>{t('overview.empty')}</Text>
       }
     />
   );

@@ -17,6 +17,17 @@ describe('formatDong', () => {
   });
 });
 
+describe('formatDong in the chosen language (US11)', () => {
+  test('groups thousands as the language writes them: dots in Vietnamese', () => {
+    expect(formatDong(55000, 'vi')).toBe('55.000 ₫');
+    expect(formatDong(4000000, 'vi')).toBe('4.000.000 ₫');
+  });
+
+  test('falls back to English commas for a language with no dictionary', () => {
+    expect(formatDong(55000, 'zz')).toBe('55,000 ₫');
+  });
+});
+
 describe('formatAmount', () => {
   test('money spent carries a minus sign', () => {
     expect(formatAmount(55000, 'expense')).toBe('−55,000 ₫');
@@ -24,6 +35,10 @@ describe('formatAmount', () => {
 
   test('money received carries a plus sign', () => {
     expect(formatAmount(4000000, 'income')).toBe('+4,000,000 ₫');
+  });
+
+  test('follows the chosen language', () => {
+    expect(formatAmount(55000, 'expense', 'vi')).toBe('−55.000 ₫');
   });
 });
 

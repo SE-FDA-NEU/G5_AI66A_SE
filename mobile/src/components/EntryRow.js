@@ -1,17 +1,22 @@
 /**
  * One entry in the list on /: its note, its kind of spending, its amount and its date (US05).
+ * The kind of spending is shown in the chosen language; the note stays exactly as typed (US11).
  */
 
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useLanguage } from '../i18n/LanguageContext';
 import { colors, radius, spacing } from '../theme';
 import { formatAmount, formatDate } from '../utils/format';
 
 export default function EntryRow({ entry }) {
+  const { language, t } = useLanguage();
   const received = entry.kind === 'income';
-  const note = entry.note || 'No note';
-  const kindOfSpending = entry.category ? entry.category.name : 'No kind of spending';
-  const amount = formatAmount(entry.amount, entry.kind);
+  const note = entry.note || t('entry.noNote');
+  const kindOfSpending = entry.category
+    ? t(`category.${entry.category.name}`)
+    : t('entry.noKind');
+  const amount = formatAmount(entry.amount, entry.kind, language);
   const date = formatDate(entry.occurred_on);
 
   return (
