@@ -18,7 +18,7 @@ a table without updating this file should not be approved (`docs/definition-of-d
 | US08 Cap spending for a month | P1 | `/budget` | `PUT` and `GET /api/budgets` | budgets | BR7, BR8 | [#21] | Backlog | Not started |
 | US09 Warn before the cap is reached | P2 | `/` | `GET /api/budgets?month=` | budgets, transactions | BR9 | [#22] | Backlog | Not started |
 | US10 See which kinds of spending took the most | P2 | `/stats` | `GET /api/stats/breakdown` | transactions, categories | BR6 | [#23] | Backlog | Not started |
-| US11 Choose the app's language | P2 | every screen | none: the app translates what the API sends | none | BR3 | [#72] | 2 | In progress |
+| US11 Choose the app's language | P2 | every screen | none: the app translates what the API sends | none | BR3 | [#72] | 2 | Done |
 
 **Built in Sprint 2.** US02 by #58, #60, #61, #63 and #64; US05 by #60, #61, #62, #63 and #65. The
 pull request of #65 closes both stories and sets their Status to Done. US11, added on 28/09, is
