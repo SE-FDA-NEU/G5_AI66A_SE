@@ -9,10 +9,10 @@ a table without updating this file should not be approved (`docs/definition-of-d
 | Story | Priority | Screen | Endpoint | Table | Rules | Story issue | Sprint | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | US01 Create an account | P0 | `/register` | `POST /api/users` | users | BR1, BR2 | [#14] | Backlog | Not started |
-| US02 Sign in and stay signed in | P0 | `/login` | `POST /api/auth/login` · `GET /api/auth/me` | users | BR2, BR3, BR10 | [#15] | 2 | In progress |
+| US02 Sign in and stay signed in | P0 | `/login` | `POST /api/auth/login` · `GET /api/auth/me` | users | BR2, BR3, BR10 | [#15] | 2 | Done |
 | US03 Log a purchase in seconds | P0 | `/transactions/new` | `POST /api/transactions` · `GET /api/categories` | transactions, categories | BR5, BR6, BR11 | [#16] | Backlog | Not started |
 | US04 This month's position | P0 | `/` | `GET /api/summary` | transactions | BR4 | [#17] | Backlog | Not started |
-| US05 Look back over recent entries | P0 | `/` | `GET /api/transactions` | transactions, categories | BR4 | [#18] | 2 | In progress |
+| US05 Look back over recent entries | P0 | `/` | `GET /api/transactions` | transactions, categories | BR4 | [#18] | 2 | Done |
 | US06 Correct or remove an entry | P1 | `/transactions/:id` | `PATCH` and `DELETE /api/transactions/{id}` | transactions | BR4, BR5, BR11 | [#19] | Backlog | Not started |
 | US07 Suggest the kind of spending | P1 | `/transactions/new` | `GET /api/categories/suggestions` | categories | BR6 | [#20] | Backlog | Not started |
 | US08 Cap spending for a month | P1 | `/budget` | `PUT` and `GET /api/budgets` | budgets | BR7, BR8 | [#21] | Backlog | Not started |
