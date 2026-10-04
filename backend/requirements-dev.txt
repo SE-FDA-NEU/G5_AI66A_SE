@@ -1,0 +1,6 @@
+# Everything the app needs, plus the tools that test and lint it. CI installs this file.
+-r requirements.txt
+pytest==9.1.1
+pytest-cov==7.1.0
+httpx2==2.13.1
+ruff==0.16.8

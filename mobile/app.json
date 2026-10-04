@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Personal Expense Management App",
+    "slug": "g5-expense",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.g5ai66a.expense"
+    },
+    "android": {
+      "package": "com.g5ai66a.expense"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
+}

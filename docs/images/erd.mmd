@@ -1,0 +1,37 @@
+erDiagram
+    users ||--o{ transactions : "records"
+    categories |o--o{ transactions : "classifies"
+    users ||--o{ budgets : "sets"
+    categories ||--o{ budgets : "is capped by"
+
+    users {
+        INTEGER id PK
+        VARCHAR(254) email UK "stored in lower case (BR1)"
+        VARCHAR(255) password_hash "one-way hash only (BR2)"
+        DATETIME created_at
+    }
+
+    categories {
+        INTEGER id PK
+        VARCHAR(40) name UK
+        VARCHAR(7) kind "expense or income (BR6, BR8)"
+    }
+
+    transactions {
+        INTEGER id PK
+        INTEGER user_id FK "the owner (BR4)"
+        INTEGER category_id FK "null when none chosen (BR6)"
+        VARCHAR(7) kind "expense or income"
+        BIGINT amount "greater than 0 (BR5)"
+        VARCHAR(200) note "as the user typed it"
+        DATE occurred_on "not later than today (BR11)"
+        DATETIME created_at
+    }
+
+    budgets {
+        INTEGER id PK
+        INTEGER user_id FK
+        INTEGER category_id FK "a kind of spending (BR8)"
+        VARCHAR(7) month "YYYY-MM, one per kind (BR7)"
+        BIGINT amount "greater than 0"
+    }

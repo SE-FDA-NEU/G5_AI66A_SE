@@ -41,3 +41,10 @@ Thumbs.db
 data/raw/*.csv
 *.pkl
 checkpoints/
+
+# Tool caches
+.ruff_cache/
+
+# Expo
+.expo/
+web-build/

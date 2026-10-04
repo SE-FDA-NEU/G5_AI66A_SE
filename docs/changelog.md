@@ -59,3 +59,49 @@ client on real hardware.
 
 **Impact.** Demos and integration testing now run over a phone hotspot instead of campus Wi-Fi.
 Recorded as a standing constraint for the final demo in week 15, not a one-off workaround.
+
+---
+
+## 2026-09-27 — BR11: an entry cannot be dated later than today
+
+**Reason.** Designing the transactions table and the seed data for Sprint 2 raised a question that
+`docs/requirements.md` never answered: may an entry carry a future date? One dated next week would
+lower what is left this month before the money is spent, which works against the measure in
+section 1, the amount left visible straight after saving. A date in the past stays allowed,
+because Scenario 1, step 4, adds a lunch that was missed days earlier.
+
+**Impact.** New rule BR11 with a worked example, and a fifth criterion on US03 (#16). The seed
+script never writes a future date (#62), and the API design rejects one with 422 "The date cannot
+be in the future" (`docs/design.md`, section 3). No story changed priority or points; the check
+itself is built with US03 in Sprint 3.
+
+---
+
+## 2026-09-27 — US05: the list is refreshed with a Refresh button
+
+**Reason.** The M2 check opens the walking skeleton in a browser, on a machine that has never seen
+the project, and the page it opens is the list of recent entries. A browser has no pull-down
+gesture, so there the only way to refresh would be to reload the page, which throws away the
+entries already on screen: exactly what criterion 2 protects.
+
+**Impact.** Criterion 2 of US05 (#18) now reads: when the user taps Refresh with no network, the
+message is "No connection. Tap Refresh to try again" and the loaded entries stay on screen. On a
+phone, pulling the list down still refreshes it too. Points unchanged at 3; built by #65.
+
+---
+
+## 2026-09-28 — US11: language options, English and Vietnamese first
+
+**Reason.** Both personas are Vietnamese students, and all three interviews were held in
+Vietnamese. An app that speaks only English puts a language barrier in front of the people it is
+built for. The Product Owner asked on 28/09 for language options, English and Vietnamese first,
+and on 29/09 the story was worded for any language, so offering another one later needs no new
+story. The documents stay in English, as the lecturer asked on 18/09; only the app's screens gain
+other languages.
+
+**Impact.** New story US11, P2, 3 points; the backlog grows from 40 to 43 points. It joins
+Sprint 2 as #72, built by #73, so Sprint 2 commits 9 points instead of 6 (`docs/sprint-log.md`).
+English stays the default, so every acceptance criterion and `docs/SETUP.md` still read word for
+word. The API keeps answering in English and the app translates the sentences it knows. From now on
+every screen adds its text to every language's dictionary, and a test fails when a language is
+missing a text that English has. A new language is one more dictionary; no screen changes.

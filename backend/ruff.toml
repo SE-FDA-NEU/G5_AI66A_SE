@@ -1,0 +1,11 @@
+# Lint rules for backend/. CI runs `ruff check .` from this folder and fails on any finding.
+line-length = 100
+target-version = "py311"
+
+[lint]
+# Errors, pyflakes, import order, likely bugs, and modern Python syntax.
+select = ["E", "F", "I", "B", "UP"]
+
+[lint.isort]
+# backend/alembic/ holds our migrations; the alembic package itself is a library.
+known-third-party = ["alembic"]
