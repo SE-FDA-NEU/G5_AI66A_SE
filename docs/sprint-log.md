@@ -153,8 +153,9 @@ Tasks carry hours, not points, so velocity counts story points only, as in Sprin
 
 ### Sprint Review
 
-- What we demonstrated: no separate Review meeting this sprint. The walking skeleton was shown
-  working on another team's machine: Team 04's run of `docs/SETUP.md` on 04/10, described below.
+- What we demonstrated: at the team meeting on 04/10, the walking skeleton running: sign-in and
+  the 20 most recent of 25 entries on `/`, read from the database. Team 04 also ran it from
+  `docs/SETUP.md` on their own machine that day, as described below.
 - Feedback received: Đỗ Quang Trung (Team 04) followed `docs/SETUP.md` on their own laptop on
   04/10 and had the page in 6 minutes; `python -m pip` did not run there, so `pip install` was used.
   An earlier run on another machine stopped at `'npm' is not recognized`, because Node.js was
