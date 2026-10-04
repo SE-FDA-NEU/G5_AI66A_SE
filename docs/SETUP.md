@@ -12,12 +12,12 @@ Bash, activate the virtual environment with `source .venv/Scripts/activate` inst
 
 ## 1. Prerequisites
 
-| Tool | Version | Check with | Get it from |
-| --- | --- | --- | --- |
-| Git | any recent version | `git --version` | https://git-scm.com/downloads |
-| Python | **3.11, 3.12, 3.13 or 3.14**, 64-bit. 3.12 recommended | `python --version` (Windows: `py --version`) | https://www.python.org/downloads/ — on Windows, tick **Add python.exe to PATH** |
-| Node.js | **20.19 or later**; 22 or 24 LTS recommended. npm comes with it | `node --version` | https://nodejs.org/ |
-| A web browser | Chrome, Edge or Firefox | | |
+| Tool          | Version                                                         | Check with                                   | Get it from                                                                     |
+| ------------- | --------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------- |
+| Git           | any recent version                                              | `git --version`                              | https://git-scm.com/downloads                                                   |
+| Python        | **3.11, 3.12, 3.13 or 3.14**, 64-bit. 3.12 recommended          | `python --version` (Windows: `py --version`) | https://www.python.org/downloads/ — on Windows, tick **Add python.exe to PATH** |
+| Node.js       | **20.19 or later**; 22 or 24 LTS recommended. npm comes with it | `node --version`                             | https://nodejs.org/                                                             |
+| A web browser | Chrome, Edge or Firefox                                         |                                              |                                                                                 |
 
 Nothing else is needed: the database is a file that Python creates, so there is no database
 server and no Docker to install. A phone is optional (section 7).
@@ -67,12 +67,12 @@ section.
 **Configuration.** The `.env` you just copied works as it is, so a first run needs no edits. What
 each value means:
 
-| Setting in `backend/.env` | Value in `.env.example` | Change it when |
-| --- | --- | --- |
-| `DATABASE_URL` | `sqlite:///./expense.db`, the file `backend/expense.db` | You want the database somewhere else |
-| `SECRET_KEY` | a development-only key | Always, on any machine others can reach: `python -c "import secrets; print(secrets.token_hex(32))"` prints a new one |
-| `SESSION_DAYS` | `7`, how long a sign-in lasts (BR10) | Never, unless the requirements change |
-| `CORS_ORIGINS` | `*`, any web page may call the API | On a server, list the exact web addresses instead |
+| Setting in `backend/.env` | Value in `.env.example`                                 | Change it when                                                                                                       |
+| ------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`            | `sqlite:///./expense.db`, the file `backend/expense.db` | You want the database somewhere else                                                                                 |
+| `SECRET_KEY`              | a development-only key                                  | Always, on any machine others can reach: `python -c "import secrets; print(secrets.token_hex(32))"` prints a new one |
+| `SESSION_DAYS`            | `7`, how long a sign-in lasts (BR10)                    | Never, unless the requirements change                                                                                |
+| `CORS_ORIGINS`            | `*`, any web page may call the API                      | On a server, list the exact web addresses instead                                                                    |
 
 **Create and fill the database, one command** (the same on every system):
 
@@ -145,6 +145,7 @@ minute.
    ```
 
    `python -m scripts.seed_data --reset` puts the original data back.
+
 5. **Languages.** The language buttons at the top right, **EN** and **VI** so far, change every
    text on the page, and the choice is kept when the page is reloaded. The app always opens in
    English the first time.
@@ -162,29 +163,29 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 
 ## 8. Troubleshooting
 
-| What you see | Why | Fix |
-| --- | --- | --- |
-| `'python' is not recognized` or `'py' is not recognized` | Python is not installed, or not on the PATH | Install Python 3.12 from python.org with **Add python.exe to PATH** ticked, then open a new terminal |
-| PowerShell: `running scripts is disabled on this system` when activating | Windows blocks the activation script | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, then activate again. It lasts only for this window |
-| `python -m pip` fails with `No module named pip`, or with `Python was not found` | The virtual environment is not active, or it was created without pip | Activate it again until the prompt starts with `(.venv)`; if the error stays, run `python -m ensurepip --upgrade`, then the install line again |
-| `ModuleNotFoundError: No module named 'fastapi'`, or `'app'`, or `'scripts'` | The virtual environment is not active, or the terminal is not in `backend/` | `cd backend`, activate again (section 3), then rerun the command |
-| `pip` tries to build `pydantic-core` and asks for Rust or for Visual C++ | A Python version outside 3.11 to 3.14, or 32-bit Python | Install 64-bit Python 3.12 and create `.venv` again |
-| `ImportError: cannot import name 'UTC' from 'datetime'` when seeding | Python 3.10 or older: the libraries install, but the code needs 3.11 or later | Install Python 3.12, delete the `.venv` folder, and create it again with `py -3.12 -m venv .venv` |
-| The page says **Cannot reach the server at http://localhost:8000/api**, or **No connection. Tap Refresh to try again** | The backend is not running | Start it in terminal 1 (section 4), check `http://localhost:8000/health`, then press **Refresh** |
-| **Incorrect email or password** for `mai@example.com` | The database was not seeded, or not in `backend/` | Run `python -m scripts.seed_data` in `backend/` |
-| `'npm' is not recognized` or `'node' is not recognized` | Node.js is not installed, or it was installed while this terminal was open | Install Node.js 22 or 24 LTS from https://nodejs.org/, close VS Code and every terminal, open a new one, then check `node --version` |
-| PowerShell: `npm.ps1 cannot be loaded because running scripts is disabled on this system` | Windows blocks npm's PowerShell script | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, or type `npm.cmd ci` instead of `npm ci` |
-| `npm ci` stops with an engine error, or Expo will not start | Node.js is older than 20.19 | Install Node.js 22 or 24 LTS, then run `npm ci` again |
-| Expo says port 8081 is in use | Another program holds the port | Accept the port Expo offers; the app still finds the backend |
-| `address already in use` when the backend starts | Another program holds port 8000 | Close it, or stop an older backend still running in another terminal |
+| What you see                                                                                                           | Why                                                                           | Fix                                                                                                                                            |
+| ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `'python' is not recognized` or `'py' is not recognized`                                                               | Python is not installed, or not on the PATH                                   | Install Python 3.12 from python.org with **Add python.exe to PATH** ticked, then open a new terminal                                           |
+| PowerShell: `running scripts is disabled on this system` when activating                                               | Windows blocks the activation script                                          | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, then activate again. It lasts only for this window                           |
+| `python -m pip` fails with `No module named pip`, or with `Python was not found`                                       | The virtual environment is not active, or it was created without pip          | Activate it again until the prompt starts with `(.venv)`; if the error stays, run `python -m ensurepip --upgrade`, then the install line again |
+| `ModuleNotFoundError: No module named 'fastapi'`, or `'app'`, or `'scripts'`                                           | The virtual environment is not active, or the terminal is not in `backend/`   | `cd backend`, activate again (section 3), then rerun the command                                                                               |
+| `pip` tries to build `pydantic-core` and asks for Rust or for Visual C++                                               | A Python version outside 3.11 to 3.14, or 32-bit Python                       | Install 64-bit Python 3.12 and create `.venv` again                                                                                            |
+| `ImportError: cannot import name 'UTC' from 'datetime'` when seeding                                                   | Python 3.10 or older: the libraries install, but the code needs 3.11 or later | Install Python 3.12, delete the `.venv` folder, and create it again with `py -3.12 -m venv .venv`                                              |
+| The page says **Cannot reach the server at http://localhost:8000/api**, or **No connection. Tap Refresh to try again** | The backend is not running                                                    | Start it in terminal 1 (section 4), check `http://localhost:8000/health`, then press **Refresh**                                               |
+| **Incorrect email or password** for `mai@example.com`                                                                  | The database was not seeded, or not in `backend/`                             | Run `python -m scripts.seed_data` in `backend/`                                                                                                |
+| `'npm' is not recognized` or `'node' is not recognized`                                                                | Node.js is not installed, or it was installed while this terminal was open    | Install Node.js 22 or 24 LTS from https://nodejs.org/, close VS Code and every terminal, open a new one, then check `node --version`           |
+| PowerShell: `npm.ps1 cannot be loaded because running scripts is disabled on this system`                              | Windows blocks npm's PowerShell script                                        | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, or type `npm.cmd ci` instead of `npm ci`                                     |
+| `npm ci` stops with an engine error, or Expo will not start                                                            | Node.js is older than 20.19                                                   | Install Node.js 22 or 24 LTS, then run `npm ci` again                                                                                          |
+| Expo says port 8081 is in use                                                                                          | Another program holds the port                                                | Accept the port Expo offers; the app still finds the backend                                                                                   |
+| `address already in use` when the backend starts                                                                       | Another program holds port 8000                                               | Close it, or stop an older backend still running in another terminal                                                                           |
 
 ---
 
 ## Tested by
 
-| Who | Team | Machine | Date | Time taken | Result |
-| --- | --- | --- | --- | --- | --- |
-| | | | | | |
+| Who            | Team    | Machine                                                                 | Date       | Time taken                                     | Result                                                                                                                                                                                                                                                                                              |
+| -------------- | ------- | ----------------------------------------------------------------------- | ---------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Đỗ Quang Trung | Team 04 | Windows laptop, Python 3.12.10, Node.js 24.15.0, both already installed | 04/10/2026 | 6 minutes, from `git clone` to the list on `/` | Worked: `python -m pip install -r requirements.txt` failed with <python -m>, and `pip install -r requirements.txt` worked; after that the seed printed 11/1/25/0, `/health` answered ok, `/` showed the 20 most recent of 25 entries, the proof line changed row 1, and EN/VI stayed after a reload |
 
 Filled in by someone outside Team 05 who followed this file word for word on a machine that is
 not ours. Anything they had to ask or guess becomes a fix in this file, not a note beside it.
