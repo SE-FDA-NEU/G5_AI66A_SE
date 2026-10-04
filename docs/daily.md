@@ -1,21 +1,9 @@
 # Daily
 
-**Không bắt buộc.** Nhóm nào muốn duy trì thì ghi vào đây.
+Optional. Each member writes three lines, and the notes are **committed on the day they are
+written**, never a week at once: the commit history of this file is the evidence that the team
+really met.
 
-Quy tắc: mỗi người 3 câu, và **commit đúng ngày viết** — đừng gộp cả tuần vào một
-commit. Lịch sử commit của chính file này là bằng chứng nhóm làm thật.
+Format: `## YYYY-MM-DD`, then one line per member: yesterday, today, blocked by.
 
 ---
-
-## 2026-09-15
-
-- @linh — Hôm qua: nhận #12, chia checklist. Hôm nay: làm form upload.
-  Vướng: chưa biết để file mẫu ở đâu trong repo.
-- @tuan — Hôm qua: dựng khung project. Hôm nay: viết test cho parser.
-  Vướng: không có.
-- @thao — Hôm qua: đọc tài liệu user story. Hôm nay: viết lại US03 và US05.
-  Vướng: cần @linh xác nhận acceptance criteria của US05.
-
-## <ngày tiếp theo>
-
-- @ —
