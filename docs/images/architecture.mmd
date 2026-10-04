@@ -1,0 +1,16 @@
+flowchart TB
+    student(["Student"])
+    metro["Expo dev server, Metro<br/>computer, port 8081"]
+    app["App: Expo, React Native<br/>on a phone or a browser<br/>screens /login and /"]
+    store[("Token store on the device<br/>SecureStore on a phone,<br/>localStorage in a browser")]
+    api["API: FastAPI, uvicorn<br/>computer, port 8000<br/>routers, services,<br/>repositories"]
+    seed["Migrations, seed script<br/>computer, run once<br/>alembic/ and<br/>scripts/seed_data.py"]
+    db[("SQLite database<br/>backend/expense.db<br/>on the computer<br/>users, categories,<br/>transactions, budgets")]
+
+    student -- "taps and types" --> app
+    metro -- "JavaScript bundle<br/>over HTTP" --> app
+    app -- "reads and saves<br/>the sign-in token" --> store
+    app -- "HTTP request, JSON<br/>and a Bearer token" --> api
+    api -- "HTTP response, JSON,<br/>or {detail} on an error" --> app
+    api -- "SQL queries<br/>through SQLAlchemy" --> db
+    seed -- "CREATE TABLE, then<br/>INSERT the demo rows" --> db

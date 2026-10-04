@@ -11,7 +11,37 @@ project are in [`docs/SETUP.md`](SETUP.md).
 
 ## 1. Architecture
 
-_Written in #68._
+The container level of the C4 model: what runs where, and what travels along each arrow.
+
+![Containers: the app on a phone or in a browser, the API, the SQLite database, the Expo dev server and the seed script](images/architecture.png)
+
+Source of the diagram: [`docs/images/architecture.mmd`](images/architecture.mmd).
+
+| Component | Runs on | Technology | Its job |
+| --- | --- | --- | --- |
+| App | A phone in Expo Go, or a browser | Expo SDK 54, React Native, React Navigation | The screens, in the language the user chose, English or Vietnamese so far (US11); in Sprint 2, `/login` and `/`. It calls the API and never touches the database |
+| Token store | The same phone or browser | SecureStore on a phone, localStorage in a browser | Keeps the sign-in token between visits, so the app opens without a password for 7 days (BR10) |
+| Expo dev server | The computer | Metro, port 8081 | Sends the app's JavaScript to the phone or the browser |
+| API | The computer | FastAPI on uvicorn, Python 3.11 to 3.14, port 8000 | Holds every business rule, behind the endpoints of section 3 |
+| Database | The computer | A SQLite file, `backend/expense.db`, reached through SQLAlchemy 2.0 | The four tables of section 2 |
+| Migrations and seed script | The computer, once per install | Alembic, `scripts/seed_data.py` | Build the tables, then add the demo data |
+
+No external system takes part: bank sync is out of scope (`docs/requirements.md`, section 1),
+and the app sends no email.
+
+**Inside the API, three layers**, each calling only the one below it. The split is what lets
+two people build the backend at once without editing the same files.
+
+| Layer | Folder | Owner | Does | Never |
+| --- | --- | --- | --- | --- |
+| Routers | `backend/app/routers/` | @Chidokato5376 | Read the request, call a service, turn its answer or its error into a status code | Hold a business rule or a query |
+| Services | `backend/app/services/` | @Chidokato5376 | Apply the business rules; raise a plain Python error when one is broken | Write a query, or know about HTTP |
+| Repositories | `backend/app/db/repositories/` | @nguyennhien2412 | Query the tables, always filtered on the signed-in account (BR4) | Hold a business rule |
+
+Imports point one way only: routers and `app/core/deps.py` import services, services import
+repositories, repositories import models. No service imports FastAPI, so every rule can be tested
+without a server. The function-by-function contract between services and repositories was agreed
+on #60 before either side wrote code, as `docs/process.md` commits to in section 1.
 
 ---
 
@@ -98,7 +128,59 @@ US10.
 
 ## 4. Walking skeleton
 
-_Written in #68._
+**Route.** `/`, the overview: `http://localhost:8081/` in a browser. It lists the signed-in
+account's 20 most recent entries, newest first, each with its amount, note, kind of spending and
+date (US05).
+
+**Table.** `transactions`, joined to `categories` for the kind of spending. The seed script writes
+**25 rows** for the demo account, so the page shows 20 and leaves 5 out.
+
+**Path of one request.** The page sends `GET /api/transactions?limit=20` with the sign-in token;
+`routers/transactions.py` passes it to `transaction_service.list_recent`, which calls
+`transaction_repo.list_recent`; SQLite answers, and the rows travel back as JSON, one row on screen
+per entry.
+
+![The overview at http://localhost:8081/ showing the 20 most recent of 25 entries](images/walking-skeleton.png)
+
+**The SQL behind the page,** exactly as SQLAlchemy sends it:
+
+```sql
+SELECT count(*) AS count_1
+FROM transactions
+WHERE transactions.user_id = ?;
+
+SELECT transactions.id, transactions.user_id, transactions.category_id, transactions.kind,
+       transactions.amount, transactions.note, transactions.occurred_on, transactions.created_at,
+       categories_1.id AS id_1, categories_1.name, categories_1.kind AS kind_1
+FROM transactions
+LEFT OUTER JOIN categories AS categories_1 ON categories_1.id = transactions.category_id
+WHERE transactions.user_id = ?
+ORDER BY transactions.occurred_on DESC, transactions.id DESC
+LIMIT ? OFFSET ?;
+-- parameters: (1, 20, 0)
+```
+
+The account id in both `WHERE` clauses comes from the sign-in token, never from the request, which
+is BR4 in the query itself.
+
+**The rows come from the database, not from the code.** With the page open, change the newest
+entry in the database from `backend/`, then press Refresh; the first row now reads "edited in the
+database". `python -m scripts.seed_data --reset` puts it back.
+
+```
+python -c "import sqlite3; c = sqlite3.connect('expense.db'); c.execute('UPDATE transactions SET note = ? WHERE id = 25', ('edited in the database',)); c.commit()"
+```
+
+**Created and seeded by one command.** `python -m scripts.seed_data` runs the migrations, then
+writes 11 categories, 1 account and 25 transactions, and prints those counts.
+
+**Settings.** Every setting is listed, with a comment, in the committed `backend/.env.example`:
+`DATABASE_URL`, `SECRET_KEY`, `SESSION_DAYS` and `CORS_ORIGINS`. The real `backend/.env` is ignored
+by git, and CI fails any pull request that commits a `.env` file. The app needs no settings file;
+`mobile/.env.example` explains its one optional value.
+
+**Install steps** for a machine that has never seen the project, with the expected result of each:
+[`docs/SETUP.md`](SETUP.md).
 
 ---
 
