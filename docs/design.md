@@ -265,4 +265,56 @@ each hash lets old and new hashes live side by side, each password re-hashed at 
 
 ## 6. What changed since M1
 
-_Written in #71._
+Three requirement changes since M1: two came out of this sprint's work, and one from the Product
+Owner. Each is recorded, with its date, reason and impact, in [`docs/changelog.md`](changelog.md),
+and each is applied to `docs/requirements.md` and to the story issues. No existing story changed
+priority or points.
+
+### Change 1 — BR11: an entry cannot be dated later than today
+
+**What changed.** A new business rule, BR11, with its worked example in section 5 of the
+requirements, and a fifth acceptance criterion on US03 (#16): "Given today is 12/11/2026, when an
+entry dated 13/11/2026 is submitted, then it is rejected with "The date cannot be in the future"
+and nothing is stored."
+
+**Why.** Designing the `transactions` table and the seed data raised a question M1 never answered:
+may an entry carry a future date? One dated next week would lower what is left this month before
+the money is spent, which works against the measure the product vision sets, the amount left
+visible straight after saving. Past dates stay allowed, because Scenario 1, step 4, adds a lunch
+that was missed days earlier.
+
+**Where it lands.** The seed script never writes a later date, and a test proves it
+(`test_no_entry_is_dated_later_than_today`). `POST /api/transactions` answers 422 with the exact
+message (section 3) when US03 is built in Sprint 3. A database CHECK cannot hold this rule, as
+section 2 explains.
+
+### Change 2 — US05 refreshes with a Refresh button
+
+**What changed.** Criterion 2 of US05 (#18). In M1: "when the user refreshes the list, then the
+message reads "No connection. Pull down to try again"". Now: "when the user taps Refresh, then the
+message reads "No connection. Tap Refresh to try again"", and the loaded entries still stay on
+screen.
+
+**Why.** The M2 check opens the walking skeleton in a browser, and the page it opens is this list.
+A browser has no pull-down gesture, so there the only way to refresh would be to reload the page,
+which throws away the entries already on screen: exactly what the criterion protects. A button
+works the same on a phone and in a browser, and on a phone pulling the list down still refreshes it
+too.
+
+**Where it lands.** The Refresh button and the message on `/`, built by #65 and shown in section 4.
+
+### Change 3 — US11: language options, English and Vietnamese first
+
+**What changed.** A new story, US11, P2, 3 points (#72): a switch in the top bar lists every
+language the app offers and changes every text to the one chosen, and the choice is kept on the
+device. This release offers English, the default, and Vietnamese.
+
+**Why.** Both personas are Vietnamese students, and all three interviews were held in Vietnamese; an
+app that speaks only English puts a language barrier in front of the people it is built for. The
+Product Owner asked for it on 28/09, and the team took it into Sprint 2 because the walking skeleton
+had only two screens to translate. The story names no language, so another one needs no new story.
+
+**Where it lands.** `mobile/src/i18n/strings.js` holds one dictionary per language, and the switch
+in the top bar of every screen lists every dictionary it finds. The API keeps answering in English
+and the app translates the sentences it knows. Built by #73; a test fails if a language is missing
+a text that English has.
