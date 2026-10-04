@@ -5,7 +5,8 @@ overview at `http://localhost:8081/` listing entries read from the database. Pla
 15 minutes, most of it downloads.
 
 You will use **two terminals**: one runs the backend, the other runs the app. Where Windows and
-macOS/Linux differ, both commands are given. On Windows, use PowerShell or Command Prompt.
+macOS/Linux differ, both commands are given. On Windows, use PowerShell or Command Prompt; in Git
+Bash, activate the virtual environment with `source .venv/Scripts/activate` instead.
 
 ---
 
@@ -47,7 +48,8 @@ python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
-If `py` is not found, use `python -m venv .venv` instead of the second line.
+If `py` is not found, check that `python --version` prints 3.11 or later, then use
+`python -m venv .venv` instead of the second line.
 
 **macOS / Linux**
 
@@ -167,6 +169,7 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 | `python -m pip` fails with `No module named pip`, or with `Python was not found` | The virtual environment is not active, or it was created without pip | Activate it again until the prompt starts with `(.venv)`; if the error stays, run `python -m ensurepip --upgrade`, then the install line again |
 | `ModuleNotFoundError: No module named 'fastapi'`, or `'app'`, or `'scripts'` | The virtual environment is not active, or the terminal is not in `backend/` | `cd backend`, activate again (section 3), then rerun the command |
 | `pip` tries to build `pydantic-core` and asks for Rust or for Visual C++ | A Python version outside 3.11 to 3.14, or 32-bit Python | Install 64-bit Python 3.12 and create `.venv` again |
+| `ImportError: cannot import name 'UTC' from 'datetime'` when seeding | Python 3.10 or older: the libraries install, but the code needs 3.11 or later | Install Python 3.12, delete the `.venv` folder, and create it again with `py -3.12 -m venv .venv` |
 | The page says **Cannot reach the server at http://localhost:8000/api**, or **No connection. Tap Refresh to try again** | The backend is not running | Start it in terminal 1 (section 4), check `http://localhost:8000/health`, then press **Refresh** |
 | **Incorrect email or password** for `mai@example.com` | The database was not seeded, or not in `backend/` | Run `python -m scripts.seed_data` in `backend/` |
 | `'npm' is not recognized` or `'node' is not recognized` | Node.js is not installed, or it was installed while this terminal was open | Install Node.js 22 or 24 LTS from https://nodejs.org/, close VS Code and every terminal, open a new one, then check `node --version` |
