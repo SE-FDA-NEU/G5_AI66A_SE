@@ -21,6 +21,9 @@ macOS/Linux differ, both commands are given. On Windows, use PowerShell or Comma
 Nothing else is needed: the database is a file that Python creates, so there is no database
 server and no Docker to install. A phone is optional (section 7).
 
+Run every **Check with** command before section 2; each must print a version. If you install
+anything now, close VS Code and every terminal, then open a new one, so the new program is found.
+
 ---
 
 ## 2. Get the code
@@ -161,10 +164,13 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 | --- | --- | --- |
 | `'python' is not recognized` or `'py' is not recognized` | Python is not installed, or not on the PATH | Install Python 3.12 from python.org with **Add python.exe to PATH** ticked, then open a new terminal |
 | PowerShell: `running scripts is disabled on this system` when activating | Windows blocks the activation script | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, then activate again. It lasts only for this window |
+| `python -m pip` fails with `No module named pip`, or with `Python was not found` | The virtual environment is not active, or it was created without pip | Activate it again until the prompt starts with `(.venv)`; if the error stays, run `python -m ensurepip --upgrade`, then the install line again |
 | `ModuleNotFoundError: No module named 'fastapi'`, or `'app'`, or `'scripts'` | The virtual environment is not active, or the terminal is not in `backend/` | `cd backend`, activate again (section 3), then rerun the command |
 | `pip` tries to build `pydantic-core` and asks for Rust or for Visual C++ | A Python version outside 3.11 to 3.14, or 32-bit Python | Install 64-bit Python 3.12 and create `.venv` again |
 | The page says **Cannot reach the server at http://localhost:8000/api**, or **No connection. Tap Refresh to try again** | The backend is not running | Start it in terminal 1 (section 4), check `http://localhost:8000/health`, then press **Refresh** |
 | **Incorrect email or password** for `mai@example.com` | The database was not seeded, or not in `backend/` | Run `python -m scripts.seed_data` in `backend/` |
+| `'npm' is not recognized` or `'node' is not recognized` | Node.js is not installed, or it was installed while this terminal was open | Install Node.js 22 or 24 LTS from https://nodejs.org/, close VS Code and every terminal, open a new one, then check `node --version` |
+| PowerShell: `npm.ps1 cannot be loaded because running scripts is disabled on this system` | Windows blocks npm's PowerShell script | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, or type `npm.cmd ci` instead of `npm ci` |
 | `npm ci` stops with an engine error, or Expo will not start | Node.js is older than 20.19 | Install Node.js 22 or 24 LTS, then run `npm ci` again |
 | Expo says port 8081 is in use | Another program holds the port | Accept the port Expo offers; the app still finds the backend |
 | `address already in use` when the backend starts | Another program holds port 8000 | Close it, or stop an older backend still running in another terminal |
