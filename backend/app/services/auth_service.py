@@ -1,4 +1,8 @@
-"""Signing in: BR2 and BR3. Nothing here knows about HTTP; the router turns a failure into 401."""
+"""Signing in (US02), with BR3 and BR10.
+
+Nothing here knows about HTTP. Each failure is an error from app/services/errors.py, and
+app/core/errors.py gives it its status.
+"""
 
 from functools import cache
 
@@ -7,12 +11,22 @@ from sqlalchemy.orm import Session
 from app.core.security import hash_password, verify_password
 from app.db.models import User
 from app.db.repositories import user_repo
+from app.services.errors import NotSignedIn
 
 INCORRECT_SIGN_IN = "Incorrect email or password"
+SIGN_IN_AGAIN = "Please sign in again"
 
 
-class IncorrectSignIn(Exception):
+class IncorrectSignIn(NotSignedIn):
     """BR3: the one failure a sign-in has, whether the address or the password was wrong."""
+
+    code = "incorrect_sign_in"
+
+
+class SessionOver(NotSignedIn):
+    """BR10: no token, a forged one, or one older than 7 days."""
+
+    code = "sign_in_again"
 
 
 @cache
