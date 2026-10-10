@@ -43,7 +43,7 @@ CATEGORIES = [
 # Mai, persona 1: a student who lives on 4,000,000 dong a month sent by her family.
 # Each entry: (days before today, category, amount in dong, the note exactly as she typed it).
 # 25 entries, so the list on / shows the newest 20 and leaves 5 out (US05). Every date is today
-# or earlier, never later (BR11).
+# or earlier, never later (BR11), and never before the 1st of this month (see entry_date).
 ENTRIES = [
     (12, "Food", 35_000, "com trua"),
     (11, "Food", 45_000, "pho"),
@@ -107,6 +107,17 @@ def add_demo_account(db: Session) -> User:
     return account
 
 
+def entry_date(today: date, days_ago: int) -> date:
+    """`days_ago` days before today, but never before the 1st of this month.
+
+    The overview totals this month only (US04). Run on the 1st to the 12th of a month, the oldest
+    entries would otherwise fall in last month, Mai's 4,000,000 allowance among them, and the
+    overview would show more spent than received. Moving them up to the 1st keeps all 25 entries,
+    and their order, in the month the demo is run.
+    """
+    return max(today - timedelta(days=days_ago), today.replace(day=1))
+
+
 def add_entries(db: Session, account: User, categories: dict[str, Category], today: date) -> None:
     already_seeded = db.scalar(
         select(func.count()).select_from(Transaction).where(Transaction.user_id == account.id)
@@ -116,7 +127,7 @@ def add_entries(db: Session, account: User, categories: dict[str, Category], tod
     # Oldest first, so ids grow with time, as they would if Mai had typed them day by day.
     for days_ago, category_name, amount, note in ENTRIES:
         category = categories[category_name]
-        occurred_on = today - timedelta(days=days_ago)
+        occurred_on = entry_date(today, days_ago)
         assert occurred_on <= today, "BR11: an entry is never dated later than today"
         db.add(
             Transaction(
