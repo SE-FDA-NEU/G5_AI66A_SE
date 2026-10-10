@@ -64,7 +64,7 @@ def test_the_list_needs_a_sign_in(client):
     response = client.get("/api/transactions")
 
     assert response.status_code == 401
-    assert response.json() == {"detail": "Please sign in again"}
+    assert response.json() == {"detail": "Please sign in again", "code": "sign_in_again"}
 
 
 def test_the_limit_must_be_between_1_and_100(client, auth_headers):
