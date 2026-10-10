@@ -105,3 +105,21 @@ English stays the default, so every acceptance criterion and `docs/SETUP.md` sti
 word. The API keeps answering in English and the app translates the sentences it knows. From now on
 every screen adds its text to every language's dictionary, and a test fails when a language is
 missing a text that English has. A new language is one more dictionary; no screen changes.
+
+---
+
+## 2026-10-10 — API errors carry a code as well as a sentence
+
+**Reason.** Drawing `/transactions/new` in its error state for `docs/ui.md` showed that the app
+could not keep translating errors by matching their English sentences: the new form has six
+messages in two languages, a reworded sentence would silently leave the Vietnamese screen in
+English, and a malformed request answered with FastAPI's own text, which no user should read. The
+same work showed that a crash in the API reached the browser without its CORS header, so the app
+said "Cannot reach the server" while the server was running.
+
+**Impact.** Every error now answers `{"detail": "<sentence>", "code": "<what went wrong>"}`, and a
+crash answers 500 in the same shape, inside CORS (#94). The sentences are unchanged, so no
+acceptance criterion changed and no story changed priority or points. The app picks each message,
+and a hint saying what to do next, by `code` (#103). `docs/design.md`, section 3, and
+`docs/ui.md`, section 4, describe it (#113). Cost: one extra commit by the testing owner on the
+same branch, because six existing tests compared whole error answers.

@@ -41,7 +41,10 @@ def test_every_failed_sign_in_gets_the_same_answer(client, account, email, secre
     response = sign_in(client, email, secret)
 
     assert response.status_code == 401
-    assert response.json() == {"detail": "Incorrect email or password"}
+    assert response.json() == {
+        "detail": "Incorrect email or password",
+        "code": "incorrect_sign_in",
+    }
 
 
 def test_password_is_stored_only_as_a_hash(client, account):
@@ -67,7 +70,7 @@ def test_me_without_a_token_asks_to_sign_in_again(client):
     response = client.get("/api/auth/me")
 
     assert response.status_code == 401
-    assert response.json() == {"detail": "Please sign in again"}
+    assert response.json() == {"detail": "Please sign in again", "code": "sign_in_again"}
 
 
 def test_a_forged_token_is_refused(client, account):
@@ -86,7 +89,7 @@ def test_a_sign_in_lasts_seven_days(client, account):
     assert still_valid.status_code == 200
     expired = client.get("/api/auth/me", headers={"Authorization": f"Bearer {stale}"})
     assert expired.status_code == 401
-    assert expired.json() == {"detail": "Please sign in again"}
+    assert expired.json() == {"detail": "Please sign in again", "code": "sign_in_again"}
 
 
 def test_the_token_expires_seven_days_after_sign_in(client, account):
