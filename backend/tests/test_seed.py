@@ -45,7 +45,7 @@ def test_no_entry_is_dated_later_than_today(database_url):
         oldest = db.scalar(select(func.min(Transaction.occurred_on)))
     engine.dispose()
     assert newest == date(2026, 11, 12)
-    assert oldest == date(2026, 10, 31)
+    assert oldest == date(2026, 11, 1)
 
 
 def test_the_demo_account_can_sign_in(database_url):
@@ -56,3 +56,19 @@ def test_the_demo_account_can_sign_in(database_url):
         account = db.scalar(select(User).where(User.email == DEMO_EMAIL))
     engine.dispose()
     assert verify_password(DEMO_PASSWORD, account.password_hash)
+
+
+@pytest.mark.parametrize("today", [date(2026, 11, 1), date(2026, 11, 3), date(2026, 11, 30)])
+def test_every_entry_falls_in_the_month_the_seed_runs(database_url, today):
+    """US04 totals this month only, so the demo must show 4,000,000 received on any day."""
+    seed(database_url, today=today)
+
+    engine = make_engine(database_url)
+    with Session(engine) as db:
+        oldest = db.scalar(select(func.min(Transaction.occurred_on)))
+        received = db.scalar(
+            select(func.sum(Transaction.amount)).where(Transaction.kind == "income")
+        )
+    engine.dispose()
+    assert oldest >= today.replace(day=1)
+    assert received == 4_000_000
