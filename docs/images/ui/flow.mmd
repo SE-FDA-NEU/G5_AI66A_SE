@@ -1,0 +1,23 @@
+flowchart TD
+    Open([Open the app]) --> Session{Signed in within 7 days?}
+
+    Session -- no --> Login["/login<br/>Sign in · US02"]
+    Session -- yes --> Home["/<br/>This month and recent entries<br/>US04 · US05"]
+
+    Login -- "Create an account" --> Register["/register<br/>Create an account · US01"]
+    Register -- "Sign in" --> Login
+    Register -- "account created,<br/>signed in at once" --> Home
+    Login -- "correct email<br/>and password" --> Home
+
+    Home -- "Add an entry" --> New["/transactions/new<br/>Log a purchase · US03"]
+    New -- "Save: stored" --> Home
+    New -- "Cancel" --> Home
+
+    Home -- "Sign out, or the<br/>7 days are over" --> Login
+
+    Home -.-> Later["/transactions/:id · /budget · /stats<br/>P1 and P2, later sprints"]
+
+    classDef built fill:#E3F0EC,stroke:#0E6B57,color:#17211E
+    classDef later fill:#F4F6F5,stroke:#9AA8A2,color:#5F6F68,stroke-dasharray: 4 3
+    class Login,Register,Home,New built
+    class Later later
