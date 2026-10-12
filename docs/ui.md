@@ -133,9 +133,30 @@ address at the top.
 - **Empty** is a month with no entries: one sentence instead of three zeros (US04, criterion 3).
 - **Data** turns **Left** red, with a minus sign, once more was spent than received.
 
-_Written in #109._
+### `/transactions/new`, New entry
 
----
+"The user comes here to write down one amount spent or received, in under 15 seconds, and goes
+back to `/` to see what is left."
+Calls: `GET /api/categories`, `POST /api/transactions`; back on `/`, the two calls of the overview.
+
+```
++- New entry -------------------------------------+
+| [ Money spent ]  Money received                 |   <- kind of entry, spent by default
+| Amount (d)  [ 55000                         ]   |   <- has the focus on arrival
+| Kind of spending                                |
+| (Food) (Transport) (Shopping) (Bills) ...       |   <- one tap; tap again to clear (BR6)
+| Note        [ tra sua                       ]   |
+| Date        [ 09/10/2026 ]  (Today) (Yesterday) |   <- today unless changed
+|                                                 |
+| ! The date cannot be in the future              |   <- 422 (BR5, BR6, BR11); nothing stored
+|   An entry records money already spent or       |
+|   received, so choose today or an earlier day.  |
+|   Nothing was saved.                            |
+|                                                 |
+| [                 Save                      ]   |   <- stored: back to / with new totals
+|                   Cancel                        |
++-------------------------------------------------+
+```
 
 ## 3. Error messages
 
