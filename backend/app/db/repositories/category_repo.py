@@ -14,3 +14,8 @@ def list_all(db: Session) -> list[Category]:
 
 def get_by_name(db: Session, name: str) -> Category | None:
     return db.scalar(select(Category).where(Category.name == name))
+
+
+def get_by_id(db: Session, category_id: int) -> Category | None:
+    """The category with this id, or None. Categories are shared by every account."""
+    return db.get(Category, category_id)

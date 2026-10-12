@@ -4,12 +4,22 @@ BR4: every function here takes the signed-in account's id and filters on it, so 
 return another account's entries.
 """
 
+from dataclasses import dataclass
 from datetime import date
 
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.orm import Session, joinedload
 
-from app.db.models import Transaction
+from app.db.models import KIND_INCOME, KIND_SPENDING, Transaction
+
+
+@dataclass
+class MonthTotals:
+    """What one account received and spent between two dates, and in how many entries."""
+
+    income: int
+    spending: int
+    count: int
 
 
 def list_recent(db: Session, user_id: int, *, limit: int) -> tuple[list[Transaction], int]:
@@ -49,4 +59,24 @@ def create(
     )
     db.add(entry)
     db.commit()
+    # Load the kind of spending now, so the answer can show its name without another query.
+    db.refresh(entry, ["category"])
     return entry
+
+
+def month_totals(db: Session, user_id: int, *, first_day: date, last_day: date) -> MonthTotals:
+    """The account's money received and spent from `first_day` to `last_day`, both included.
+
+    One query: each SUM adds only the rows of its kind, and the WHERE keeps only this account's
+    entries (BR4).
+    """
+
+    def total_of(kind: str):
+        return func.coalesce(func.sum(case((Transaction.kind == kind, Transaction.amount))), 0)
+
+    income, spending, count = db.execute(
+        select(total_of(KIND_INCOME), total_of(KIND_SPENDING), func.count())
+        .where(Transaction.user_id == user_id)
+        .where(Transaction.occurred_on.between(first_day, last_day))
+    ).one()
+    return MonthTotals(income=income, spending=spending, count=count)
