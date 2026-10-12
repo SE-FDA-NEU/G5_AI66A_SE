@@ -73,7 +73,29 @@ Calls: `POST /api/auth/login`.
 +-------------------------------------------------+
 ```
 
-_Written in #108._
+### `/register`, Create an account
+
+"The user comes here to create an account with an email and a password, and lands on `/`
+already signed in."
+Calls: `POST /api/users`.
+
+```
++- Create an account -----------------------------+
+| Create an account                               |
+| An email and a password are all it takes.       |
+|                                                 |
+| Email     [ hoa@example.com                 ]   |
+| Password  [ ********                        ]   |
+|           6 to 128 characters                   |
+|                                                 |
+| ! This email is already registered              |   <- 409 (BR1), 422 (BR2) or 400
+|   Sign in with it instead, or create the        |
+|   account with another address.                 |
+|                                                 |
+| [            Create account                 ]   |
+|      Already have an account?  Sign in  ->      |   <- back to /login
++-------------------------------------------------+
+```
 
 _Written in #109._
 
