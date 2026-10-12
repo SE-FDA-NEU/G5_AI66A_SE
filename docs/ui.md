@@ -47,6 +47,32 @@ Source of the diagram: [`docs/images/ui/flow.mmd`](images/ui/flow.mmd).
 
 ## 2. Wireframes
 
+One wireframe per P0 screen, drawn before the screen was built. The overview at `/` is drawn in
+all four states. Every screen has the language switch, **EN | VI**, at the right of its top bar
+(US11), left out of the drawings below.
+
+### `/login`, Sign in
+
+"The user comes here to sign in once, and is then not asked again for 7 days."
+Calls: `POST /api/auth/login`.
+
+```
++- Sign in ---------------------------------------+
+| Personal Expense Management App                 |
+| Sign in to see this month and your recent       |
+| entries.                                        |
+|                                                 |
+| Email     [ you@example.com                 ]   |
+| Password  [ ********                        ]   |
+|                                                 |
+| ! Incorrect email or password                   |   <- only after a failed sign-in (BR3)
+|   Check both and try again.                     |
+|                                                 |
+| [               Sign in                     ]   |
+|          New here?  Create an account  ->       |   <- goes to /register
++-------------------------------------------------+
+```
+
 _Written in #108._
 
 _Written in #109._
