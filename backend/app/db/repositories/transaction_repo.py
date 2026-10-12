@@ -49,4 +49,6 @@ def create(
     )
     db.add(entry)
     db.commit()
+    # Load the kind of spending now, so the answer can show its name without another query.
+    db.refresh(entry, ["category"])
     return entry
