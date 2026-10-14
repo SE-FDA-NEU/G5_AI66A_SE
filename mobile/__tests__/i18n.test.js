@@ -1,11 +1,12 @@
 /**
  * Language options (US11): every language has exactly the texts English has, placeholders are
- * filled, and the API's English sentences are shown in the chosen language.
+ * filled, and every error the API names by its code is shown in the chosen language, with a hint.
  */
 
 import { strings } from '../src/i18n/strings';
 import {
   DEFAULT_LANGUAGE,
+  ERROR_KEYS,
   LANGUAGE_NAMES,
   LANGUAGES,
   describeError,
@@ -53,6 +54,8 @@ describe('the dictionaries', () => {
   test('keep the exact English sentences of the acceptance criteria', () => {
     expect(strings.en['error.incorrectSignIn']).toBe('Incorrect email or password');
     expect(strings.en['overview.noConnection']).toBe('No connection. Tap Refresh to try again');
+    expect(strings.en['error.emailTaken']).toBe('This email is already registered');
+    expect(strings.en['error.passwordLength']).toBe('Password must be 6 to 128 characters');
   });
 
   test('keep the exact Vietnamese texts of the US11 criteria', () => {
@@ -99,25 +102,49 @@ describe('translate', () => {
 describe('describeError', () => {
   const vi = (key, params) => translate('vi', key, params);
   const en = (key, params) => translate('en', key, params);
+  const URL = 'http://localhost:8000/api';
 
-  test('shows the BR3 sentence in the chosen language', () => {
-    const error = { status: 401, message: 'Incorrect email or password' };
-    expect(describeError(error, vi, 'http://localhost:8000/api')).toBe(
-      'Email hoặc mật khẩu không đúng',
-    );
-    expect(describeError(error, en, 'http://localhost:8000/api')).toBe(
-      'Incorrect email or password',
-    );
+  test('shows the BR3 sentence in the chosen language, picked by its code', () => {
+    const error = { status: 401, code: 'incorrect_sign_in', message: 'Incorrect email or password' };
+    expect(describeError(error, vi, URL).message).toBe('Email hoặc mật khẩu không đúng');
+    expect(describeError(error, en, URL).message).toBe('Incorrect email or password');
   });
 
-  test('names the server address when there was no answer at all', () => {
-    expect(describeError({ status: 0, message: '' }, vi, 'http://localhost:8000/api')).toBe(
-      'Không kết nối được máy chủ tại http://localhost:8000/api',
-    );
+  test('follows the code, not the English sentence, so rewording the API changes nothing', () => {
+    const error = { status: 422, code: 'date_in_future', message: 'Some newer wording' };
+    expect(describeError(error, en, URL).message).toBe('The date cannot be in the future');
   });
 
-  test('shows a sentence it does not know exactly as the API sent it', () => {
-    expect(describeError({ status: 422, message: 'limit: too big' }, vi, '')).toBe('limit: too big');
+  test.each(Object.entries(ERROR_KEYS))('%s has a message and a hint in every language', (code, key) => {
+    for (const language of LANGUAGES) {
+      const shown = describeError({ status: 400, code }, (k, p) => translate(language, k, p), URL);
+      expect([code, language, shown.message]).toEqual([code, language, strings[language][key]]);
+      expect([code, language, Boolean(shown.hint)]).toEqual([code, language, true]);
+    }
+  });
+
+  test('names the server address and says what to do when there was no answer at all', () => {
+    const shown = describeError({ status: 0, message: '' }, vi, URL);
+    expect(shown.message).toBe('Không kết nối được máy chủ tại http://localhost:8000/api');
+    expect(shown.hint).toContain('docs/SETUP.md');
+  });
+
+  test('shows a message of the screen itself, with its hint when it has one', () => {
+    expect(describeError({ key: 'login.missing' }, en, URL)).toEqual({
+      message: 'Enter your email and password',
+      hint: null,
+    });
+  });
+
+  test('shows a sentence with an unknown code as the API sent it, with general advice', () => {
+    const shown = describeError({ status: 418, code: 'teapot', message: 'I am a teapot' }, en, URL);
+    expect(shown.message).toBe('I am a teapot');
+    expect(shown.hint).toBe(strings.en['error.refused.hint']);
+  });
+
+  test('never shows a bare status such as "Error 422"', () => {
+    const shown = describeError({ status: 422, code: null, message: '' }, en, URL);
+    expect(shown.message).toBe('The server refused this request');
   });
 
   test('shows nothing when there is no error', () => {
