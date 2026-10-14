@@ -97,9 +97,66 @@ Calls: `POST /api/users`.
 +-------------------------------------------------+
 ```
 
-_Written in #109._
+### `/`, the overview, in four states
 
----
+"The user comes here to see how much of this month's money is left, and to check the latest
+entries for mistakes."
+Calls: `GET /api/summary`, `GET /api/transactions?limit=20`, and `GET /api/auth/me` for the
+address at the top.
+
+```
++- Loading --------------------------------+   +- Error -----------------------------------+
+|                                          |   |                                           |
+|              ( spinner )                 |   | ! Cannot reach the server at              |
+|          Loading this month...           |   |   http://localhost:8000/api               |
+|                                          |   |   Check that the backend is running       |
+|                                          |   |   (docs/SETUP.md, section 4), then try    |
+|                                          |   |   again.                                  |
+|                                          |   | [             Try again              ]    |
++------------------------------------------+   +-------------------------------------------+
++- Empty ----------------------------------+   +- Data ------------------------------------+
+| hoa@example.com              Sign out    |   | mai@example.com               Sign out    |
+| This month, 10/2026                      |   | This month, 10/2026                       |
+| No transactions yet this month           |   | Received 4,000,000 d   Spent 2,931,000 d  |
+| Write down the first amount you spend    |   | Left  1,069,000 d                         |
+| or receive, and this month's totals      |   | [          + Add an entry           ]     |
+| appear here.                             |   | The 20 most recent of 25 entries [Refresh]|
+| [          + Add an entry           ]    |   | tra sua   Food        -55,000 d  09/10    |
+| Recent entries               [Refresh]   |   | com trua  Food        -45,000 d  09/10    |
+| No entries yet.                          |   | ...                                       |
++------------------------------------------+   +-------------------------------------------+
+```
+
+- **Loading** shows only the first time; a later refresh keeps what is on screen.
+- **Error** shows when the first load gets no answer. Once data is on screen, a failed **Refresh**
+  keeps it and adds "No connection. Tap Refresh to try again" above it (US05, criterion 2).
+- **Empty** is a month with no entries: one sentence instead of three zeros (US04, criterion 3).
+- **Data** turns **Left** red, with a minus sign, once more was spent than received.
+
+### `/transactions/new`, New entry
+
+"The user comes here to write down one amount spent or received, in under 15 seconds, and goes
+back to `/` to see what is left."
+Calls: `GET /api/categories`, `POST /api/transactions`; back on `/`, the two calls of the overview.
+
+```
++- New entry -------------------------------------+
+| [ Money spent ]  Money received                 |   <- kind of entry, spent by default
+| Amount (d)  [ 55000                         ]   |   <- has the focus on arrival
+| Kind of spending                                |
+| (Food) (Transport) (Shopping) (Bills) ...       |   <- one tap; tap again to clear (BR6)
+| Note        [ tra sua                       ]   |
+| Date        [ 09/10/2026 ]  (Today) (Yesterday) |   <- today unless changed
+|                                                 |
+| ! The date cannot be in the future              |   <- 422 (BR5, BR6, BR11); nothing stored
+|   An entry records money already spent or       |
+|   received, so choose today or an earlier day.  |
+|   Nothing was saved.                            |
+|                                                 |
+| [                 Save                      ]   |   <- stored: back to / with new totals
+|                   Cancel                        |
++-------------------------------------------------+
+```
 
 ## 3. Error messages
 
