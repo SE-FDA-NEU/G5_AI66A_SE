@@ -20,6 +20,7 @@ import {
 
 import { api } from '../api/client';
 import EntryRow from '../components/EntryRow';
+import ErrorMessage from '../components/ErrorMessage';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
@@ -67,7 +68,7 @@ export default function OverviewScreen() {
     load();
   }
 
-  const messageText = message?.key ? t(message.key) : describeError(message, t, api.baseUrl);
+  const problem = describeError(message, t, api.baseUrl);
 
   if (loading) {
     return (
@@ -117,11 +118,7 @@ export default function OverviewScreen() {
             </Pressable>
           </View>
 
-          {messageText ? (
-            <Text style={styles.message} accessibilityRole="alert">
-              {messageText}
-            </Text>
-          ) : null}
+          <ErrorMessage problem={problem} />
         </View>
       }
       ListEmptyComponent={
@@ -163,12 +160,5 @@ const styles = StyleSheet.create({
   },
   refreshButtonBusy: { opacity: 0.6 },
   refreshText: { color: colors.textInverse, fontSize: 14, fontWeight: '600' },
-  message: {
-    backgroundColor: colors.dangerLight,
-    borderRadius: radius.sm,
-    color: colors.danger,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
   empty: { color: colors.textMuted, marginTop: spacing.lg, textAlign: 'center' },
 });
