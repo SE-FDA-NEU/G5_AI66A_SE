@@ -1,6 +1,7 @@
 /**
- * Which screen shows. Signed out, only /login exists; signed in, only the overview at / exists,
- * so no signed-in screen can ever be reached without a session (BR4 as navigation).
+ * Which screens exist. Signed out, only /login and /register; signed in, only the screens of an
+ * account. A signed-in screen typed into the address bar without a session lands on /login
+ * (BR4 as navigation), and signing in or creating an account lands on / by itself.
  */
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,20 +13,11 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import LoginScreen from '../screens/LoginScreen';
 import OverviewScreen from '../screens/OverviewScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import { colors } from '../theme';
+import { linking } from './linking';
 
 const Stack = createNativeStackNavigator();
-
-// In a browser the address bar follows section 6 of docs/requirements.md: /login and /.
-const linking = {
-  prefixes: [],
-  config: {
-    screens: {
-      Login: 'login',
-      Overview: '',
-    },
-  },
-};
 
 const screenOptions = {
   headerStyle: { backgroundColor: colors.primary },
@@ -63,7 +55,18 @@ export default function AppNavigator() {
             options={{ title: t('overview.title') }}
           />
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} options={{ title: t('login.title') }} />
+          <>
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ title: t('login.title') }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={RegisterScreen}
+              options={{ title: t('register.title') }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
