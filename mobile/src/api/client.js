@@ -9,12 +9,16 @@ import * as storage from './storage';
 const BASE_URL = getBaseUrl();
 const TOKEN_KEY = 'g5_access_token';
 
-/** An error the screens can act on: `status` is the HTTP status, or 0 when there was no answer. */
+/**
+ * An error the screens can act on. `status` is the HTTP status, or 0 when there was no answer;
+ * `code` names the error, such as "date_in_future", and picks the message the screen shows.
+ */
 export class ApiError extends Error {
-  constructor(status, message) {
+  constructor(status, message, code = null) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.code = code;
   }
 }
 
@@ -47,19 +51,24 @@ async function request(path, { method = 'GET', body, signedIn = true } = {}) {
   } catch {
     // fetch rejects, rather than answering, when there is no network or no server running.
     // The address is in the message so that a wrong one is easy to spot.
-    throw new ApiError(0, `Cannot reach the server at ${BASE_URL}`);
+    throw new ApiError(0, `Cannot reach the server at ${BASE_URL}`, 'no_connection');
   }
 
   const payload = await response.json().catch(() => null);
   if (!response.ok) {
-    // The API always answers errors as {"detail": "<one sentence>"}, ready to show as it is.
-    throw new ApiError(response.status, payload?.detail ?? `Server error (${response.status})`);
+    // The API answers every error as {"detail": "<one sentence>", "code": "<what went wrong>"}.
+    // An answer without that shape, such as a proxy's error page, counts as a server error.
+    const code = payload?.code ?? (response.status >= 500 ? 'server_error' : null);
+    throw new ApiError(response.status, payload?.detail ?? '', code);
   }
   return payload;
 }
 
 export const api = {
   baseUrl: BASE_URL,
+
+  register: (email, password) =>
+    request('/users', { method: 'POST', body: { email, password }, signedIn: false }),
 
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: { email, password }, signedIn: false }),
