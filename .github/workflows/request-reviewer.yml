@@ -1,0 +1,65 @@
+name: Request reviewer
+
+# Sprint 1 and Sprint 2 retros: most pull requests were opened without a reviewer, and waited
+# until someone noticed. This asks the reviewer the moment a pull request is opened, from the
+# rotation the team agreed at sprint planning, so nobody has to remember.
+#
+# The rotation is read from .github/review-rotation.json on main, not from the pull request, so
+# a pull request cannot pick its own reviewer. An issue listed under reviewer_of_issue overrides
+# the author's usual reviewer; the issue number is read from the title, "[#123] ...".
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  request:
+    name: Ask the reviewer from the rotation
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const { owner, repo } = context.repo;
+
+            let rotation;
+            try {
+              const { data } = await github.rest.repos.getContent({
+                owner, repo, path: '.github/review-rotation.json', ref: 'main',
+              });
+              rotation = JSON.parse(Buffer.from(data.content, 'base64').toString('utf8'));
+            } catch (error) {
+              core.warning(`No rotation on main yet (${error.message}). Pick a reviewer by hand.`);
+              return;
+            }
+
+            const issue = (pr.title.match(/^\[#(\d+)\]/) || [])[1];
+            const byIssue = rotation.reviewer_of_issue || {};
+            const byAuthor = rotation.reviewer_of_author || {};
+            const reviewer = (issue && byIssue[issue]) || byAuthor[pr.user.login];
+
+            if (!reviewer) {
+              core.warning(`The rotation names no reviewer for @${pr.user.login}. Pick one by hand.`);
+              return;
+            }
+            if (reviewer === pr.user.login) {
+              core.warning('The rotation names the author as reviewer. Fix .github/review-rotation.json.');
+              return;
+            }
+
+            const already = (pr.requested_reviewers || []).map((user) => user.login);
+            if (already.includes(reviewer)) {
+              core.info(`@${reviewer} is already asked.`);
+              return;
+            }
+
+            await github.rest.pulls.requestReviewers({
+              owner, repo, pull_number: pr.number, reviewers: [reviewer],
+            });
+            core.info(`Asked @${reviewer} to review, from the Sprint ${rotation.sprint} rotation.`);
