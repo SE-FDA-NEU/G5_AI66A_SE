@@ -75,6 +75,11 @@ left to retune.
    becomes an issue. 
 3. A Pull Request is merged only after the automated tests pass; a failing run blocks it.
 4. Each member owns a fixed part of the codebase and does not edit another's; cross-boundary
-   changes are requested in the Pull Request and made by the owner.
+   changes are requested in the Pull Request and made by the owner. When the two changes must
+   merge together, such as a new error shape and the tests that expect it, the owner pushes a
+   commit to the same branch, so `main` never sees one without the other.
 5. Any requirement or technology change after a sprint starts is recorded in `docs/changelog.md`
    with date, reason and cost.
+6. The reviewer is asked the moment a Pull Request is opened, from the rotation agreed at sprint
+   planning in `.github/review-rotation.json`; the Request reviewer workflow does the asking. A
+   review says what the reviewer ran and what it showed, never only "looks good".
