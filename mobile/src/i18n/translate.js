@@ -32,20 +32,48 @@ export function translate(language, key, params = {}) {
   );
 }
 
-// The API always answers in English, with the exact sentences of the acceptance criteria. The app
-// shows each sentence it knows in the chosen language; any other sentence is shown as it came.
-const API_SENTENCES = {
-  'Incorrect email or password': 'error.incorrectSignIn',
-  'Please sign in again': 'error.signInAgain',
+/** True when the English dictionary has `key`, so every other language has it too. */
+export function hasText(key) {
+  return Object.prototype.hasOwnProperty.call(strings[DEFAULT_LANGUAGE], key);
+}
+
+// The API names every error with a `code` that never changes when its English sentence is
+// reworded (docs/design.md, section 3). The app picks the message to show by that code, in the
+// chosen language; matching the English sentence instead broke as soon as one word changed.
+export const ERROR_KEYS = {
+  incorrect_sign_in: 'error.incorrectSignIn',
+  sign_in_again: 'error.signInAgain',
+  email_taken: 'error.emailTaken',
+  password_length: 'error.passwordLength',
+  invalid_email: 'error.invalidEmail',
+  amount_not_positive: 'error.amountNotPositive',
+  date_in_future: 'error.dateInFuture',
+  unknown_category: 'error.unknownCategory',
+  invalid_month: 'error.invalidMonth',
+  invalid_request: 'error.invalidRequest',
+  not_found: 'error.notFound',
+  server_error: 'error.server',
 };
 
+/** The message under `key`, and its hint under `key.hint` when the dictionary has one. */
+function withHint(key, t, params) {
+  const hintKey = `${key}.hint`;
+  return { message: t(key, params), hint: hasText(hintKey) ? t(hintKey, params) : null };
+}
+
 /**
- * The text to show for an error from src/api/client.js, in the chosen language.
- * Status 0 means no answer at all: no network, or no server running.
+ * What to show for a problem, in the chosen language: `{ message, hint }`, or null for none.
+ *
+ * A problem is either `{ key }`, a message of the screen itself such as "Enter your email and
+ * password", or an error from src/api/client.js. Status 0 means no answer at all: no network, or
+ * no server running. A code the app does not know yet shows the API's sentence as it came, with
+ * general advice, rather than nothing.
  */
-export function describeError(error, t, baseUrl) {
-  if (!error) return null;
-  if (error.status === 0) return t('error.cannotReach', { url: baseUrl });
-  const key = API_SENTENCES[error.message];
-  return key ? t(key) : error.message;
+export function describeError(problem, t, baseUrl) {
+  if (!problem) return null;
+  if (problem.key) return withHint(problem.key, t);
+  if (problem.status === 0) return withHint('error.cannotReach', t, { url: baseUrl });
+  const key = ERROR_KEYS[problem.code];
+  if (key) return withHint(key, t);
+  return { message: problem.message || t('error.refused'), hint: t('error.refused.hint') };
 }

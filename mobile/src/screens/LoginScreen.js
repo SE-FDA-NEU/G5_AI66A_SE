@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import { api } from '../api/client';
+import ErrorMessage from '../components/ErrorMessage';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
@@ -47,7 +48,7 @@ export default function LoginScreen() {
     }
   }
 
-  const errorText = error?.key ? t(error.key) : describeError(error, t, api.baseUrl);
+  const problem = describeError(error, t, api.baseUrl);
 
   return (
     <KeyboardAvoidingView
@@ -85,11 +86,7 @@ export default function LoginScreen() {
           accessibilityLabel={t('login.password')}
         />
 
-        {errorText ? (
-          <Text style={styles.error} accessibilityRole="alert">
-            {errorText}
-          </Text>
-        ) : null}
+        <ErrorMessage problem={problem} style={styles.error} />
 
         <Pressable
           style={[styles.button, submitting && styles.buttonDisabled]}
@@ -141,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: spacing.md,
   },
-  error: { color: colors.danger, fontSize: 14, marginTop: spacing.md },
+  error: { marginBottom: 0, marginTop: spacing.md },
   button: {
     alignItems: 'center',
     backgroundColor: colors.primary,
