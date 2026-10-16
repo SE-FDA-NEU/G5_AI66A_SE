@@ -22,6 +22,19 @@ export function formatAmount(amount, kind, language = DEFAULT_LANGUAGE) {
   return `${kind === 'income' ? '+' : '−'}${formatDong(amount, language)}`;
 }
 
+/**
+ * What is left this month: "1,069,000 ₫", or "−120,000 ₫" once more was spent than received.
+ */
+export function formatSigned(amount, language = DEFAULT_LANGUAGE) {
+  return `${Number(amount) < 0 ? '−' : ''}${formatDong(amount, language)}`;
+}
+
+/** "2026-10" -> "10/2026": the month as the requirements write it. */
+export function formatMonth(month) {
+  const [year, number] = String(month ?? '').split('-');
+  return year && number ? `${number}/${year}` : '';
+}
+
 /** "2026-09-28" -> "28/09/2026": day first in every language, as the requirements write dates. */
 export function formatDate(isoDate) {
   const [year, month, day] = String(isoDate ?? '').split('-');
