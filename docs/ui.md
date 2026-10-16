@@ -49,7 +49,7 @@ Source of the diagram: [`docs/images/ui/flow.mmd`](images/ui/flow.mmd).
 
 One wireframe per P0 screen, drawn before the screen was built. The overview at `/` is drawn in
 all four states. Every screen has the language switch, **EN | VI**, at the right of its top bar
-(US11), left out of the drawings below.
+(US11), left out of the drawings below. Under each wireframe, a screenshot of the screen as built.
 
 ### `/login`, Sign in
 
@@ -72,6 +72,10 @@ Calls: `POST /api/auth/login`.
 |          New here?  Create an account  ->       |   <- goes to /register
 +-------------------------------------------------+
 ```
+
+As built:
+
+![/login after a wrong password](images/ui/login-error.png)
 
 ### `/register`, Create an account
 
@@ -96,6 +100,10 @@ Calls: `POST /api/users`.
 |      Already have an account?  Sign in  ->      |   <- back to /login
 +-------------------------------------------------+
 ```
+
+As built:
+
+![/register with an address that is already registered](images/ui/register-error.png)
 
 ### `/`, the overview, in four states
 
