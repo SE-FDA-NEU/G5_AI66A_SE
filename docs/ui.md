@@ -141,6 +141,14 @@ address at the top.
 - **Empty** is a month with no entries: one sentence instead of three zeros (US04, criterion 3).
 - **Data** turns **Left** red, with a minus sign, once more was spent than received.
 
+As built, in the same order:
+
+| Loading | Error |
+| --- | --- |
+| ![/ while it loads](images/ui/overview-loading.png) | ![/ with the backend stopped](images/ui/overview-error.png) |
+| **Empty** | **Data** |
+| ![/ for a new account](images/ui/overview-empty.png) | ![/ for mai@example.com](images/ui/overview-data.png) |
+
 ### `/transactions/new`, New entry
 
 "The user comes here to write down one amount spent or received, in under 15 seconds, and goes
@@ -165,6 +173,12 @@ Calls: `GET /api/categories`, `POST /api/transactions`; back on `/`, the two cal
 |                   Cancel                        |
 +-------------------------------------------------+
 ```
+
+As built:
+
+![/transactions/new after a date in the future](images/ui/new-entry-future.png)
+
+---
 
 ## 3. Error messages
 
