@@ -1,4 +1,4 @@
-"""This month's position: US04 and BR4."""
+"""This month's position: US04 and BR4. Also the list of categories behind the form (US03)."""
 
 from datetime import date, timedelta
 
@@ -100,3 +100,19 @@ def test_a_month_not_written_yyyy_mm_gets_400(client, auth_headers):
 
 def test_the_summary_needs_a_sign_in(client):
     assert client.get("/api/summary").json()["code"] == "sign_in_again"
+
+
+def test_categories_list_spending_first(client, auth_headers):
+    """The picker on /transactions/new: the conftest seeds Food, Transport and Salary."""
+    response = client.get("/api/categories", headers=auth_headers)
+
+    assert response.status_code == 200
+    assert [(c["name"], c["kind"]) for c in response.json()] == [
+        ("Food", "expense"),
+        ("Transport", "expense"),
+        ("Salary", "income"),
+    ]
+
+
+def test_categories_need_a_sign_in(client):
+    assert client.get("/api/categories").status_code == 401
