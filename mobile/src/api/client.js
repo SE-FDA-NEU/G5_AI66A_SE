@@ -76,4 +76,10 @@ export const api = {
   me: () => request('/auth/me'),
 
   listRecent: (limit = 20) => request(`/transactions?limit=${limit}`),
+
+  summary: () => request('/summary'),
+
+  categories: () => request('/categories'),
+
+  createEntry: (entry) => request('/transactions', { method: 'POST', body: entry }),
 };
