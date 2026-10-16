@@ -7,6 +7,7 @@ export const ROUTES = {
   Login: 'login',
   Register: 'register',
   Overview: '',
+  NewEntry: 'transactions/new',
 };
 
 export const linking = {

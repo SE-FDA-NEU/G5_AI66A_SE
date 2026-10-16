@@ -12,6 +12,7 @@ import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import LoginScreen from '../screens/LoginScreen';
+import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { colors } from '../theme';
@@ -49,11 +50,18 @@ export default function AppNavigator() {
     <NavigationContainer linking={linking} documentTitle={documentTitle}>
       <Stack.Navigator screenOptions={screenOptions}>
         {status === 'signed-in' ? (
-          <Stack.Screen
-            name="Overview"
-            component={OverviewScreen}
-            options={{ title: t('overview.title') }}
-          />
+          <>
+            <Stack.Screen
+              name="Overview"
+              component={OverviewScreen}
+              options={{ title: t('overview.title') }}
+            />
+            <Stack.Screen
+              name="NewEntry"
+              component={NewEntryScreen}
+              options={{ title: t('newEntry.title') }}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
