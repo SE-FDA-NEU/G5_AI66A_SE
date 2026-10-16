@@ -66,6 +66,16 @@ export function AuthProvider({ children }) {
     [start],
   );
 
+  // The account's email, read again once the server answers. When the app opened with no
+  // connection, restoreSession could not read it, and the overview showed no address.
+  const refreshUser = useCallback(async () => {
+    try {
+      setUser(await api.me());
+    } catch {
+      // Still unreachable, or signed out meanwhile: the overview already says which.
+    }
+  }, []);
+
   const signOut = useCallback(async () => {
     await clearToken();
     setUser(null);
@@ -73,8 +83,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ status, user, signIn, signUp, signOut }),
-    [status, user, signIn, signUp, signOut],
+    () => ({ status, user, signIn, signUp, signOut, refreshUser }),
+    [status, user, signIn, signUp, signOut, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

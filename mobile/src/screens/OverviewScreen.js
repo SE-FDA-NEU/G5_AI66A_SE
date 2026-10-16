@@ -1,12 +1,14 @@
 /**
- * The overview at /: the signed-in account's 20 most recent entries, newest first (US05), in
- * the chosen language (US11).
+ * The overview at /: this month's income, spending and what is left (US04), then the 20 most
+ * recent entries, newest first (US05), in the chosen language (US11).
  *
- * This is the walking skeleton: every row comes from GET /api/transactions, which reads the
- * transactions table. Nothing on this screen comes from an array in the code.
+ * Everything comes from the database through GET /api/summary and GET /api/transactions; nothing
+ * on this screen comes from an array in the code. The screen has four states (docs/ui.md,
+ * section 2): loading the first time, an error with nothing to show, an empty month, and data.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -21,6 +23,7 @@ import {
 import { api } from '../api/client';
 import EntryRow from '../components/EntryRow';
 import ErrorMessage from '../components/ErrorMessage';
+import MonthSummary from '../components/MonthSummary';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
@@ -28,12 +31,13 @@ import { colors, radius, spacing } from '../theme';
 
 export const RECENT_COUNT = 20;
 
-export default function OverviewScreen() {
-  const { user, signOut } = useAuth();
+export default function OverviewScreen({ navigation }) {
+  const { user, signOut, refreshUser } = useAuth();
   const { t } = useLanguage();
+  // null until the first answer arrives; the loading and error states depend on it.
+  const [summary, setSummary] = useState(null);
   const [entries, setEntries] = useState([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   // Either { key } for "No connection. Tap Refresh to try again", or the error the API client
   // threw; translated when shown, like the errors on /login.
@@ -41,10 +45,12 @@ export default function OverviewScreen() {
 
   const load = useCallback(async () => {
     try {
-      const page = await api.listRecent(RECENT_COUNT);
+      const [month, page] = await Promise.all([api.summary(), api.listRecent(RECENT_COUNT)]);
+      setSummary(month);
       setEntries(page.items);
       setTotal(page.total);
       setMessage(null);
+      if (!user) refreshUser();
     } catch (error) {
       if (error.status === 401) {
         // BR10: the sign-in has expired, so back to /login.
@@ -54,30 +60,49 @@ export default function OverviewScreen() {
       // US05: keep whatever is already on screen and say why nothing changed.
       setMessage(error.status === 0 ? { key: 'overview.noConnection' } : error);
     } finally {
-      setLoading(false);
       setRefreshing(false);
     }
-  }, [signOut]);
+  }, [signOut, user, refreshUser]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  // Load each time / comes into view, so an entry saved on /transactions/new is already counted.
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load]),
+  );
 
   function refresh() {
     setRefreshing(true);
     load();
   }
 
-  const problem = describeError(message, t, api.baseUrl);
-
-  if (loading) {
+  // Loading: the first answer has not arrived yet.
+  if (summary === null && message === null) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={styles.centerText}>{t('overview.loading')}</Text>
       </View>
     );
   }
 
+  // Error: the first load failed, so there is nothing to keep on screen. With no answer at all
+  // the message names the server address and says what to start (docs/SETUP.md, section 4).
+  if (summary === null) {
+    const firstProblem = describeError(message.key ? { status: 0 } : message, t, api.baseUrl);
+    return (
+      <View style={styles.center}>
+        <View style={styles.narrow}>
+          <ErrorMessage problem={firstProblem} />
+          <Pressable style={styles.primaryButton} onPress={refresh} accessibilityRole="button">
+            <Text style={styles.primaryText}>{t('overview.tryAgain')}</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
+
+  // Empty or data: the month summary decides which, from its count.
   return (
     <FlatList
       style={styles.screen}
@@ -102,9 +127,23 @@ export default function OverviewScreen() {
             </Pressable>
           </View>
 
+          <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
+
+          <MonthSummary summary={summary} />
+
+          <Pressable
+            style={styles.primaryButton}
+            onPress={() => navigation.navigate('NewEntry')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.primaryText}>+ {t('overview.add')}</Text>
+          </Pressable>
+
           <View style={styles.titleRow}>
             <Text style={styles.count}>
-              {total > 0 ? t('overview.count', { shown: entries.length, total }) : ' '}
+              {total > 0
+                ? t('overview.count', { shown: entries.length, total })
+                : t('overview.recent')}
             </Text>
             <Pressable
               style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
@@ -117,13 +156,9 @@ export default function OverviewScreen() {
               </Text>
             </Pressable>
           </View>
-
-          <ErrorMessage problem={problem} />
         </View>
       }
-      ListEmptyComponent={
-        message ? null : <Text style={styles.empty}>{t('overview.empty')}</Text>
-      }
+      ListEmptyComponent={<Text style={styles.empty}>{t('overview.empty')}</Text>}
     />
   );
 }
@@ -136,7 +171,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     flex: 1,
     justifyContent: 'center',
+    padding: spacing.lg,
   },
+  centerText: { color: colors.textMuted, fontSize: 15, marginTop: spacing.md },
+  narrow: { maxWidth: 480, width: '100%' },
   accountRow: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -145,6 +183,14 @@ const styles = StyleSheet.create({
   },
   account: { color: colors.textMuted, fontSize: 14 },
   link: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+  primaryButton: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.sm,
+    marginBottom: spacing.md,
+    padding: spacing.md,
+  },
+  primaryText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
   titleRow: {
     alignItems: 'center',
     flexDirection: 'row',
