@@ -1,8 +1,14 @@
 /**
- * How amounts and dates look in the list on / (US05).
+ * How amounts and dates look on /: the month's totals (US04) and the list (US05).
  */
 
-import { formatAmount, formatDate, formatDong } from '../src/utils/format';
+import {
+  formatAmount,
+  formatDate,
+  formatDong,
+  formatMonth,
+  formatSigned,
+} from '../src/utils/format';
 
 describe('formatDong', () => {
   test('separates thousands with commas, as the requirements do', () => {
@@ -50,5 +56,27 @@ describe('formatDate', () => {
   test('gives an empty string when there is no date', () => {
     expect(formatDate(null)).toBe('');
     expect(formatDate('')).toBe('');
+  });
+});
+
+describe('formatSigned', () => {
+  test('shows what is left as it is', () => {
+    expect(formatSigned(1069000)).toBe('1,069,000 ₫');
+    expect(formatSigned(0)).toBe('0 ₫');
+  });
+
+  test('puts a minus sign before more spent than received', () => {
+    expect(formatSigned(-120000)).toBe('−120,000 ₫');
+    expect(formatSigned(-120000, 'vi')).toBe('−120.000 ₫');
+  });
+});
+
+describe('formatMonth', () => {
+  test('writes the month as the requirements do', () => {
+    expect(formatMonth('2026-10')).toBe('10/2026');
+  });
+
+  test('gives an empty string when there is no month', () => {
+    expect(formatMonth(undefined)).toBe('');
   });
 });

@@ -56,6 +56,9 @@ describe('the dictionaries', () => {
     expect(strings.en['overview.noConnection']).toBe('No connection. Tap Refresh to try again');
     expect(strings.en['error.emailTaken']).toBe('This email is already registered');
     expect(strings.en['error.passwordLength']).toBe('Password must be 6 to 128 characters');
+    expect(strings.en['error.amountNotPositive']).toBe('Enter an amount greater than 0');
+    expect(strings.en['error.dateInFuture']).toBe('The date cannot be in the future');
+    expect(strings.en['overview.noMonthEntries']).toBe('No transactions yet this month');
   });
 
   test('keep the exact Vietnamese texts of the US11 criteria', () => {
