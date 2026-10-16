@@ -67,6 +67,9 @@ async function request(path, { method = 'GET', body, signedIn = true } = {}) {
 export const api = {
   baseUrl: BASE_URL,
 
+  register: (email, password) =>
+    request('/users', { method: 'POST', body: { email, password }, signedIn: false }),
+
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: { email, password }, signedIn: false }),
 

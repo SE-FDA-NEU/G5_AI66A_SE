@@ -54,6 +54,8 @@ describe('the dictionaries', () => {
   test('keep the exact English sentences of the acceptance criteria', () => {
     expect(strings.en['error.incorrectSignIn']).toBe('Incorrect email or password');
     expect(strings.en['overview.noConnection']).toBe('No connection. Tap Refresh to try again');
+    expect(strings.en['error.emailTaken']).toBe('This email is already registered');
+    expect(strings.en['error.passwordLength']).toBe('Password must be 6 to 128 characters');
   });
 
   test('keep the exact Vietnamese texts of the US11 criteria', () => {

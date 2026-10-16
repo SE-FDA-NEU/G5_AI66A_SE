@@ -49,12 +49,22 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const signIn = useCallback(async (email, password) => {
-    const result = await api.login(email, password);
+  // Both answer with a token: a new account is signed in at once, with no second sign-in (US01).
+  const start = useCallback(async (result) => {
     await saveToken(result.access_token);
     setUser(result.user);
     setStatus('signed-in');
   }, []);
+
+  const signIn = useCallback(
+    async (email, password) => start(await api.login(email, password)),
+    [start],
+  );
+
+  const signUp = useCallback(
+    async (email, password) => start(await api.register(email, password)),
+    [start],
+  );
 
   const signOut = useCallback(async () => {
     await clearToken();
@@ -63,8 +73,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ status, user, signIn, signOut }),
-    [status, user, signIn, signOut],
+    () => ({ status, user, signIn, signUp, signOut }),
+    [status, user, signIn, signUp, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,5 +1,6 @@
 /**
- * /login: sign in with an email and a password (US02), in the chosen language (US11).
+ * /login: sign in with an email and a password (US02), in the chosen language (US11). A link leads
+ * to /register for someone with no account yet (US01).
  */
 
 import { useState } from 'react';
@@ -9,19 +10,20 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
+  View,
 } from 'react-native';
 
 import { api } from '../api/client';
 import ErrorMessage from '../components/ErrorMessage';
+import { formStyles as styles } from '../components/formStyles';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { colors } from '../theme';
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const { signIn } = useAuth();
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
@@ -100,52 +102,14 @@ export default function LoginScreen() {
             <Text style={styles.buttonText}>{t('login.submit')}</Text>
           )}
         </Pressable>
+
+        <View style={styles.switchRow}>
+          <Text style={styles.switchText}>{t('login.noAccount')}</Text>
+          <Pressable onPress={() => navigation.navigate('Register')} accessibilityRole="link">
+            <Text style={styles.link}>{t('login.toRegister')}</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  flex: { backgroundColor: colors.background, flex: 1 },
-  container: {
-    alignSelf: 'center',
-    flexGrow: 1,
-    justifyContent: 'center',
-    maxWidth: 480,
-    padding: spacing.lg,
-    width: '100%',
-  },
-  title: { color: colors.text, fontSize: 24, fontWeight: '700' },
-  subtitle: {
-    color: colors.textMuted,
-    fontSize: 15,
-    marginBottom: spacing.lg,
-    marginTop: spacing.xs,
-  },
-  label: {
-    color: colors.text,
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: spacing.xs,
-    marginTop: spacing.md,
-  },
-  input: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    color: colors.text,
-    fontSize: 16,
-    padding: spacing.md,
-  },
-  error: { marginBottom: 0, marginTop: spacing.md },
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: radius.sm,
-    marginTop: spacing.lg,
-    padding: spacing.md,
-  },
-  buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: colors.textInverse, fontSize: 16, fontWeight: '600' },
-});
