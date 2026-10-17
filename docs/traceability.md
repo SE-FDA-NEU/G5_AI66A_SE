@@ -8,10 +8,10 @@ a table without updating this file should not be approved (`docs/definition-of-d
 
 | Story | Priority | Screen | Endpoint | Table | Rules | Story issue | Sprint | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| US01 Create an account | P0 | `/register` | `POST /api/users` | users | BR1, BR2 | [#14] | Backlog | Not started |
+| US01 Create an account | P0 | `/register` | `POST /api/users` | users | BR1, BR2 | [#14] | 3 | Done |
 | US02 Sign in and stay signed in | P0 | `/login` | `POST /api/auth/login` · `GET /api/auth/me` | users | BR2, BR3, BR10 | [#15] | 2 | Done |
-| US03 Log a purchase in seconds | P0 | `/transactions/new` | `POST /api/transactions` · `GET /api/categories` | transactions, categories | BR5, BR6, BR11 | [#16] | Backlog | Not started |
-| US04 This month's position | P0 | `/` | `GET /api/summary` | transactions | BR4 | [#17] | Backlog | Not started |
+| US03 Log a purchase in seconds | P0 | `/transactions/new` | `POST /api/transactions` · `GET /api/categories` | transactions, categories | BR4, BR5, BR6, BR11 | [#16] | 3 | Done |
+| US04 This month's position | P0 | `/` | `GET /api/summary` | transactions | BR4 | [#17] | 3 | Done |
 | US05 Look back over recent entries | P0 | `/` | `GET /api/transactions` | transactions, categories | BR4 | [#18] | 2 | Done |
 | US06 Correct or remove an entry | P1 | `/transactions/:id` | `PATCH` and `DELETE /api/transactions/{id}` | transactions | BR4, BR5, BR11 | [#19] | Backlog | Not started |
 | US07 Suggest the kind of spending | P1 | `/transactions/new` | `GET /api/categories/suggestions` | categories | BR6 | [#20] | Backlog | Not started |
@@ -23,6 +23,15 @@ a table without updating this file should not be approved (`docs/definition-of-d
 **Built in Sprint 2.** US02 by #58, #60, #61, #63 and #64; US05 by #60, #61, #62, #63 and #65. The
 pull request of #65 closes both stories and sets their Status to Done. US11, added on 28/09, is
 built by #73, whose pull request closes it and sets its Status to Done.
+
+**Built in Sprint 3.** Every story relies on #94, which gives each error a code, and #103, which
+shows it as a message and a hint (`docs/ui.md`, section 3).
+
+| Story | API | Database | Tests | Screen, whose pull request closes the story |
+| --- | --- | --- | --- | --- |
+| US01 | #97 `POST /api/users` | users, as built in Sprint 2 | #100 `test_users.py` | #104 `/register` |
+| US03 | #98 `POST /api/transactions`, `GET /api/categories` | #96 `category_repo.get_by_id` | #101 `test_new_entry.py` | #105 `/transactions/new` |
+| US04 | #99 `GET /api/summary` | #96 `transaction_repo.month_totals`; #95 keeps the demo inside the month | #95 `test_seed.py`, #101 `test_summary.py` | #106 `/` |
 
 **Sprint** is the sprint the story is committed to; Backlog until a sprint planning picks it.
 **Status:** Not started / In progress / Done.
