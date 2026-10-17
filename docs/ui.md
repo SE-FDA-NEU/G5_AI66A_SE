@@ -207,6 +207,13 @@ lại tiền đã chi hoặc đã nhận, nên hãy chọn hôm nay hoặc một
 Every message has both languages, and a test fails when one is missing
 (`mobile/__tests__/i18n.test.js`).
 
+**Break a rule on purpose.** Signed in as `mai@example.com`, tap **+ Add an entry**, type `55000`,
+and change the date to tomorrow; **Save** shows the BR11 message above, and `/` still shows the
+same totals. An amount of `0` shows the BR5 message. On `/register`, the address
+`mai@example.com` shows the BR1 message, and the password `abc12` the BR2 message.
+
+![The BR11 message on /transactions/new, nothing stored](images/ui/new-entry-future.png)
+
 ---
 
 ## 4. What changed since M2
