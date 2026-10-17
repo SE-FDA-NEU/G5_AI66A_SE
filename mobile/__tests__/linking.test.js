@@ -10,6 +10,7 @@ test('each screen has the route of the requirements', () => {
     Login: 'login',
     Register: 'register',
     Overview: '',
+    NewEntry: 'transactions/new',
   });
 });
 
