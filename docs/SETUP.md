@@ -1,8 +1,8 @@
 # Setup — from a fresh clone to the running app
 
-Follow these steps in order on a machine that has never seen the project. They end with the
-overview at `http://localhost:8081/` listing entries read from the database. Plan on about
-15 minutes, most of it downloads.
+Follow these steps in order on a machine that has never seen the project. They end with every
+P0 story working in the browser at `http://localhost:8081/`, on data read from the database.
+Plan on about 15 minutes, most of it downloads.
 
 You will use **two terminals**: one runs the backend, the other runs the app. Where Windows and
 macOS/Linux differ, both commands are given. On Windows, use PowerShell or Command Prompt; in Git
@@ -94,6 +94,17 @@ Sign in as mai@example.com with the password demo1234
 
 Running it again adds nothing. `python -m scripts.seed_data --reset` empties the database and
 seeds it again.
+
+**Test accounts.** These exist only in the database this command creates; none of them is anyone's
+real password.
+
+| Email | Password | What it holds |
+| --- | --- | --- |
+| `mai@example.com` | `demo1234` | Persona 1, Mai: 25 entries dated this month, 4,000,000 ₫ received and 2,931,000 ₫ spent |
+| any address you create on `/register` | 6 to 128 characters of your choice | Nothing yet: the overview says "No transactions yet this month" |
+
+The 25 entries are dated from today back over twelve days, and never before the 1st of this month,
+so the overview shows the same totals on whatever day the project is set up.
 
 ---
 
