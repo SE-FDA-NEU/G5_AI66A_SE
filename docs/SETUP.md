@@ -98,10 +98,10 @@ seeds it again.
 **Test accounts.** These exist only in the database this command creates; none of them is anyone's
 real password.
 
-| Email | Password | What it holds |
-| --- | --- | --- |
-| `mai@example.com` | `demo1234` | Persona 1, Mai: 25 entries dated this month, 4,000,000 ₫ received and 2,931,000 ₫ spent |
-| any address you create on `/register` | 6 to 128 characters of your choice | Nothing yet: the overview says "No transactions yet this month" |
+| Email                                 | Password                           | What it holds                                                                           |
+| ------------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `mai@example.com`                     | `demo1234`                         | Persona 1, Mai: 25 entries dated this month, 4,000,000 ₫ received and 2,931,000 ₫ spent |
+| any address you create on `/register` | 6 to 128 characters of your choice | Nothing yet: the overview says "No transactions yet this month"                         |
 
 The 25 entries are dated from today back over twelve days, and never before the 1st of this month,
 so the overview shows the same totals on whatever day the project is set up.
@@ -216,9 +216,9 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 
 ## Tested by
 
-| Who            | Team    | Machine                                                                 | Date       | Time taken                                     | Result                                                                                                                                                                                                                                                                                              |
-| -------------- | ------- | ----------------------------------------------------------------------- | ---------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Đỗ Quang Trung | Team 04 | Windows laptop, Python 3.12.10, Node.js 24.15.0, both already installed | 04/10/2026 | 6 minutes, from `git clone` to the list on `/` | Worked: `python -m pip install -r requirements.txt` failed with <python -m>, and `pip install -r requirements.txt` worked; after that the seed printed 11/1/25/0, `/health` answered ok, `/` showed the 20 most recent of 25 entries, the proof line changed row 1, and EN/VI stayed after a reload |
+| Who            | Team    | Machine                                                                 | Date       | Time taken                                      | Result |
+| -------------- | ------- | ----------------------------------------------------------------------- | ---------- | ----------------------------------------------- | ------ |
+| Đỗ Quang Trung | Team 04 | Windows laptop, Python 3.12.10, Node.js 24.15.0, both already installed | 17/10/2026 | 10 minutes, from `git clone` to the list on `/` | Worked |
 
 Filled in by someone outside Team 05 who followed this file word for word on a machine that is
 not ours. Anything they had to ask or guess becomes a fix in this file, not a note beside it.
