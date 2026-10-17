@@ -140,13 +140,17 @@ minute.
 
 ## 6. How to know it worked
 
-1. `http://localhost:8081/login` shows **Personal Expense Management App** with an email field, a
-   password field and a **Sign in** button.
-2. Sign in as `mai@example.com` with the password `demo1234`.
-3. The address bar changes to `http://localhost:8081/` and the page shows **The 20 most recent of
-   25 entries**. The first row is **tra sua · Food · −55,000 ₫** dated today; the rows run back
-   nine days to **tien nha · Bills · −1,500,000 ₫**. The 19th row is money received:
-   **tien bo me gui · Other income · +4,000,000 ₫**.
+Each step below is one P0 story, done through the screens only: no address needs typing after the
+first. Every number assumes a freshly seeded database (`python -m scripts.seed_data --reset`).
+
+1. **Sign in, US02.** `http://localhost:8081/login` shows **Personal Expense Management App** with
+   an email field, a password field, a **Sign in** button and a **Create an account** link. Sign
+   in as `mai@example.com` with the password `demo1234`.
+2. **This month, US04.** The address bar changes to `http://localhost:8081/`. The card at the top
+   reads **Received 4,000,000 ₫ · Spent 2,931,000 ₫ · Left 1,069,000 ₫**.
+3. **Recent entries, US05.** Under the card: **The 20 most recent of 25 entries**. The first row
+   is **tra sua · Food · −55,000 ₫** dated today, and the money received,
+   **tien bo me gui · Other income · +4,000,000 ₫**, is the 19th row.
 4. **The rows come from the database.** Open a third terminal in `G5_AI66A_SE/backend` and run the
    line below; it needs only Python, not the virtual environment. Then press **Refresh** on the
    page: the first row now reads **edited in the database**.
@@ -155,11 +159,26 @@ minute.
    python -c "import sqlite3; c = sqlite3.connect('expense.db'); c.execute('UPDATE transactions SET note = ? WHERE id = 25', ('edited in the database',)); c.commit()"
    ```
 
-   `python -m scripts.seed_data --reset` puts the original data back.
+   `python -m scripts.seed_data --reset` puts the original data back; press **Refresh** again.
 
-5. **Languages.** The language buttons at the top right, **EN** and **VI** so far, change every
-   text on the page, and the choice is kept when the page is reloaded. The app always opens in
-   English the first time.
+5. **Log a purchase, US03.** Press **+ Add an entry**. The address bar shows
+   `/transactions/new`, and the amount field has the cursor. Type `30000`, tap **Food**, type the
+   note `banh mi`, and press **Save**. Back on `/`, the card reads **Spent 2,961,000 ₫ · Left
+   1,039,000 ₫**, and **banh mi · Food · −30,000 ₫** is the first row of **26 entries**.
+6. **Break a rule on purpose, BR11.** Press **+ Add an entry** again, type `55000`, and change the
+   date to tomorrow. **Save** shows, under the form, **The date cannot be in the future** and why,
+   and nothing is stored: **Cancel**, and the card still reads **Left 1,039,000 ₫**. An amount of
+   `0` shows **Enter an amount greater than 0** in the same place (BR5).
+7. **Create an account, US01.** Press **Sign out**, then **Create an account** on `/login`.
+   `mai@example.com` shows **This email is already registered** (BR1), and a password of 5
+   characters **Password must be 6 to 128 characters** (BR2). With a new address, such as
+   `hoa@example.com`, and the password `abcd1234`, **Create account** opens `/` already signed in,
+   showing **No transactions yet this month**.
+8. **Languages, US11.** The language buttons at the top right, **EN** and **VI** so far, change
+   every text on the page, error messages included, and the choice is kept when the page is
+   reloaded. The app always opens in English the first time.
+
+Every message the app can show, and the rule behind it, is listed in `docs/ui.md`, section 3.
 
 ---
 
@@ -189,6 +208,9 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 | `npm ci` stops with an engine error, or Expo will not start                                                            | Node.js is older than 20.19                                                   | Install Node.js 22 or 24 LTS, then run `npm ci` again                                                                                          |
 | Expo says port 8081 is in use                                                                                          | Another program holds the port                                                | Accept the port Expo offers; the app still finds the backend                                                                                   |
 | `address already in use` when the backend starts                                                                       | Another program holds port 8000                                               | Close it, or stop an older backend still running in another terminal                                                                           |
+| **The server does not offer this yet** on `/register` or `/transactions/new`                                           | The backend still runs code from before Sprint 3                              | `git pull` in the repository, stop the backend with Ctrl+C, then start it again (section 4)                                                    |
+| The page shows an older screen after `git pull`                                                                        | Expo still holds the old bundle                                               | Stop Expo with Ctrl+C, then `npx expo start --web --clear`                                                                                     |
+| **This email is already registered** for an address you meant to create                                                | You created it on an earlier run; the database keeps it                       | Use another address, or `python -m scripts.seed_data --reset` to start again from the demo data                                                |
 
 ---
 
