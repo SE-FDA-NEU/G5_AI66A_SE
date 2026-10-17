@@ -182,7 +182,37 @@ As built:
 
 ## 3. Error messages
 
-_Written in #110._
+Every error the API sends has the same shape, `{"detail": "<sentence>", "code": "<what went
+wrong>"}`, with the status codes of section 3 of `docs/design.md`. The app picks the message by
+`code`, in the language the user chose, and shows it under the form in two parts: **what
+happened**, the exact sentence of the acceptance criterion, then **why and what to do next**. No
+screen ever shows a status number, "Something went wrong" or a stack trace; a crash in the API
+answers 500 in the same shape.
+
+| API error code | Business rule | The exact message the user sees |
+| --- | --- | --- |
+| 409 `email_taken` | BR1 | **"This email is already registered"** Sign in with it instead, or create the account with another address. |
+| 422 `password_length` | BR2 | **"Password must be 6 to 128 characters"** One under 6 characters is too easy to guess. Choose one of 6 to 128 characters and try again. |
+| 401 `incorrect_sign_in` | BR3 | **"Incorrect email or password"** Check both and try again. |
+| 422 `amount_not_positive` | BR5 | **"Enter an amount greater than 0"** Write it in whole dong, such as 55000. Nothing was saved. |
+| 422 `unknown_category` | BR6 | **"Choose a kind of spending from the list"** Tap one of the kinds shown, or none at all. Nothing was saved. |
+| 422 `date_in_future` | BR11 | **"The date cannot be in the future"** An entry records money already spent or received, so choose today or an earlier day. Nothing was saved. |
+| 401 `sign_in_again` | BR10 | **"Please sign in again"** A sign-in lasts 7 days, and yours has ended. The app then opens `/login`. |
+| 400 `invalid_email` | none, a malformed request | **"Enter a valid email address"** An address looks like name@example.com. |
+| no answer | none, the server is not running | **"Cannot reach the server at http://localhost:8000/api"** Check that the backend is running (docs/SETUP.md, section 4), then try again. |
+| 500 `server_error` | none, a fault in the API | **"The server could not finish this request"** Try again in a moment. If it keeps happening, the backend terminal shows what went wrong. |
+
+In Vietnamese the same message reads, for BR11: **"Ngày không được ở tương lai"** Mỗi giao dịch ghi
+lại tiền đã chi hoặc đã nhận, nên hãy chọn hôm nay hoặc một ngày trước đó. Chưa có gì được lưu.
+Every message has both languages, and a test fails when one is missing
+(`mobile/__tests__/i18n.test.js`).
+
+**Break a rule on purpose.** Signed in as `mai@example.com`, tap **+ Add an entry**, type `55000`,
+and change the date to tomorrow; **Save** shows the BR11 message above, and `/` still shows the
+same totals. An amount of `0` shows the BR5 message. On `/register`, the address
+`mai@example.com` shows the BR1 message, and the password `abc12` the BR2 message.
+
+![The BR11 message on /transactions/new, nothing stored](images/ui/new-entry-future.png)
 
 ---
 
