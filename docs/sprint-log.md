@@ -176,3 +176,99 @@ See Sprint 2 in `docs/retro.md`.
 | @levanduc36      | Yes      | Yes    | Yes   |
 
 **Scrum Master for Sprint 3:** @levanduc36
+
+---
+
+## Sprint 3 - 06/10/2026 to 19/10/2026
+
+**Committed 11 · Completed 11 · Velocity: 11 points**
+
+### Sprint goal
+
+A person who has never seen the app completes every P0 story through its screens, with real data
+from the database, and every broken rule gives a message that says what happened and what to do
+next; `docs/ui.md` shows how.
+
+### Planning
+
+The iteration opened on 06/10. Planning met on 17/10; the Sprint 3 issues #92 to #113 had been
+written on 10/10, and the review rotation and merge order were posted on #92 and committed as
+`.github/review-rotation.json` by #102.
+
+### The two required chore issues
+
+| Issue                                   | Owner               | Closed?                     |
+| --------------------------------------- | ------------------- | --------------------------- |
+| #92 [Chore] Refine backlog for Sprint 3 | @Chidokato5376 (PO) | Yes, 10/10                  |
+| #93 [Chore] Sprint 3 wrap-up            | @levanduc36 (SM)    | Right after this log merges |
+
+### Committed
+
+| Issue | Story                          | Points | Owner            |
+| ----- | ------------------------------ | ------ | ---------------- |
+| #14   | US01 Create an account         | 3      | @vantran2801     |
+| #16   | US03 Log a purchase in seconds | 5      | @nguyennhien2412 |
+| #17   | US04 This month's position     | 3      | @vantran2801     |
+
+**Total committed: 11 points**, the three P0 stories not yet built. Velocity was 9 in Sprint 2;
+11 was taken on because US01 and US04 reuse the screens, tables and tests Sprint 2 built, and the
+API for all three was designed in M2.
+
+The task issues #94 to #113 build these three stories and `docs/ui.md`. Tasks carry hours, not
+points, so velocity counts story points only, as in Sprints 1 and 2.
+
+### Result
+
+| Issue | Deliverable                                                           | Owner            | Status      | If not done, why                                                                                   |
+| ----- | --------------------------------------------------------------------- | ---------------- | ----------- | -------------------------------------------------------------------------------------------------- |
+| #14   | US01 Create an account, 3 points                                      | @vantran2801     | Done        |                                                                                                    |
+| #16   | US03 Log a purchase in seconds, 5 points                              | @nguyennhien2412 | Done        |                                                                                                    |
+| #17   | US04 This month's position, 3 points                                  | @vantran2801     | Done        |                                                                                                    |
+| #94   | Every API error carries a code; a crash answers 500 inside CORS       | @Chidokato5376   | Done        |                                                                                                    |
+| #95   | Bug: demo entries fell into last month early in a month               | @nguyennhien2412 | Done        |                                                                                                    |
+| #96   | Repository: one category by id, one month's totals                    | @nguyennhien2412 | Done        |                                                                                                    |
+| #97   | POST /api/users                                                       | @Chidokato5376   | Done        |                                                                                                    |
+| #98   | POST /api/transactions and GET /api/categories                        | @Chidokato5376   | Done        |                                                                                                    |
+| #99   | GET /api/summary                                                      | @Chidokato5376   | Done        |                                                                                                    |
+| #100  | Backend tests for US01                                                | @levanduc36      | Done        |                                                                                                    |
+| #101  | Backend tests for US03 and US04                                       | @levanduc36      | Done        |                                                                                                    |
+| #102  | Ask the reviewer automatically, from the rotation                     | @levanduc36      | Done        |                                                                                                    |
+| #103  | A message and a hint for every error code, in the app                 | @vantran2801     | Done        |                                                                                                    |
+| #104  | /register, closes US01                                                | @vantran2801     | Done        |                                                                                                    |
+| #105  | /transactions/new, closes US03                                        | @vantran2801     | Done        |                                                                                                    |
+| #106  | The month on /, in four states, closes US04                           | @vantran2801     | Done        |                                                                                                    |
+| #107  | docs/ui.md skeleton, section 1 and the flow diagram                   | @nguyennhien2412 | Done        |                                                                                                    |
+| #108  | ui.md section 2: wireframes of /login and /register                   | @nguyennhien2412 | Done        |                                                                                                    |
+| #109  | ui.md section 2: wireframes of / in four states and /transactions/new | @vantran2801     | Done        |                                                                                                    |
+| #110  | ui.md section 3: error messages                                       | @levanduc36      | Done        |                                                                                                    |
+| #111  | docs/traceability.md for Sprint 3                                     | @nguyennhien2412 | Done        |                                                                                                    |
+| #112  | docs/SETUP.md for Sprint 3, tested on a machine that is not ours      | @levanduc36      | Done        |                                                                                                    |
+| #113  | ui.md section 4, design.md, README, M3 checklist, PDF                 | @Chidokato5376   | Merges last | The final pull request of the sprint, merged after this log; its merge commit is on the PDF cover |
+
+**Completed: 11 points. Velocity this sprint: 11 points**: US01 #14, US03 #16 and US04 #17 all
+closed by the pull requests of #104, #105 and #106.
+
+### Sprint Review
+
+- What we demonstrated: 17/10/2026, the four P0 screens from a fresh clone: an account created on
+  `/register`, a purchase logged on `/transactions/new` and counted on `/`, and BR11 broken on
+  purpose, with its message on screen.
+- Feedback received: Đỗ Quang Trung from Team 04 followed `docs/SETUP.md` on his own Windows laptop
+  on 17/10/2026 (#112); it worked in 10 minutes from `git clone` to the list on `/`.
+- Backlog changes as a result: no story changed; the setup verification was recorded in
+  `docs/SETUP.md`.
+
+### Retrospective
+
+See Sprint 3 in `docs/retro.md`.
+
+### Attendance
+
+| Member           | Planning | Review | Retro |
+| ---------------- | -------- | ------ | ----- |
+| @Chidokato5376   | Yes      | Yes    | Yes   |
+| @vantran2801     | Yes      | Yes    | Yes   |
+| @nguyennhien2412 | Yes      | Yes    | Yes   |
+| @levanduc36      | Yes      | Yes    | Yes   |
+
+**Scrum Master for Sprint 4:** @Chidokato5376
