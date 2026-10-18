@@ -104,7 +104,7 @@ rebalanced there on 29/09.
 | Issue                                   | Owner                 | Closed?                     |
 | --------------------------------------- | --------------------- | --------------------------- |
 | #55 [Chore] Refine backlog for Sprint 2 | @Chidokato5376 (PO)   | Yes, 29/09                  |
-| #56 [Chore] Sprint 2 wrap-up            | @nguyennhien2412 (SM) | Right after this log merges |
+| #56 [Chore] Sprint 2 wrap-up            | @nguyennhien2412 (SM) | Yes, 04/10                  |
 
 ### Committed
 
@@ -146,7 +146,7 @@ Tasks carry hours, not points, so velocity counts story points only, as in Sprin
 | #68   | design.md sections 1 and 4: architecture and walking skeleton     | @vantran2801     | Done        |                                                                                                   |
 | #69   | design.md section 5: three ADRs                                   | @levanduc36      | Done        |                                                                                                   |
 | #70   | docs/traceability.md: story, screen, endpoint, table              | @levanduc36      | Done        |                                                                                                   |
-| #71   | design.md section 6, README, M2 checklist, PDF                    | @Chidokato5376   | Merges last | The final pull request of the sprint, merged after this log; its merge commit is on the PDF cover |
+| #71   | design.md section 6, README, M2 checklist, PDF                    | @Chidokato5376   | Done        | Merged last, on 04/10, as #91; its merge commit `350b0ed` is on the PDF cover                     |
 | #73   | Language options on /login and /, English and Vietnamese first    | @vantran2801     | Done        |                                                                                                   |
 
 **Completed: 9 points. Velocity this sprint: 9 points**: US02 #15, US05 #18 and US11 #72 all closed on 03/10.
