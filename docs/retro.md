@@ -83,75 +83,76 @@ Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
 
 ---
 
-## Sprint 3 - <start date> to <end date>
+## Sprint 3 - 06/10/2026 to 19/10/2026
 
-**Scrum Master:** @
+**Scrum Master:** @levanduc36
 
 ### Keep / Stop / Start
 
+Agreed during the Sprint 3 retrospective meeting on 17/10/2026.
+
 | Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
+| --- | --- | --- |
+| Drawing the wireframes before building the P0 screens, so the interface and documentation stay aligned | Opening replacement pull requests late, which leaves less time for a meaningful review | Recording the exact checks and result in every review comment |
+| Having another team follow `docs/SETUP.md` on its own machine before submission | Treating a closed, replaced pull request as evidence of completed review | |
 
 ### Action for next sprint
 
-| Action | Owner | Checked at     |
-| ------ | ----- | -------------- |
-|        | @     | Sprint 4 retro |
+| Action | Owner | Checked at |
+| --- | --- | --- |
+| Check the review queue every evening and follow up immediately on any pull request without a reviewer or a review within 12 hours | @Chidokato5376 | Sprint 4 retro |
 
 ### Did last sprint's action happen?
 
+The action was "Every reviewer provides detailed feedback or explicit verification steps on PRs
+within 12 hours; the Scrum Master checks open PRs each evening". Partly, from
+`review_latency.py 92 113`, checked on 18/10/2026: 15 of 21 pull requests had a reviewer named
+when opened and were reviewed within 12 hours. The longest review took 45.1 hours; 19 completed
+reviews named the checks run and their result. Pull requests #125 and #129 were closed and replaced
+before a review. Since #102, the workflow requests the reviewer from the rotation when a pull
+request opens.
+
+| PR | Title | Author | Reviewer named when opened | Time to review |
+| --- | --- | --- | --- | --- |
+| #114 | [#94] Give every API error a code, and a crash a 500 in the same shape | @Chidokato5376 | yes | 9.1 h |
+| #115 | [#95] Keep every demo entry inside the current month | @nguyennhien2412 | yes | 21.8 h |
+| #116 | [#107] Add docs/ui.md with its P0 stories and the screen flow | @nguyennhien2412 | yes | 9.9 h |
+| #117 | [#97] Add POST /api/users, signed in at once | @Chidokato5376 | yes | 3.3 h |
+| #118 | [#96] Add the queries behind US03 and US04 | @nguyennhien2412 | yes | 0.1 h |
+| #119 | [#108] Wireframe /login and /register | @nguyennhien2412 | yes | 0.2 h |
+| #120 | [#109] Wireframes for Overview and New Entry | @vantran2801 | no | 45.1 h |
+| #121 | [#102] Ask the reviewer from the rotation when a pull request opens | @levanduc36 | no | 5.5 h |
+| #122 | [#100] Test creating an account, US01 with BR1 and BR2 | @levanduc36 | yes | 5.4 h |
+| #123 | [#98] Add POST /api/transactions and GET /api/categories | @Chidokato5376 | yes | 1.8 h |
+| #124 | [#103] Error messages app | @vantran2801 | yes | 11.1 h |
+| #125 | [#104] Register screen | @vantran2801 | yes | no review yet |
+| #126 | [#99] Add GET /api/summary | @Chidokato5376 | yes | 1.2 h |
+| #127 | [#104] Register screen | @vantran2801 | yes | 1.0 h |
+| #128 | [#101] Test logging an entry and this month's position | @levanduc36 | yes | 4.0 h |
+| #129 | [#105] New entry screen | @vantran2801 | yes | no review yet |
+| #130 | [#106] Overview month | @vantran2801 | yes | 1.3 h |
+| #131 | [#105] new entry redo | @vantran2801 | yes | 13.6 h |
+| #132 | [#111] Trace US01, US03 and US04 to what built and tested them | @nguyennhien2412 | yes | 3.4 h |
+| #133 | [#110] List every error message in docs/ui.md | @levanduc36 | yes | 1.3 h |
+| #134 | [#112] Check every P0 story in SETUP.md, tested by another team | @levanduc36 | yes | 12.0 h |
+
 ### Velocity
 
-Committed: ** points · Completed: ** points
+Committed: 11 points · Completed: 11 points
 
 ---
 
-## Sprint 4 - <start date> to <end date>
+## Sprint 4
 
-**Scrum Master:** @
+**Scrum Master:** @Chidokato5376
 
-### Keep / Stop / Start
-
-| Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
-
-### Action for next sprint
-
-| Action | Owner | Checked at     |
-| ------ | ----- | -------------- |
-|        | @     | Sprint 5 retro |
-
-### Did last sprint's action happen?
-
-### Velocity
-
-Committed: ** points · Completed: ** points
+This section will be completed during Sprint 4.
 
 ---
 
-## Sprint 5 - <start date> to <end date>
+## Sprint 5
 
-**Scrum Master:** @
-
-### Keep / Stop / Start
-
-| Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
-
-### Action for next sprint
-
-| Action | Owner | Checked at      |
-| ------ | ----- | --------------- |
-|        | @     | - (last sprint) |
-
-### Did last sprint's action happen?
-
-### Velocity
-
-Committed: ** points · Completed: ** points
+This section will be completed during Sprint 5.
 
 ---
 
