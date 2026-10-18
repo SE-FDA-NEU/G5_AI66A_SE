@@ -17,16 +17,16 @@ app opens on `/login` for someone signed out and on `/` for someone signed in wi
 
 | Story | Screen(s) | Route | Status | Issue |
 | --- | --- | --- | --- | --- |
-| US01 Create an account | Create an account | `/register`, from **Create an account** on `/login` | not started | [#14] |
+| US01 Create an account | Create an account | `/register`, from **Create an account** on `/login` | works | [#14] |
 | US02 Sign in and stay signed in | Sign in | `/login` | works | [#15] |
-| US03 Log a purchase in seconds | New entry | `/transactions/new`, from **+ Add an entry** on `/` | not started | [#16] |
-| US04 This month's position | Overview | `/`, the card at the top | not started | [#17] |
+| US03 Log a purchase in seconds | New entry | `/transactions/new`, from **+ Add an entry** on `/` | works | [#16] |
+| US04 This month's position | Overview | `/`, the card at the top | works | [#17] |
 | US05 Look back over recent entries | Overview | `/`, the list under the card | works | [#18] |
 
 **Works** means a person can complete the story through the interface from a fresh clone, with
 `docs/SETUP.md` and nothing else, and every acceptance criterion on the issue passes. US02 and US05
-have worked since Sprint 2. US01, US03 and US04 are built this sprint, by #103 to #106 on the API of
-#94 and #97 to #99, and tested by #100 and #101; their status changes as each one merges.
+have worked since Sprint 2; US01, US03 and US04 were built in Sprint 3 by #103 to #106, on the API of
+#94 and #97 to #99, and are tested by #100 and #101.
 
 **The flow as built.** The M1 flow (`docs/images/flow.png`) planned seven screens. The four P0
 screens below are built; the three P1 and P2 screens, dashed, come in later sprints. A broken rule
@@ -218,4 +218,35 @@ same totals. An amount of `0` shows the BR5 message. On `/register`, the address
 
 ## 4. What changed since M2
 
-_Written in #113._
+Building the screens changed two things in section 3 of `docs/design.md`, both in the way the API
+answers an error. Both are updated in `docs/design.md` in the pull request that added this section,
+#113, and recorded in `docs/changelog.md` on 10/10.
+
+### Change 1 — Every error carries a `code` as well as a sentence
+
+**What changed.** In M2 an error answered `{"detail": "<sentence>"}`. It now answers
+`{"detail": "<sentence>", "code": "<what went wrong>"}`, such as `"code": "date_in_future"` for
+BR11, on every endpoint. The sentence is unchanged, so every acceptance criterion still reads word
+for word. The codes are listed in section 3 above and in section 3 of `docs/design.md`.
+
+**Why.** We noticed it when we drew `/transactions/new` in its error state (#109). The M2 app
+translated an error by matching its English sentence, which worked for the two sentences of
+`/login`. The new form has six messages, in two languages each, and a reworded sentence on the
+server would have silently left the Vietnamese screen in English. Worse, a malformed request
+answered with FastAPI's own text, such as `amount: Input should be a valid integer`, which no
+user should read. A stable `code` lets the app choose its message, and its hint, without caring
+how the sentence is worded. Built by #94; the app reads it since #103.
+
+### Change 2 — A crash answers 500 in the same shape, inside CORS
+
+**What changed.** A fault in the API now answers 500 with
+`{"detail": "The server could not finish this request", "code": "server_error"}`, and the answer
+carries the CORS header like any other. Section 1 of `docs/design.md` names the new layer that does
+it, inside the CORS middleware.
+
+**Why.** Testing the error state of `/` (#106) by breaking the API on purpose, the page said "Cannot
+reach the server" while the server was running. FastAPI answers an unexpected exception outside
+the CORS middleware, so the browser received a 500 without the CORS header, hid it from the app,
+and the app could not tell it from a server that was not running at all. Catching the fault
+inside CORS gives the right message, and a test keeps it that way
+(`test_a_crash_still_carries_the_cors_header`, #94).
