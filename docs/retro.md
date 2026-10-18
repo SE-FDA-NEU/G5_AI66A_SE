@@ -79,7 +79,9 @@ Partly. The action was "Every pull request names its reviewer when it is opened,
 
 ### Velocity
 
-## Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
+Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
+
+---
 
 ## Sprint 3 - <start date> to <end date>
 
