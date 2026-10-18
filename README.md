@@ -4,9 +4,27 @@ An application designed for individuals who want to **manage their daily income 
 
 **Run it:** [docs/SETUP.md](docs/SETUP.md) takes a fresh clone to the running app, step by step.
 
+## Try the P0 stories
+
+With the backend and the app running (SETUP.md, sections 4 and 5), open http://localhost:8081.
+Every story starts from a screen; no address needs typing.
+
+| Story | Where it starts | What to do |
+| --- | --- | --- |
+| US02 Sign in and stay signed in | `/login`, the first screen | Sign in with the test account below; reopen the page, no password asked |
+| US04 This month's position | `/`, the card at the top | Read Received, Spent and Left for this month |
+| US05 Look back over recent entries | `/`, the list under the card | The 20 most recent entries, newest first; **Refresh** reloads them |
+| US03 Log a purchase in seconds | **+ Add an entry** on `/` → `/transactions/new` | Amount, a kind of spending, **Save**; `/` shows the new totals |
+| US01 Create an account | **Create an account** on `/login` → `/register` | An email and a password of 6 to 128 characters; lands on `/` signed in |
+
+**Test account:** `mai@example.com` with the password `demo1234`, created by
+`python -m scripts.seed_data`. It is a test value for this project only, never a real password.
+To see a rule refused, date an entry tomorrow on `/transactions/new`: the screen says why and
+what to do. Every message is listed in [docs/ui.md](docs/ui.md), section 3.
+
 **Group:** G5_AI66A
 **Product Owner (fixed for the entire semester):** @Chidokato5376
-**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · @levanduc36 (Sprint 3)
+**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · **@levanduc36 (Sprint 3, current)**
 **Board:** [Sprint Board — Personal Expense Management App](https://github.com/orgs/SE-FDA-NEU/projects/12/views/1)
 
 ## Team
@@ -44,7 +62,7 @@ An issue is Done only when every line below is true. No exceptions, including fo
 Sprint 1 produced documents rather than code, so criteria 3 and 4 did not apply to its issues.
 From Sprint 2 all eight apply. Criterion 3 is checked per story: backend tests belong to the testing
 owner, so a story's tests come from the testing task that names it as parent (#63 in Sprint 2), and
-the story closes only after that task has merged. Every pull request, documents included, still
+the story closes only after that task has merged (#100 and #101 in Sprint 3). Every pull request, documents included, still
 needs CI green. Full text: [docs/definition-of-done.md](docs/definition-of-done.md).
 
 ## Documents
@@ -53,6 +71,7 @@ needs CI green. Full text: [docs/definition-of-done.md](docs/definition-of-done.
 | -------------------------------------------- | -------------------------------------------------------------------------------- |
 | [docs/requirements.md](docs/requirements.md) | Milestone 1 — vision, personas, scenarios, user stories, business rules, screens |
 | [docs/design.md](docs/design.md)             | Milestone 2 — architecture, data model, API, walking skeleton, design decisions  |
+| [docs/ui.md](docs/ui.md)                     | Milestone 3 — P0 stories and status, wireframes, error messages, changes since M2 |
 | [docs/SETUP.md](docs/SETUP.md)               | Install and run the project on a machine that has never seen it                  |
 | [docs/traceability.md](docs/traceability.md) | Every story traced to its screen, endpoint, table, rules and issue               |
 | [docs/changelog.md](docs/changelog.md)       | Every requirement or technology change after a sprint started, with its cost     |
@@ -106,7 +125,8 @@ npx expo start --web
 ```
 
 Open http://localhost:8081 and sign in as `mai@example.com` with the password `demo1234`. The page
-lists the 20 most recent of 25 entries, read from the database. The language buttons at the top
+shows this month's totals and the 20 most recent of 25 entries, read from the database; the table
+under **Try the P0 stories** above says where every story starts. The language buttons at the top
 right, **EN** and **VI** so far, change every text on the page.
 
 ## If a member stops responding
