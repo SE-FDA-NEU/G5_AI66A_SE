@@ -79,29 +79,56 @@ Partly. The action was "Every pull request names its reviewer when it is opened,
 
 ### Velocity
 
-## Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
+Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
 
-## Sprint 3 - <start date> to <end date>
+---
 
-**Scrum Master:** @
+## Sprint 3 - 06/10/2026 to 19/10/2026
+
+**Scrum Master:** @levanduc36
 
 ### Keep / Stop / Start
 
-| Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
-
-### Action for next sprint
-
-| Action | Owner | Checked at     |
-| ------ | ----- | -------------- |
-|        | @     | Sprint 4 retro |
+No retrospective meeting was held in Sprint 3; the retrospective is optional in M3. The team
+holds one at the start of Sprint 4 and records its Keep / Stop / Start, and the one action with
+its owner, there.
 
 ### Did last sprint's action happen?
 
+The action was "Every reviewer provides detailed feedback or explicit verification steps on PRs
+within 12 hours; the Scrum Master checks open PRs each evening". Partly, from
+`review_latency.py 92 113`, run on 18/10/2026: 16 of the 19 merged pull requests were reviewed
+within 12 hours, the longest in 21.8 hours (#115), and 12 reviews named what the reviewer ran and
+what it showed; the other 7 did not say what was run. #125 and #129 were closed without a review. Since #102
+the reviewer is asked by the workflow, so every pull request after it had a reviewer when opened.
+
+| PR | Title | Author | Reviewer named when opened | Time to review |
+| --- | --- | --- | --- | --- |
+| #114 | [#94] Give every API error a code, and a crash a 5 | @Chidokato5376 | yes | 13.1 h |
+| #115 | [#95] Keep every demo entry inside the current mon | @nguyennhien2412 | yes | 21.8 h |
+| #116 | [#107] Add docs/ui.md with its P0 stories and the  | @nguyennhien2412 | yes | 9.9 h |
+| #117 | [#97] Add POST /api/users, signed in at once | @Chidokato5376 | yes | 3.3 h |
+| #118 | [#96] Add the queries behind US03 and US04 | @nguyennhien2412 | yes | 0.1 h |
+| #119 | [#108] Wireframe /login and /register | @nguyennhien2412 | yes | 0.2 h |
+| #120 | [#109] Wireframes for Overview and New Entry | @vantran2801 | no | 0.2 h |
+| #121 | [#102] Ask the reviewer from the rotation when a p | @levanduc36 | no | 5.1 h |
+| #122 | [#100] Test creating an account, US01 with BR1 and | @levanduc36 | no | 5.4 h |
+| #123 | [#98] Add POST /api/transactions and GET /api/cate | @Chidokato5376 | yes | 1.8 h |
+| #124 | [#103] Error messages app | @vantran2801 | yes | 11.1 h |
+| #125 | [#104] Register screen | @vantran2801 | yes | no review yet |
+| #126 | [#99] Add GET /api/summary | @Chidokato5376 | yes | 1.2 h |
+| #127 | [#104] Register screen | @vantran2801 | yes | 1.0 h |
+| #128 | [#101] Test logging an entry and this month's posi | @levanduc36 | yes | 4.0 h |
+| #129 | [#105] New entry screen | @vantran2801 | yes | no review yet |
+| #130 | [#106] Overview month | @vantran2801 | yes | 1.3 h |
+| #131 | [#105] new entry redo | @vantran2801 | yes | 13.6 h |
+| #132 | [#111] Trace US01, US03 and US04 to what built and | @nguyennhien2412 | yes | 3.4 h |
+| #133 | [#110] List every error message in docs/ui.md | @levanduc36 | yes | 1.3 h |
+| #134 | [#112] Check every P0 story in SETUP.md, tested by | @levanduc36 | yes | 12.0 h |
+
 ### Velocity
 
-Committed: ** points · Completed: ** points
+Committed: 11 points · Completed: 11 points
 
 ---
 
