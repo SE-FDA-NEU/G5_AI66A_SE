@@ -4,6 +4,7 @@
 Milestone 1 · Sprint 1 · Weeks 5–6
 
 _Updated in Sprint 2: BR11 and its criterion on US03, criterion 2 of US05, and the new story US11._
+_Updated in Sprint 4: the new stories US12 and US13, with BR12, BR13 and BR14, and `/debts`._
 _Each change is recorded in `docs/changelog.md`._
 
 ---
@@ -148,8 +149,11 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | US09 | As someone with a cap, I want to be told before I reach it, so that I can still change what I do.                                               | P2       | 5      |
 | US10 | As a user, I want to see which kinds of spending took the most, so that I know what to cut.                                                     | P2       | 5      |
 | US11 | As a user, I want to choose the app's language, so that I understand every screen and message in the language I read best.                      | P2       | 3      |
+| US12 | As a user, I want to see what I spent in each month and in each year, so that I know which months cost the most and which the least.                     | P1       | 5      |
+| US13 | As a student who borrows from and lends to friends, I want to write down who owes whom and by when, so that I pay back on time and never forget money I lent. | P1       | 5      |
 
-**Five P0 · three P1 · three P2 · 43 points total.** US11 was added in Sprint 2, on 28/09.
+**Five P0 · five P1 · three P2 · 53 points total.** US11 was added in Sprint 2, on 28/09;
+US12 and US13 in Sprint 4, on 24/10.
 
 ---
 
@@ -266,6 +270,41 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
   then the kind of spending reads **"Ăn uống"** (Food) and the amount **"−55.000 ₫"**, while the
   note stays **"tra sua"** exactly as typed.
 
+### US12 — See how spending changes month by month · P1 · 5 points · `/stats`
+
+- Given **2,931,000** spent in 10/2026 and **1,200,000** in 09/2026, when the months of 2026 load,
+  then October's bar reads **2,931,000**, September's **1,200,000**, and October is named the
+  month with **the most spent**. _(BR12)_
+- Given today is **24/10/2026**, when the months of 2026 load, then November and December show no
+  spending and are **never** named the month with the least spent. _(BR12)_
+- Given two months with the same spending, when the months load, then **the earlier** of the two
+  is named. _(BR12)_
+- Given entries dated **31/12/2025** and **01/01/2026**, when the years load, then the first counts
+  in **2025** and the second in **2026**.
+- Given today is in 2026, when the year **2027** is asked for, then it is refused with **"The
+  year cannot be in the future"**; **2026** is shown. _(BR12)_
+- Given a year with no entries at all, when it loads, then the screen reads **"No entries in this
+  year"** and no empty chart is drawn.
+
+### US13 — Keep track of debts and loans · P1 · 5 points · `/debts`
+
+- Given the user lends **200,000** to **"Lan"** today, due in 10 days, when it is saved, then
+  **Owed to you** grows by **exactly 200,000** and the debt is listed as open.
+- Given an open debt of **500,000** borrowed from **"Minh"**, when it is marked settled, then
+  **You owe** drops by **exactly 500,000**; marking it settled again is refused with **"This debt
+  is already settled"**. _(BR14)_
+- Given a debt due **yesterday** and not settled, when the list loads, then it is marked
+  **"Overdue"**; a debt due **today** is not. _(BR14)_
+- Given a due date **one day before** the money changed hands, when it is saved, then it is
+  refused with **"The due date cannot be before the start date"** and nothing is stored; the
+  **same day** is accepted. _(BR13)_
+- Given no name, or a name of **61 characters**, when it is saved, then it is refused with
+  **"Write a name of 1 to 60 characters"**; **60 characters** are accepted. _(BR13)_
+- Given money lent or borrowed, when it is saved, then this month's **Received** and **Spent** on
+  `/` do not change: a debt is not spending.
+- Given debt id **88** belongs to another account, when this user asks for it, then the answer is
+  **"not found"**. _(BR4)_
+
 ---
 
 ## 5. Business rules
@@ -283,6 +322,9 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | **BR9**  | A cap warns at 70% of the figure and turns to an over-budget warning above 100%.                                                                                                                                                       | Cap 3,000,000. Spent 2,100,000 = exactly 70% → amber. Spent 3,000,000 = exactly 100% → still amber, not yet over. Spent 3,000,001 → over-budget. Both states carry text as well as colour, so they are readable without colour vision.                             |
 | **BR10** | A session lasts 7 days from sign-in, then the password is required again.                                                                                                                                                              | Signed in 12/09 at 21:00. On 19/09 at 20:00 the application opens still signed in. On 19/09 at 22:00 it asks for the password.                                                                                                                                     |
 | **BR11** | An entry cannot be dated later than today.                                                                                                                                                                                             | Today is 12/11/2026. An entry dated 12/11/2026 → accepted. Dated 13/11/2026 → rejected with "The date cannot be in the future". Dated 28/10/2026, last month → accepted: a purchase written down late is still recorded (Scenario 1, step 4).                      |
+| **BR12** | Months and years are compared on money spent. The month with the most spent and the month with the least are chosen among the months up to this one that have at least one entry; on a tie, the earlier month. A year later than this one cannot be chosen. | Today is 24/10/2026. In 2026, January has no entries, February and March 900,000 spent each, October 2,931,000. Most spent: October. Least: February, earlier than March. January, November and December are never named. Asking for 2027 → rejected with "The year cannot be in the future". |
+| **BR13** | A debt names who the money is with in 1 to 60 characters, and its amount follows BR5. It started today or earlier (BR11), and its due date, if it has one, is not before the day it started. | Lent 200,000 to "Lan" on 24/10, due 24/10 → accepted. Due 23/10 → rejected with "The due date cannot be before the start date". A name of 61 characters → rejected with "Write a name of 1 to 60 characters". |
+| **BR14** | An open debt is overdue from the day after its due date; on the due date itself it is not yet overdue. A settled debt is never overdue and cannot be settled twice. | Due 23/10, today 24/10, not settled → "Overdue". Due 24/10 → open, not overdue. Settled on 20/10 → never overdue; settling it again → "This debt is already settled". |
 
 ---
 
@@ -298,9 +340,11 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | `/transactions/new` | Log one amount of money spent or received                              | **U**  | P0       |
 | `/transactions/:id` | Correct or remove one entry                                            | **U**  | P1       |
 | `/budget`           | Set and read monthly caps per kind of spending                         | **U**  | P1       |
-| `/stats`            | Breakdown of one month by kind of spending                             | **U**  | P2       |
+| `/stats`            | Spending month by month and year by year; one month by kind of spending | **U**  | P1       |
+| `/debts`            | Money borrowed and lent: who, how much, by when; mark it settled        | **U**  | P1       |
+| `/debts/new`        | Write down one debt or loan                                             | **U**  | P1       |
 
-Seven screens against the required five. **No `A` screen exists this semester:** every account
+Nine screens against the required five. **No `A` screen exists this semester:** every account
 sees only its own records (BR4), so there is no administrator role to build. This is stated so
 the absence reads as a decision rather than an omission.
 
