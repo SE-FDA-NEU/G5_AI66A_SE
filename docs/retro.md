@@ -89,9 +89,19 @@ Committed: 9 points, 6 at planning and 3 added on 28/09 · Completed: 9 points
 
 ### Keep / Stop / Start
 
-No retrospective meeting was held in Sprint 3; the retrospective is optional in M3. The team
-holds one at the start of Sprint 4 and records its Keep / Stop / Start, and the one action with
-its owner, there.
+No meeting was held at the end of Sprint 3. The team held it at Sprint 4 planning, on 24/10, and
+read the review times below before talking.
+
+| Keep doing | Stop doing | Start doing |
+| --- | --- | --- |
+| The Request reviewer workflow: every pull request after #102 had its reviewer the moment it was opened | Finishing another member's task on the last evening: #93 and #113 moved to the Product Owner on 18/10 | Writing the test case, with its ID, before the code it checks, as the week 11 lecture showed |
+| Error codes: one change of wording never again broke the Vietnamese screens | Redoing a pull request instead of fixing it: #129 was closed unmerged and redone as #131, 13.6 hours later | Each member writing the tests of the code they wrote, so `tests/` has a test by everyone |
+
+### Action for next sprint
+
+| Action | Owner | Checked at |
+| --- | --- | --- |
+| Every pull request lists the test case IDs it adds or changes, and its reviewer runs `pytest` from the repository root and pastes the last line of the output in the review | @levanduc36 | Sprint 4 retro |
 
 ### Did last sprint's action happen?
 
@@ -132,9 +142,9 @@ Committed: 11 points · Completed: 11 points
 
 ---
 
-## Sprint 4 - <start date> to <end date>
+## Sprint 4 - 20/10/2026 to 02/11/2026
 
-**Scrum Master:** @
+**Scrum Master:** @Chidokato5376
 
 ### Keep / Stop / Start
 

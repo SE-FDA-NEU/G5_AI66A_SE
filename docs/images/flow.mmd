@@ -26,4 +26,11 @@ flowchart TD
     Home --> Stats["/stats"]
     Stats --> Home
 
+    Home --> Debts["/debts"]
+    Debts -- "write one down" --> DebtNew["/debts/new"]
+    DebtNew -- stored --> Debts
+    DebtNew -- abandoned --> Debts
+    Debts -- "settled or removed" --> Debts
+    Debts --> Home
+
     Home -- "sign out" --> Login

@@ -123,3 +123,21 @@ acceptance criterion changed and no story changed priority or points. The app pi
 and a hint saying what to do next, by `code` (#103). `docs/design.md`, section 3, and
 `docs/ui.md`, section 4, describe it (#113). Cost: one extra commit by the testing owner on the
 same branch, because six existing tests compared whole error answers.
+
+---
+
+## 2026-10-24 — Two new stories: the spending trend (US12) and debts and loans (US13)
+
+**Reason.** At Sprint 4 planning the Product Owner asked for two things the overview cannot show:
+which months cost the most and which the least, and money borrowed from or lent to friends, which
+students in our interviews keep in their heads. Both came with the request to use the empty space
+around the overview on a wide screen.
+
+**Impact.** New stories US12 (P1, 5 points) and US13 (P1, 5 points), with three new rules: BR12
+compares months and years, BR13 checks a debt, BR14 says when it is overdue. The backlog grows
+from 43 to 53 points. Sprint 4 commits US06 (3), US10 (5), US12 and US13: **18 points**, against a
+velocity of 11, because US10 and US12 share one screen and one endpoint family, and the API for US06
+was designed in M2. US10 stays P2 but is taken ahead of US07 to US09, because it shares `/stats` with
+US12. The new screen
+`/debts` and its table `debts` are added to `docs/requirements.md` and `docs/design.md`; no
+existing criterion changed.
