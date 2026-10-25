@@ -24,7 +24,7 @@ what to do. Every message is listed in [docs/ui.md](docs/ui.md), section 3.
 
 **Group:** G5_AI66A
 **Product Owner (fixed for the entire semester):** @Chidokato5376
-**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · **@levanduc36 (Sprint 3, current)**
+**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · @levanduc36 (Sprint 3) · **@Chidokato5376 (Sprint 4, current)**
 **Board:** [Sprint Board — Personal Expense Management App](https://github.com/orgs/SE-FDA-NEU/projects/12/views/1)
 
 ## Team
@@ -45,6 +45,10 @@ colliding.
 | Sprint       | 1            | 2                | 3           | 4              | 5           |
 | ------------ | ------------ | ---------------- | ----------- | -------------- | ----------- |
 | Scrum Master | @vantran2801 | @nguyennhien2412 | @levanduc36 | @Chidokato5376 | @levanduc36 |
+
+In Sprint 4 the Product Owner is also Scrum Master, as this rotation fixed in week 1. To keep
+the two roles apart, the backlog is ordered at planning with the whole team present, and the
+Sprint 4 retrospective is facilitated by @levanduc36, who owns its action.
 
 ## Definition of Done
 

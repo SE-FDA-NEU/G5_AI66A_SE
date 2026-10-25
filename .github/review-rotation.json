@@ -1,13 +1,14 @@
 {
-  "sprint": 3,
+  "sprint": 4,
   "about": "Who reviews whom this sprint. The Request reviewer workflow reads this file from main when a pull request is opened and asks the reviewer named here. Change it at sprint planning, through a pull request like everything else.",
   "reviewer_of_author": {
-    "Chidokato5376": "nguyennhien2412",
-    "vantran2801": "levanduc36",
-    "nguyennhien2412": "Chidokato5376",
-    "levanduc36": "vantran2801"
+    "Chidokato5376": "levanduc36",
+    "vantran2801": "nguyennhien2412",
+    "nguyennhien2412": "vantran2801",
+    "levanduc36": "Chidokato5376"
   },
   "reviewer_of_issue": {
-    "93": "Chidokato5376"
+    "142": "vantran2801",
+    "160": "levanduc36"
   }
 }
