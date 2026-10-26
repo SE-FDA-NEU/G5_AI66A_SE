@@ -42,6 +42,7 @@ def list_transactions(
             "model": ErrorOut,
             "description": (
                 f'"{transaction_service.AMOUNT_NOT_POSITIVE}" (BR5) · '
+                f'"{transaction_service.AMOUNT_TOO_LARGE}" (BR5) · '
                 f'"{transaction_service.UNKNOWN_CATEGORY}" (BR6) · '
                 f'"{transaction_service.DATE_IN_FUTURE}" (BR11)'
             ),
