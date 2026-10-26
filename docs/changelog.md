@@ -141,3 +141,20 @@ was designed in M2. US10 stays P2 but is taken ahead of US07 to US09, because it
 US12. The new screen
 `/debts` and its table `debts` are added to `docs/requirements.md` and `docs/design.md`; no
 existing criterion changed.
+
+---
+
+## 2026-10-26 — BR5 gets an upper limit: 1,000,000,000,000 dong per entry
+
+**Reason.** Bug #142, found while writing the test cases of US03 for `docs/testing.md`: the
+partition "a very large amount" had no test. An entry of 9,223,372,036,854,775,807 dong, the largest
+number SQLite stores, was accepted, and from the next entry of the month on, `GET /api/summary`
+answered 500, because the month's SUM no longer fits: `/` showed its error state for good. One
+dong more was refused with 500 instead of a message.
+
+**Impact.** BR5 now reads "greater than zero and at most 1,000,000,000,000", with a new criterion on
+US03 and the message "Enter an amount of at most 1,000,000,000,000" (code `amount_too_large`). The
+limit is far above anything a student spends, and at that size nine million entries are needed
+before a month's sum can overflow. No story changed priority or points. Cost: one service check,
+one regression test, and one message in each language of the app.
+
