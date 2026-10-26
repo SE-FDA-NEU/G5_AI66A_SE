@@ -146,3 +146,40 @@ def test_the_entry_belongs_to_the_account_that_logged_it(client, db, account, au
     log(client, auth_headers, user_id=999)
 
     assert db.scalar(select(Transaction.user_id)) == account.id
+
+
+@pytest.mark.parametrize(
+    ("amount", "status"),
+    [
+        (1_000_000_000_000, 201),
+        (1_000_000_000_001, 422),
+        (9_223_372_036_854_775_808, 422),
+    ],
+    ids=["on the limit", "one dong above", "above what SQLite stores"],
+)
+def test_an_amount_above_one_trillion_is_refused(client, db, auth_headers, amount, status):
+    """BR5's upper limit. Regression test for bug #142: the last amount answered 500."""
+    response = log(client, auth_headers, amount=amount)
+
+    assert response.status_code == status
+    if status == 422:
+        assert response.json() == {
+            "detail": "Enter an amount of at most 1,000,000,000,000",
+            "code": "amount_too_large",
+        }
+        assert count_entries(db) == 0
+
+
+def test_the_month_still_adds_up_after_the_largest_entries(client, auth_headers):
+    """Bug #142: after an entry of 9,223,372,036,854,775,807 the next one made /api/summary 500.
+
+    Two of the largest entries allowed now leave the month's totals readable.
+    """
+    log(client, auth_headers, amount=1_000_000_000_000)
+    log(client, auth_headers, amount=1_000_000_000_000)
+    refused = log(client, auth_headers, amount=9_223_372_036_854_775_807)
+
+    assert refused.status_code == 422
+    response = client.get("/api/summary", headers=auth_headers)
+    assert response.status_code == 200
+    assert response.json()["spending"] == 2_000_000_000_000
