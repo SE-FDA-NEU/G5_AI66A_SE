@@ -74,6 +74,12 @@ jobs:
       - name: Test
         run: pytest -v --cov=app --cov-report=term-missing --junitxml=junit.xml
 
+      - name: One command from the repository root
+        # docs/SETUP.md, section 7: the instructor types `pytest` in the cloned folder. This
+        # proves that command finds every test, on a machine that has never seen the project.
+        working-directory: .
+        run: pytest -q
+
       - name: Publish test summary
         if: always()
         run: |
