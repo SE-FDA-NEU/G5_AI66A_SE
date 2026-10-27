@@ -5,9 +5,9 @@ never changes when the sentence is reworded, so the app chooses the message it s
 user's language, by `code` (docs/ui.md, section 3).
 
 Each kind of refusal a service raises gets its status here, once: 400 a malformed request, 401 not
-signed in, 409 a conflict with what is stored, 422 a well-formed request that breaks a business
-rule (docs/design.md, section 3). Anything else that goes wrong is a 500 in the same shape, never
-a stack trace.
+signed in, 404 nothing of this account's has that id (BR4), 409 a conflict with what is stored,
+422 a well-formed request that breaks a business rule (docs/design.md, section 3). Anything else
+that goes wrong is a 500 in the same shape, never a stack trace.
 """
 
 import logging
@@ -17,7 +17,14 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.services.errors import AlreadyExists, NotSignedIn, NotUnderstood, RuleBroken, ServiceError
+from app.services.errors import (
+    AlreadyExists,
+    NotFound,
+    NotSignedIn,
+    NotUnderstood,
+    RuleBroken,
+    ServiceError,
+)
 
 logger = logging.getLogger("app")
 
@@ -26,6 +33,7 @@ SERVER_ERROR = "The server could not finish this request"
 STATUS_OF = {
     NotUnderstood: status.HTTP_400_BAD_REQUEST,
     NotSignedIn: status.HTTP_401_UNAUTHORIZED,
+    NotFound: status.HTTP_404_NOT_FOUND,
     AlreadyExists: status.HTTP_409_CONFLICT,
     RuleBroken: status.HTTP_422_UNPROCESSABLE_CONTENT,
 }

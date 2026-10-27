@@ -30,6 +30,15 @@ class NotSignedIn(ServiceError):
     code = "sign_in_again"
 
 
+class NotFound(ServiceError):
+    """Nothing this account owns has that id: it does not exist, or another account owns it (BR4).
+
+    Both answer the same, so a stranger cannot find out that an id exists.
+    """
+
+    code = "not_found"
+
+
 class AlreadyExists(ServiceError):
     """The request conflicts with what is stored, such as an address already registered (BR1)."""
 
@@ -37,6 +46,6 @@ class AlreadyExists(ServiceError):
 
 
 class RuleBroken(ServiceError):
-    """A well-formed request that breaks a business rule (BR2, BR5, BR6, BR11)."""
+    """A well-formed request that breaks a business rule (BR2, BR5, BR6, BR11, BR13)."""
 
     code = "rule_broken"
