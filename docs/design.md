@@ -118,7 +118,8 @@ API, `server_error`, never a stack trace.
 | --- | --- | --- | --- |
 | `invalid_request` | 400 | a malformed request | every endpoint |
 | `invalid_email` | 400 | an address with no @ or no dot after it | `POST /api/users` |
-| `invalid_month` | 400 | a month not written YYYY-MM | `GET /api/summary` |
+| `invalid_month` | 400 | a month not written YYYY-MM | `GET /api/summary`, `GET /api/stats/breakdown` |
+| `invalid_year` | 400 | a year not written YYYY | `GET /api/stats/months` |
 | `incorrect_sign_in` | 401 | BR3 | `POST /api/auth/login` |
 | `sign_in_again` | 401 | BR10 | every endpoint behind a sign-in |
 | `email_taken` | 409 | BR1 | `POST /api/users` |
@@ -127,6 +128,7 @@ API, `server_error`, never a stack trace.
 | `amount_too_large` | 422 | BR5, at most 1,000,000,000,000 | `POST /api/transactions` |
 | `unknown_category` | 422 | BR6 | `POST /api/transactions` |
 | `date_in_future` | 422 | BR11 | `POST /api/transactions` |
+| `year_in_future` | 422 | BR12 | `GET /api/stats/months` |
 | `entry_not_found` | 404 | BR4: no such entry, or another account's | `GET`, `PATCH`, `DELETE /api/transactions/{id}` |
 | `not_found` | 404 | a path the API does not have | any |
 | `server_error` | 500 | a fault in the API | any |
@@ -148,6 +150,9 @@ a small sub-resource named as a noun, a login: `POST /api/auth/login`.
 | 9   | GET    | `/api/transactions/{id}` | Bearer token                                                                                                 | **200** · one entry, in the shape of row 4                                                                                                                                 | **404** "Entry not found", for an unknown id and for another account's _(BR4)_ · **401**                                                                                    | US06         | **Sprint 4** |
 | 10  | PATCH  | `/api/transactions/{id}` | Bearer token · JSON as row 5: the form sends every field again                                              | **200** · the corrected entry                                                                                                                                              | as row 5 · **404** "Entry not found" _(BR4)_                                                                                                                                 | US06         | **Sprint 4** |
 | 11  | DELETE | `/api/transactions/{id}` | Bearer token                                                                                                 | **204** · nothing; the entry is gone                                                                                                                                       | **404** "Entry not found" _(BR4)_ · **401**                                                                                                                                  | US06         | **Sprint 4** |
+| 12  | GET    | `/api/stats/breakdown` | Bearer token · query `month` as `YYYY-MM`, this month by default                                    | **200** · `{month, total, items}`: money spent per kind, the biggest first, each `{category or null, amount, share}`, `share` a whole percentage rounded half up | **400** "Month must be written YYYY-MM" · **401**                                                                                                                           | US10 _(BR4, BR6)_ | **Sprint 4** |
+| 13  | GET    | `/api/stats/months`    | Bearer token · query `year` as `YYYY`, this year by default                                         | **200** · `{periods, busiest, quietest}`: twelve `{period "2026-01", income, spending, count}`, January first; the months with the most and least spent _(BR12)_ | **400** "Year must be written YYYY" · **422** "The year cannot be in the future" _(BR12)_ · **401**                                                                         | US12 _(BR4)_ | **Sprint 4** |
+| 14  | GET    | `/api/stats/years`     | Bearer token                                                                                         | **200** · the same shape as row 13, one period per year with entries, oldest first                                                                                       | **401**                                                                                                                                                                      | US12 _(BR4)_ | **Sprint 4** |
 
 Rows 1 to 7 cover all five P0 stories, and all eight endpoints are built: four in Sprint 2, and
 rows 1, 5, 6 and 7 in Sprint 3, against the contract fixed here in Sprint 2. Building them changed
@@ -158,7 +163,8 @@ account's entry rather than 403, so its existence is never confirmed _(BR4)_. A 
 checked by the same function as a new entry, `transaction_service.check_entry`, so BR5, BR6 and BR11
 cannot drift apart between the two. **Still planned:** `GET /api/categories/suggestions?note=` for
 US07; `PUT` and `GET /api/budgets` for US08 and US09, with **422** "Caps apply to spending only"
-_(BR8)_; `GET /api/stats/breakdown?month=` for US10.
+_(BR8)_. US10 is row 12, under the `/api/stats` family planned for it, next to US12's rows 13 and 14,
+because `/stats` shows the three together.
 
 ---
 

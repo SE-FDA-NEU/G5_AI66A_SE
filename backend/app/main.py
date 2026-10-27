@@ -6,11 +6,11 @@ from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.errors import register_error_handlers
-from app.routers import auth, categories, summary, transactions, users
+from app.routers import auth, categories, stats, summary, transactions, users
 
 app = FastAPI(
     title=settings.APP_NAME,
-    version="0.3.0",
+    version="0.4.0",
     description="API of the Personal Expense Management App, Team 05 (AI66A).",
 )
 register_error_handlers(app)
@@ -41,3 +41,4 @@ app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(transactions.router, prefix=settings.API_PREFIX)
 app.include_router(categories.router, prefix=settings.API_PREFIX)
 app.include_router(summary.router, prefix=settings.API_PREFIX)
+app.include_router(stats.router, prefix=settings.API_PREFIX)
