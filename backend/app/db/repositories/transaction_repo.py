@@ -80,3 +80,43 @@ def month_totals(db: Session, user_id: int, *, first_day: date, last_day: date) 
         .where(Transaction.occurred_on.between(first_day, last_day))
     ).one()
     return MonthTotals(income=income, spending=spending, count=count)
+
+
+def get_for_account(db: Session, user_id: int, entry_id: int) -> Transaction | None:
+    """The entry with this id if this account owns it; None otherwise (US06).
+
+    Another account's entry and an id that does not exist both give None, so the service cannot
+    tell them apart and neither can the caller (BR4).
+    """
+    return db.scalar(
+        select(Transaction)
+        .options(joinedload(Transaction.category))
+        .where(Transaction.id == entry_id, Transaction.user_id == user_id)
+    )
+
+
+def update(
+    db: Session,
+    entry: Transaction,
+    *,
+    kind: str,
+    amount: int,
+    note: str,
+    occurred_on: date,
+    category_id: int | None,
+) -> Transaction:
+    """Replace what an entry says. The service has already checked it, as for a new one."""
+    entry.kind = kind
+    entry.amount = amount
+    entry.note = note
+    entry.occurred_on = occurred_on
+    entry.category_id = category_id
+    db.commit()
+    db.refresh(entry, ["category"])
+    return entry
+
+
+def delete(db: Session, entry: Transaction) -> None:
+    """Remove one entry for good. The service has already checked who owns it."""
+    db.delete(entry)
+    db.commit()
