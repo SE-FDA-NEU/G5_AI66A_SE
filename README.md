@@ -98,7 +98,7 @@ git clone https://github.com/SE-FDA-NEU/G5_AI66A_SE.git
 cd G5_AI66A_SE\backend
 py -3.12 -m venv .venv
 .venv\Scripts\activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 copy .env.example .env
 python -m scripts.seed_data
 python -m uvicorn app.main:app --reload
@@ -111,11 +111,14 @@ git clone https://github.com/SE-FDA-NEU/G5_AI66A_SE.git
 cd G5_AI66A_SE/backend
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 cp .env.example .env
 python -m scripts.seed_data
 python -m uvicorn app.main:app --reload
 ```
+
+**Run the tests** with `pytest` in the `G5_AI66A_SE` folder, the virtual environment active: no
+server and no database needed (SETUP.md, section 7).
 
 `python -m scripts.seed_data` creates the database and prints 11 categories, 1 user,
 25 transactions and 0 budgets.

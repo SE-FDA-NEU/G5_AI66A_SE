@@ -4,7 +4,8 @@
 Milestone 1 · Sprint 1 · Weeks 5–6
 
 _Updated in Sprint 2: BR11 and its criterion on US03, criterion 2 of US05, and the new story US11._
-_Updated in Sprint 4: the new stories US12 and US13, with BR12, BR13 and BR14, and `/debts`._
+_Updated in Sprint 4: the new stories US12 and US13, with BR12, BR13 and BR14, and `/debts`; the
+upper limit of BR5 and its criterion on US03 (bug #142)._
 _Each change is recorded in `docs/changelog.md`._
 
 ---
@@ -185,6 +186,9 @@ US12 and US13 in Sprint 4, on 24/10.
   increases by **exactly 4,000,000** and the spending total does not change.
 - Given the amount is left empty, or is **0**, or is **−20,000**, when the user submits, then it
   is rejected with **"Enter an amount greater than 0"** and nothing is stored. _(BR5)_
+- Given an amount of **1,000,000,000,001**, when the user submits, then it is rejected with
+  **"Enter an amount of at most 1,000,000,000,000"** and nothing is stored; **1,000,000,000,000**
+  is accepted. _(BR5)_
 - Given today is **12/11/2026**, when an entry dated **13/11/2026** is submitted, then it is
   rejected with **"The date cannot be in the future"** and nothing is stored. _(BR11)_
 
@@ -315,7 +319,7 @@ US12 and US13 in Sprint 4, on 24/10.
 | **BR2**  | A password is 6 to 128 characters and is never stored or shown as plain text.                                                                                                                                                          | `abc12` (5 characters) → rejected. `abc123` (6) → accepted, and what is stored is a one-way hash of it: no response and no stored field ever contains `abc123`. A password of 129 characters → rejected.                                                           |
 | **BR3**  | A failed sign-in returns the same message whether the email is unknown or the password is wrong.                                                                                                                                       | `ghost@x.com` was never registered → 401, "Incorrect email or password". `tuan@x.com`, registered with `abc123`, signs in with `abc124` → the same 401 and the identical message. An attacker cannot tell which emails exist.                                      |
 | **BR4**  | An account can read and change only its own entries.                                                                                                                                                                                   | Entry 412 belongs to account 7. Account 9 requests entry 412 → "not found". Not "forbidden", because that would confirm 412 exists.                                                                                                                                |
-| **BR5**  | An amount is a whole number of dong, greater than zero.                                                                                                                                                                                | 55,000 → accepted. 0 → rejected. −20,000 → rejected. 55,000.50 → rejected; VND has no subunit in use.                                                                                                                                                              |
+| **BR5**  | An amount is a whole number of dong, greater than zero and at most 1,000,000,000,000.                                                                                                                                                  | 55,000 → accepted. 0 → rejected. −20,000 → rejected. 55,000.50 → rejected; VND has no subunit in use. 1,000,000,000,000 → accepted; 1,000,000,000,001 → rejected, so a month's totals can always be added up (bug #142).                                                                                                                                                              |
 | **BR6**  | An entry has at most one kind of spending, chosen from Food, Transport, Shopping, Bills, Entertainment, Health, Education and Other. A suggestion never overrides what the user picks, and when nothing matches, nothing is suggested. | "tra sua" (milk tea) → Food is suggested. The user picks Entertainment instead → stored as Entertainment. "xyz123" → nothing is suggested and the entry is left empty, **not** filed under the most common category, because a wrong guess is worse than no guess. |
 | **BR7**  | There is at most one cap per account, per kind of spending, per month.                                                                                                                                                                 | A 3,000,000 food cap exists for 11/2026. Saving 2,000,000 for food 11/2026 replaces the figure; there is still one record, reading 2,000,000.                                                                                                                      |
 | **BR8**  | A cap applies only to spending, never to money received: Salary, Bonus or Other income.                                                                                                                                                | Choosing "Salary" and submitting 5,000,000 → rejected. Receiving more money than expected is never something to warn about, so a cap on income has no meaning.                                                                                                     |

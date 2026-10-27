@@ -20,7 +20,7 @@ Bash, activate the virtual environment with `source .venv/Scripts/activate` inst
 | A web browser | Chrome, Edge or Firefox                                         |                                              |                                                                                 |
 
 Nothing else is needed: the database is a file that Python creates, so there is no database
-server and no Docker to install. A phone is optional (section 7).
+server and no Docker to install. A phone is optional (section 8).
 
 Run every **Check with** command before section 2; each must print a version. If you install
 anything now, close VS Code and every terminal, then open a new one, so the new program is found.
@@ -44,7 +44,7 @@ cd G5_AI66A_SE
 cd backend
 py -3.12 -m venv .venv
 .venv\Scripts\activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 copy .env.example .env
 ```
 
@@ -57,11 +57,12 @@ If `py` is not found, check that `python --version` prints 3.11 or later, then u
 cd backend
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 cp .env.example .env
 ```
 
-Your prompt now starts with `(.venv)`. Keep this terminal in `backend/` for the rest of this
+`requirements-dev.txt` installs the app's libraries from `requirements.txt` and the tools that test
+it, pytest among them (section 7). Your prompt now starts with `(.venv)`. Keep this terminal in `backend/` for the rest of this
 section.
 
 **Configuration.** The `.env` you just copied works as it is, so a first run needs no edits. What
@@ -182,7 +183,27 @@ Every message the app can show, and the rule behind it, is listed in `docs/ui.md
 
 ---
 
-## 7. Optional: on a phone
+## 7. Run the automated tests
+
+The tests need no server and no database: each one builds its own database in memory, or in a
+temporary folder, and throws it away, so `backend/expense.db` is never touched and the backend does
+not have to be running. In a terminal with the virtual environment active (section 3), in the
+`G5_AI66A_SE` folder:
+
+```
+pytest
+```
+
+`pytest -v` lists every test by name, with the test case ID from `docs/testing.md` in it. The last
+line reads `75 passed`, in about two seconds; nothing may fail or be skipped. The same command
+works from `backend/`.
+
+The app has tests of its own, for how amounts, dates and messages are shown. In terminal 2, in
+`mobile/`: `npm test`.
+
+---
+
+## 8. Optional: on a phone
 
 Install **Expo Go** (it must support SDK 54). Put the phone and the computer on the same network;
 campus Wi-Fi blocks devices from reaching each other, so use a phone hotspot. Start the backend
@@ -191,7 +212,7 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 
 ---
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | What you see                                                                                                           | Why                                                                           | Fix                                                                                                                                            |
 | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -211,6 +232,8 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 | **The server does not offer this yet** on `/register` or `/transactions/new`                                           | The backend still runs code from before Sprint 3                              | `git pull` in the repository, stop the backend with Ctrl+C, then start it again (section 4)                                                    |
 | The page shows an older screen after `git pull`                                                                        | Expo still holds the old bundle                                               | Stop Expo with Ctrl+C, then `npx expo start --web --clear`                                                                                     |
 | **This email is already registered** for an address you meant to create                                                | You created it on an earlier run; the database keeps it                       | Use another address, or `python -m scripts.seed_data --reset` to start again from the demo data                                                |
+| `'pytest' is not recognized`, or `No module named pytest`                                                              | The virtual environment is not active, or it was filled from `requirements.txt` only | Activate it (section 3), then `python -m pip install -r requirements-dev.txt` in `backend/`                                                   |
+| `ModuleNotFoundError: No module named 'app'` when running pytest                                                       | pytest was started outside the project, so it found no `pytest.ini`           | `cd` to the `G5_AI66A_SE` folder or to `backend/`, then run `pytest` again                                                                     |
 
 ---
 
