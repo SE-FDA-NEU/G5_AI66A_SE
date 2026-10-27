@@ -109,7 +109,8 @@ acceptance criteria, always in English. The code never changes when the sentence
 the app chooses what it shows by the code, in the language the user chose, with a hint that says
 what to do next (US11, `docs/ui.md` section 3). The status says whose mistake it was: **400** a
 malformed request, such as a missing field or a `limit` outside 1 to 100; **401** not signed in
-(BR3, BR10); **409** a conflict with what is stored (BR1); **422** a well-formed request that
+(BR3, BR10); **404** no such id among the account's own, which is also the answer for another
+account's id (BR4); **409** a conflict with what is stored (BR1); **422** a well-formed request that
 breaks a business rule, checked in the service (BR2, BR5, BR6, BR8, BR11); **500** a fault in the
 API, `server_error`, never a stack trace.
 
@@ -126,6 +127,7 @@ API, `server_error`, never a stack trace.
 | `amount_too_large` | 422 | BR5, at most 1,000,000,000,000 | `POST /api/transactions` |
 | `unknown_category` | 422 | BR6 | `POST /api/transactions` |
 | `date_in_future` | 422 | BR11 | `POST /api/transactions` |
+| `entry_not_found` | 404 | BR4: no such entry, or another account's | `GET`, `PATCH`, `DELETE /api/transactions/{id}` |
 | `not_found` | 404 | a path the API does not have | any |
 | `server_error` | 500 | a fault in the API | any |
 
@@ -143,16 +145,20 @@ a small sub-resource named as a noun, a login: `POST /api/auth/login`.
 | 6   | GET    | `/api/categories`   | Bearer token                                                                                               | **200** · the 11 categories, `{id, name, kind}`, kinds of spending first                                                                                                  | **401** "Please sign in again"                                                                                                                                               | US03         | **Sprint 3** |
 | 7   | GET    | `/api/summary`      | Bearer token · query `month` as `YYYY-MM`, this month by default                                           | **200** · `{month, income, spending, remaining, count}` for that month                                                                                                    | **401** · **400** "Month must be written YYYY-MM"                                                                                                                            | US04 _(BR4)_ | **Sprint 3** |
 | 8   | GET    | `/health`           | none                                                                                                       | **200** · `{"status": "ok"}`                                                                                                                                              | none                                                                                                                                                                         | all          | **Sprint 2** |
+| 9   | GET    | `/api/transactions/{id}` | Bearer token                                                                                                 | **200** · one entry, in the shape of row 4                                                                                                                                 | **404** "Entry not found", for an unknown id and for another account's _(BR4)_ · **401**                                                                                    | US06         | **Sprint 4** |
+| 10  | PATCH  | `/api/transactions/{id}` | Bearer token · JSON as row 5: the form sends every field again                                              | **200** · the corrected entry                                                                                                                                              | as row 5 · **404** "Entry not found" _(BR4)_                                                                                                                                 | US06         | **Sprint 4** |
+| 11  | DELETE | `/api/transactions/{id}` | Bearer token                                                                                                 | **204** · nothing; the entry is gone                                                                                                                                       | **404** "Entry not found" _(BR4)_ · **401**                                                                                                                                  | US06         | **Sprint 4** |
 
 Rows 1 to 7 cover all five P0 stories, and all eight endpoints are built: four in Sprint 2, and
 rows 1, 5, 6 and 7 in Sprint 3, against the contract fixed here in Sprint 2. Building them changed
 only the error shape above.
 
-**Planned for the P1 and P2 stories:** `PATCH` and `DELETE /api/transactions/{id}` for US06,
-answering **404** for another account's entry rather than 403, so its existence is never confirmed
-_(BR4)_; `GET /api/categories/suggestions?note=` for US07; `PUT` and `GET /api/budgets` for US08 and
-US09, with **422** "Caps apply to spending only" _(BR8)_; `GET /api/stats/breakdown?month=` for
-US10.
+**US06, built in Sprint 4** as planned here in Sprint 2: rows 9 to 11 answer **404** for another
+account's entry rather than 403, so its existence is never confirmed _(BR4)_. A correction is
+checked by the same function as a new entry, `transaction_service.check_entry`, so BR5, BR6 and BR11
+cannot drift apart between the two. **Still planned:** `GET /api/categories/suggestions?note=` for
+US07; `PUT` and `GET /api/budgets` for US08 and US09, with **422** "Caps apply to spending only"
+_(BR8)_; `GET /api/stats/breakdown?month=` for US10.
 
 ---
 
