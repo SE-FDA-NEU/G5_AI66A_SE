@@ -71,3 +71,56 @@ def test_delete_removes_only_that_entry(db, account):
     entries, total = transaction_repo.list_recent(db, account.id, limit=20)
     assert total == 1
     assert [entry.id for entry in entries] == [kept.id]
+
+
+def test_spending_is_added_up_per_kind_biggest_first(db, account):
+    """US10: money received and other months are left out; no kind chosen counts as one group."""
+    transport = category_repo.get_by_name(db, "Transport")
+    add(db, account.id, 30_000)
+    add(db, account.id, 25_000)
+    transaction_repo.create(
+        db, user_id=account.id, kind="expense", amount=70_000, note="grab",
+        occurred_on=DAY, category_id=transport.id,
+    )
+    transaction_repo.create(
+        db, user_id=account.id, kind="expense", amount=5_000, note="",
+        occurred_on=DAY, category_id=None,
+    )
+    add(db, account.id, 4_000_000, kind="income")
+    add(db, account.id, 99_000, on=date(2026, 10, 31))
+
+    rows = transaction_repo.spending_by_category(
+        db, account.id, first_day=date(2026, 11, 1), last_day=date(2026, 11, 30)
+    )
+
+    assert [(c.name if c else None, amount) for c, amount in rows] == [
+        ("Transport", 70_000),
+        ("Food", 55_000),
+        (None, 5_000),
+    ]
+
+
+def test_totals_by_month_keep_the_months_of_one_year_apart(db, account):
+    """US12: 31/12/2025 belongs to 2025, 01/01/2026 to 2026."""
+    add(db, account.id, 10_000, on=date(2025, 12, 31))
+    add(db, account.id, 20_000, on=date(2026, 1, 1))
+    add(db, account.id, 30_000, on=date(2026, 1, 31))
+    add(db, account.id, 4_000_000, kind="income", on=date(2026, 2, 1))
+
+    months = transaction_repo.totals_by_month(db, account.id, year=2026)
+
+    assert sorted(months) == [1, 2]
+    assert (months[1].spending, months[1].count) == (50_000, 2)
+    assert (months[2].income, months[2].spending) == (4_000_000, 0)
+
+
+def test_totals_by_year_and_month_keep_to_one_account(db, account):
+    """BR4: a stranger's entries are in neither total."""
+    stranger = make_account(db, email="stranger@example.com")
+    add(db, stranger.id, 10_000, on=date(2025, 6, 1))
+    add(db, account.id, 20_000, on=date(2026, 6, 1))
+
+    years = transaction_repo.totals_by_year(db, account.id)
+
+    assert {year: totals.spending for year, totals in years.items()} == {2026: 20_000}
+    assert transaction_repo.totals_by_month(db, account.id, year=2025) == {}
