@@ -1,4 +1,7 @@
-"""Signing in: US02, BR2, BR3 and BR10."""
+"""Signing in: US02, BR2, BR3 and BR10.
+
+Test cases TC-09 to TC-16 of docs/testing.md, section 2; the ID is in each test's name or row.
+"""
 
 from datetime import UTC, datetime, timedelta
 
@@ -12,7 +15,8 @@ def sign_in(client, email: str, secret: str):
     return client.post("/api/auth/login", json={"email": email, "password": secret})
 
 
-def test_sign_in_returns_a_token_and_the_account(client, account):
+def test_tc09_sign_in_returns_a_token_and_the_account(client, account):
+    """TC-09, US02 criterion 1: the right email and password."""
     response = sign_in(client, DEMO_EMAIL, DEMO_SECRET)
 
     assert response.status_code == 200
@@ -22,8 +26,8 @@ def test_sign_in_returns_a_token_and_the_account(client, account):
     assert body["user"] == {"id": account.id, "email": DEMO_EMAIL}
 
 
-def test_sign_in_ignores_capitals_in_the_address(client, account):
-    """BR1: MAI@EXAMPLE.COM is the same account as mai@example.com."""
+def test_tc10_sign_in_ignores_capitals_in_the_address(client, account):
+    """TC-10, BR1: MAI@EXAMPLE.COM is the same account as mai@example.com."""
     assert sign_in(client, "MAI@Example.COM", DEMO_SECRET).status_code == 200
 
 
@@ -34,10 +38,11 @@ def test_sign_in_ignores_capitals_in_the_address(client, account):
         ("ghost@example.com", DEMO_SECRET),
         ("not-an-email", DEMO_SECRET),
     ],
-    ids=["wrong password", "unknown email", "malformed email"],
+    ids=["TC-11 wrong password", "TC-12 unknown email", "TC-13 malformed email"],
 )
-def test_every_failed_sign_in_gets_the_same_answer(client, account, email, secret):
-    """BR3: nobody can tell from the answer whether an address has an account."""
+def test_tc11_to_tc13_every_failed_sign_in_gets_the_same_answer(client, account, email, secret):
+    """US02 criterion 3 and BR3: nobody can tell from the answer whether an address has an
+    account."""
     response = sign_in(client, email, secret)
 
     assert response.status_code == 401
@@ -79,17 +84,30 @@ def test_a_forged_token_is_refused(client, account):
     assert response.status_code == 401
 
 
-def test_a_sign_in_lasts_seven_days(client, account):
-    """BR10: signed in 7 days ago minus an hour still works; 7 days plus an hour does not."""
-    now = datetime.now(UTC)
-    fresh, _ = create_access_token(account.id, now=now - timedelta(days=7) + timedelta(hours=1))
-    stale, _ = create_access_token(account.id, now=now - timedelta(days=7) - timedelta(hours=1))
+@pytest.mark.parametrize(
+    ("signed_in_ago", "still_signed_in"),
+    [
+        (timedelta(days=7) - timedelta(minutes=1), True),  # TC-14 a minute before the end
+        (timedelta(days=7), False),  # TC-15 exactly 7 days: the session has ended
+        (timedelta(days=7) + timedelta(minutes=1), False),  # TC-16 a minute after
+    ],
+    ids=["TC-14 6 days 23:59", "TC-15 7 days", "TC-16 7 days 00:01"],
+)
+def test_tc14_to_tc16_a_sign_in_lasts_seven_days(client, account, signed_in_ago, still_signed_in):
+    """US02 criterion 2 and BR10, both sides of 7 days.
 
-    still_valid = client.get("/api/auth/me", headers={"Authorization": f"Bearer {fresh}"})
-    assert still_valid.status_code == 200
-    expired = client.get("/api/auth/me", headers={"Authorization": f"Bearer {stale}"})
-    assert expired.status_code == 401
-    assert expired.json() == {"detail": "Please sign in again", "code": "sign_in_again"}
+    Time only moves forward while the test runs, so "exactly 7 days" is already over when the
+    token is read, and a minute is far more than the test takes.
+    """
+    token, _ = create_access_token(account.id, now=datetime.now(UTC) - signed_in_ago)
+
+    response = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+
+    if still_signed_in:
+        assert response.status_code == 200
+    else:
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Please sign in again", "code": "sign_in_again"}
 
 
 def test_the_token_expires_seven_days_after_sign_in(client, account):
