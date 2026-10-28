@@ -11,6 +11,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
+import EditEntryScreen from '../screens/EditEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
@@ -60,6 +61,11 @@ export default function AppNavigator() {
               name="NewEntry"
               component={NewEntryScreen}
               options={{ title: t('newEntry.title') }}
+            />
+            <Stack.Screen
+              name="EditEntry"
+              component={EditEntryScreen}
+              options={{ title: t('editEntry.title') }}
             />
           </>
         ) : (

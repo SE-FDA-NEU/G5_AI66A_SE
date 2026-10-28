@@ -8,6 +8,7 @@ export const ROUTES = {
   Register: 'register',
   Overview: '',
   NewEntry: 'transactions/new',
+  EditEntry: 'transactions/:id',
 };
 
 export const linking = {

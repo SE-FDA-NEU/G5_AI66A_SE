@@ -82,4 +82,10 @@ export const api = {
   categories: () => request('/categories'),
 
   createEntry: (entry) => request('/transactions', { method: 'POST', body: entry }),
+
+  getEntry: (id) => request(`/transactions/${id}`),
+
+  correctEntry: (id, entry) => request(`/transactions/${id}`, { method: 'PATCH', body: entry }),
+
+  removeEntry: (id) => request(`/transactions/${id}`, { method: 'DELETE' }),
 };

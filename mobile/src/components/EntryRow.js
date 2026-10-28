@@ -1,15 +1,16 @@
 /**
  * One entry in the list on /: its note, its kind of spending, its amount and its date (US05).
  * The kind of spending is shown in the chosen language; the note stays exactly as typed (US11).
+ * Tapping it opens /transactions/:id, to correct or remove it (US06).
  */
 
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
 import { colors, radius, spacing } from '../theme';
 import { formatAmount, formatDate } from '../utils/format';
 
-export default function EntryRow({ entry }) {
+export default function EntryRow({ entry, onPress }) {
   const { language, t } = useLanguage();
   const received = entry.kind === 'income';
   const note = entry.note || t('entry.noNote');
@@ -20,7 +21,13 @@ export default function EntryRow({ entry }) {
   const date = formatDate(entry.occurred_on);
 
   return (
-    <View style={styles.row} accessibilityLabel={`${note}, ${kindOfSpending}, ${amount}, ${date}`}>
+    <Pressable
+      style={({ hovered }) => [styles.row, hovered && styles.rowHovered]}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${note}, ${kindOfSpending}, ${amount}, ${date}`}
+      accessibilityHint={t('entry.open')}
+    >
       <View style={styles.left}>
         <Text style={styles.note} numberOfLines={1}>
           {note}
@@ -31,7 +38,7 @@ export default function EntryRow({ entry }) {
         <Text style={[styles.amount, received ? styles.received : styles.spent]}>{amount}</Text>
         <Text style={styles.date}>{date}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -45,6 +52,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     padding: spacing.md,
   },
+  rowHovered: { backgroundColor: colors.primaryLight },
   left: { flex: 1, paddingRight: spacing.sm },
   note: { color: colors.text, fontSize: 15, fontWeight: '600' },
   kind: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
