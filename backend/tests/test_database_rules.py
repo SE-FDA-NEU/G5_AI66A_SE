@@ -1,4 +1,4 @@
-"""The rules the database itself enforces: BR1, BR4, BR5 and BR7.
+"""The rules the database itself enforces: BR1, BR4, BR5, BR7 and BR13.
 
 These go straight to the tables, without the API, so a rule still holds if a future endpoint
 forgets to check it.
@@ -10,7 +10,7 @@ import pytest
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 
-from app.db.models import Budget, Transaction
+from app.db.models import Budget, Debt, Transaction
 from app.db.repositories import category_repo
 from tests.conftest import make_account
 
@@ -62,3 +62,33 @@ def test_there_is_one_cap_per_account_kind_of_spending_and_month(db, account):
     db.add(Budget(user_id=account.id, category_id=food.id, month="2026-11", amount=2_000_000))
     with pytest.raises(IntegrityError):
         db.commit()
+
+
+def debt(account, **fields) -> Debt:
+    values = {"direction": "lent", "person": "Lan", "amount": 200_000}
+    values["started_on"] = date(2026, 11, 12)
+    return Debt(user_id=account.id, **{**values, **fields})
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"due_on": date(2026, 11, 11)},
+        {"person": ""},
+        {"person": "x" * 61},
+        {"amount": 0},
+        {"direction": "given"},
+    ],
+    ids=["due before start", "no name", "61-character name", "amount 0", "unknown direction"],
+)
+def test_a_debt_that_breaks_br13_cannot_be_stored(db, account, fields):
+    """BR13 and BR5 hold in the table itself, even if a future endpoint forgets to check."""
+    db.add(debt(account, **fields))
+    with pytest.raises(IntegrityError):
+        db.commit()
+
+
+def test_a_debt_due_the_day_it_started_can_be_stored(db, account):
+    """BR13: the same day is the edge that is still allowed."""
+    db.add(debt(account, due_on=date(2026, 11, 12), person="x" * 60))
+    db.commit()
