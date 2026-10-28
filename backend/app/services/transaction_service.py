@@ -37,6 +37,17 @@ def list_recent(
     return transaction_repo.list_recent(db, user_id, limit=limit)
 
 
+def check_amount(amount: int | None) -> None:
+    """BR5: a whole number of dong, greater than 0 and at most AMOUNT_MAX. Empty breaks it too.
+
+    Debts follow the same rule (BR13), so app/services/debt_service.py calls this as well.
+    """
+    if amount is None or amount <= 0:
+        raise RuleBroken(AMOUNT_NOT_POSITIVE, code="amount_not_positive")
+    if amount > AMOUNT_MAX:
+        raise RuleBroken(AMOUNT_TOO_LARGE, code="amount_too_large")
+
+
 def check_entry(
     db: Session,
     *,
@@ -50,16 +61,12 @@ def check_entry(
 
     New and corrected entries follow the same rules, so both call this one function. The rules
     are checked in the order the form lists its fields, and the first one broken is the answer:
-    - BR5: an amount is a whole number of dong, greater than 0 and at most AMOUNT_MAX. An empty
-      amount breaks it too.
+    - BR5: check_amount.
     - BR6: a kind of spending, when chosen, is one from the list, of the same kind as the entry:
       money spent is never filed under Salary. None chosen is allowed; nothing is guessed.
     - BR11: the date is today or earlier. No date means today.
     """
-    if amount is None or amount <= 0:
-        raise RuleBroken(AMOUNT_NOT_POSITIVE, code="amount_not_positive")
-    if amount > AMOUNT_MAX:
-        raise RuleBroken(AMOUNT_TOO_LARGE, code="amount_too_large")
+    check_amount(amount)
     if category_id is not None:
         category = category_repo.get_by_id(db, category_id)
         if category is None or category.kind != kind:
