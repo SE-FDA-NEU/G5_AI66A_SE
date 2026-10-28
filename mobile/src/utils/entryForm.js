@@ -1,8 +1,10 @@
 /**
- * Reading what a person types into the form on /transactions/new (US03). Pure functions, so the
- * tests can call them directly. The rules themselves (BR5, BR6, BR11) are the API's to check; these
- * only turn the text into what the API expects.
+ * Reading what a person types into the form on /transactions/new (US03) and /transactions/:id
+ * (US06). Pure functions, so the tests can call them directly. The rules themselves (BR5, BR6,
+ * BR11) are the API's to check; these only turn the text into what the API expects.
  */
+
+import { formatDate } from './format';
 
 const pad = (number) => String(number).padStart(2, '0');
 
@@ -48,4 +50,29 @@ export function parseDateInput(text) {
   const real =
     date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
   return real ? `${year}-${pad(month)}-${pad(day)}` : null;
+}
+
+/** What the form starts with for a new entry: money spent, today, nothing else (US03). */
+export function emptyForm(now = new Date()) {
+  return {
+    kind: 'expense',
+    amountText: '',
+    categoryId: null,
+    note: '',
+    dateText: formatDate(todayIso(now)),
+  };
+}
+
+/**
+ * What the form starts with to correct a stored entry (US06): every field as the API returned it,
+ * the amount without separators and the date day first, so saving unchanged sends it back as it was.
+ */
+export function formFromEntry(entry) {
+  return {
+    kind: entry.kind,
+    amountText: String(entry.amount),
+    categoryId: entry.category ? entry.category.id : null,
+    note: entry.note ?? '',
+    dateText: formatDate(entry.occurred_on),
+  };
 }
