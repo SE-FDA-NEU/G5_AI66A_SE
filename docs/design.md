@@ -26,7 +26,7 @@ Source of the diagram: [`docs/images/architecture.mmd`](images/architecture.mmd)
 | Token store | The same phone or browser | SecureStore on a phone, localStorage in a browser | Keeps the sign-in token between visits, so the app opens without a password for 7 days (BR10) |
 | Expo dev server | The computer | Metro, port 8081 | Sends the app's JavaScript to the phone or the browser |
 | API | The computer | FastAPI on uvicorn, Python 3.11 to 3.14, port 8000 | Holds every business rule, behind the endpoints of section 3 |
-| Database | The computer | A SQLite file, `backend/expense.db`, reached through SQLAlchemy 2.0 | The four tables of section 2 |
+| Database | The computer | A SQLite file, `backend/expense.db`, reached through SQLAlchemy 2.0 | The five tables of section 2 |
 | Migrations and seed script | The computer, once per install | Alembic, `scripts/seed_data.py` | Build the tables, then add the demo data |
 
 No external system takes part: bank sync is out of scope (`docs/requirements.md`, section 1),
@@ -57,7 +57,8 @@ on #60 before either side wrote code, as `docs/process.md` commits to in section
 
 ## 2. Data model
 
-Four tables, created by migration `0001` in `backend/alembic/versions/` from the models in
+Five tables, created by migrations `0001` and, for `debts` in Sprint 4, `0002` in
+`backend/alembic/versions/` from the models in
 `backend/app/db/models/`. CI runs `alembic check` on every pull request, so a model that changes
 without a migration turns the build red, and this section cannot quietly drift from the code.
 
@@ -73,6 +74,9 @@ image again.
   allows at most one, and none until the user chooses.
 - An account sets **0..\*** caps; a cap belongs to exactly **1** account.
 - A category is capped by **0..\*** budgets; a cap is on exactly **1** category.
+- An account keeps **0..\*** debts; a debt belongs to exactly **1** account. A debt is not an
+  entry: lending money is not spending it, so `debts` has no link to `transactions` or
+  `categories` (US13).
 
 | Table          | Purpose                                                        | Columns and types                                                                                                                                                              | Keys                                                                                               | Constraint · the M1 rule it enforces                                                                                                                                                                                                                                                                  |
 | -------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -80,6 +84,7 @@ image again.
 | `categories`   | The fixed list: 8 kinds of spending, 3 kinds of money received | `id` INTEGER · `name` VARCHAR(40) · `kind` VARCHAR(7)                                                                                                                          | PK `id`                                                                                            | UNIQUE `name` · CHECK `kind IN ('expense', 'income')` · **BR6**, **BR8**                                                                                                                                                                                                                              |
 | `transactions` | One amount of money spent or received                          | `id` INTEGER · `user_id` INTEGER · `category_id` INTEGER, may be null · `kind` VARCHAR(7) · `amount` BIGINT · `note` VARCHAR(200) · `occurred_on` DATE · `created_at` DATETIME | PK `id` · FK `user_id` → `users.id`, deleted with the account · FK `category_id` → `categories.id` | FK `user_id` NOT NULL, and every query filters on it · **BR4**<br>CHECK `amount > 0` on an integer column: no zero, no negative, no fraction of a dong · **BR5**<br>One nullable `category_id`: at most one kind of spending · **BR6**<br>INDEX (`user_id`, `occurred_on`) for the list on `/` · US05 |
 | `budgets`      | A monthly cap on one kind of spending                          | `id` INTEGER · `user_id` INTEGER · `category_id` INTEGER · `month` VARCHAR(7) · `amount` BIGINT                                                                                | PK `id` · FK `user_id` → `users.id`, deleted with the account · FK `category_id` → `categories.id` | UNIQUE (`user_id`, `category_id`, `month`) · **BR7**<br>CHECK `amount > 0` · CHECK `month LIKE '____-__'`                                                                                                                                                                                             |
+| `debts`        | Money borrowed from or lent to someone, until it is paid back (US13) | `id` INTEGER · `user_id` INTEGER · `direction` VARCHAR(8) · `person` VARCHAR(60) · `amount` BIGINT · `note` VARCHAR(200) · `started_on` DATE · `due_on` DATE, may be null · `settled_on` DATE, may be null · `created_at` DATETIME | PK `id` · FK `user_id` → `users.id`, deleted with the account | FK `user_id` NOT NULL, and every query filters on it · **BR4**<br>CHECK `direction IN ('borrowed', 'lent')`<br>CHECK `length(person) BETWEEN 1 AND 60` and CHECK `due_on IS NULL OR due_on >= started_on` · **BR13**<br>CHECK `amount > 0` · **BR5**<br>`settled_on` null while open · **BR14**<br>INDEX (`user_id`, `settled_on`) for `/debts` |
 
 **Two rules the database cannot hold on its own.** BR11, no entry dated later than today, needs
 today's date, and SQLite refuses a CHECK constraint that reads it; so the API checks the date
@@ -87,10 +92,11 @@ when an entry is saved, and the seed script never writes a later one. BR8, a cap
 only, compares two tables, which a CHECK constraint cannot do; the service checks it when a cap
 is saved (US08).
 
-**The schema in executable form** is migration `backend/alembic/versions/0001_create_tables.py`.
-It matches `backend/app/db/models/` exactly, and CI fails if the two drift apart (`alembic check`).
-`python -m scripts.seed_data` applies it on every new machine before seeding, so the database is
-always built by a script, never by hand; `alembic upgrade head --sql` prints it as plain SQL.
+**The schema in executable form** is migrations `backend/alembic/versions/0001_create_tables.py`
+and `0002_create_debts.py`. They match `backend/app/db/models/` exactly, and CI fails if they drift
+apart (`alembic check`). `python -m scripts.seed_data` applies them on every new machine before
+seeding, so the database is always built by a script, never by hand; `alembic upgrade head --sql`
+prints them as plain SQL.
 
 ---
 

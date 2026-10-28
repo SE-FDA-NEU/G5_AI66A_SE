@@ -3,6 +3,7 @@ erDiagram
     categories |o--o{ transactions : "classifies"
     users ||--o{ budgets : "sets"
     categories ||--o{ budgets : "is capped by"
+    users ||--o{ debts : "keeps"
 
     users {
         INTEGER id PK
@@ -34,4 +35,17 @@ erDiagram
         INTEGER category_id FK "a kind of spending (BR8)"
         VARCHAR(7) month "YYYY-MM, one per kind (BR7)"
         BIGINT amount "greater than 0"
+    }
+
+    debts {
+        INTEGER id PK
+        INTEGER user_id FK "the owner (BR4)"
+        VARCHAR(8) direction "borrowed or lent"
+        VARCHAR(60) person "1 to 60 characters (BR13)"
+        BIGINT amount "greater than 0 (BR5)"
+        VARCHAR(200) note
+        DATE started_on "not later than today (BR11)"
+        DATE due_on "null, or not before started_on (BR13)"
+        DATE settled_on "null while open (BR14)"
+        DATETIME created_at
     }
