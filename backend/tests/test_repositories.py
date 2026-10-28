@@ -6,7 +6,8 @@ and that every query keeps to one account (BR4).
 
 from datetime import date
 
-from app.db.repositories import category_repo, transaction_repo
+from app.db.repositories import category_repo, debt_repo, transaction_repo
+from app.db.repositories.debt_repo import OpenTotals
 from tests.conftest import make_account
 
 DAY = date(2026, 11, 12)
@@ -124,3 +125,40 @@ def test_totals_by_year_and_month_keep_to_one_account(db, account):
 
     assert {year: totals.spending for year, totals in years.items()} == {2026: 20_000}
     assert transaction_repo.totals_by_month(db, account.id, year=2025) == {}
+
+
+def lend(db, user_id: int, amount: int = 200_000, **fields):
+    values = {"direction": "lent", "person": "Lan", "note": "", "started_on": DAY, "due_on": None}
+    return debt_repo.create(db, user_id=user_id, amount=amount, **{**values, **fields})
+
+
+def test_open_debts_come_first_the_soonest_due_first(db, account):
+    """US13: what to pay back next is at the top; settled debts sink to the bottom."""
+    no_date = lend(db, account.id, person="Minh")
+    later = lend(db, account.id, person="Lan", due_on=date(2026, 12, 1))
+    sooner = lend(db, account.id, person="Hoa", due_on=date(2026, 11, 20))
+    settled = lend(db, account.id, person="Nam", due_on=date(2026, 11, 13))
+    debt_repo.settle(db, settled, on=DAY)
+
+    listed = debt_repo.list_for_account(db, account.id)
+
+    assert [debt.id for debt in listed] == [sooner.id, later.id, no_date.id, settled.id]
+
+
+def test_open_totals_add_up_each_direction_and_skip_settled_debts(db, account):
+    lend(db, account.id, 200_000)
+    lend(db, account.id, 500_000, direction="borrowed", person="Minh")
+    paid = lend(db, account.id, 300_000, direction="borrowed", person="Nam")
+    debt_repo.settle(db, paid, on=DAY)
+
+    assert debt_repo.open_totals(db, account.id) == OpenTotals(owe=500_000, owed=200_000)
+
+
+def test_another_accounts_debt_is_neither_found_nor_counted(db, account):
+    """BR4."""
+    stranger = make_account(db, email="stranger@example.com")
+    theirs = lend(db, stranger.id, 900_000)
+
+    assert debt_repo.get_for_account(db, account.id, theirs.id) is None
+    assert debt_repo.list_for_account(db, account.id) == []
+    assert debt_repo.open_totals(db, account.id) == OpenTotals(owe=0, owed=0)
