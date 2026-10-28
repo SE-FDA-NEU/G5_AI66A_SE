@@ -5,6 +5,10 @@
 
 The Alembic migrations run first, so the tables always match app/db/models. Running the script a
 second time adds nothing.
+
+Every date is counted back from today, so the demo looks the same on whatever day it is run: this
+month's 25 entries for / (US04, US05), the eleven months before it for /stats (US10, US12), and four
+debts for /debts (US13), one of them overdue.
 """
 
 import argparse
@@ -18,7 +22,17 @@ from sqlalchemy.orm import Session
 
 from app.core.config import BACKEND_DIR, settings
 from app.core.security import hash_password
-from app.db.models import KIND_INCOME, KIND_SPENDING, Budget, Category, Transaction, User
+from app.db.models import (
+    BORROWED,
+    KIND_INCOME,
+    KIND_SPENDING,
+    LENT,
+    Budget,
+    Category,
+    Debt,
+    Transaction,
+    User,
+)
 from app.db.repositories import user_repo
 from app.db.session import make_engine
 
@@ -73,12 +87,54 @@ ENTRIES = [
 ]
 
 
+# The eleven months before this one, so /stats has a whole year to draw (US12). Each month Mai
+# receives her 4,000,000 and pays the rent; what she spends on the rest changes from month to month,
+# so one month clearly cost the most and one the least. Each entry: (day of the month, category,
+# amount in dong, note). FOOD to FUN hold one amount per month, from 1 month back to 11 back.
+FOOD = [
+    820_000, 640_000, 910_000, 560_000, 700_000, 1_150_000, 600_000, 680_000, 730_000, 880_000,
+    520_000,
+]
+TRANSPORT = [
+    210_000, 180_000, 240_000, 150_000, 200_000, 260_000, 170_000, 190_000, 220_000, 230_000,
+    140_000,
+]
+FUN = [
+    350_000, 150_000, 420_000, 90_000, 250_000, 780_000, 120_000, 200_000, 300_000, 460_000, 60_000,
+]
+EARLIER_MONTHS = len(FOOD)
+
+
+def month_entries(months_back: int) -> list[tuple[int, str, int, str]]:
+    k = months_back - 1
+    return [
+        (2, "Bills", 1_500_000, "tien nha"),
+        (5, "Other income", 4_000_000, "tien bo me gui"),
+        (9, "Food", FOOD[k], "an uong"),
+        (14, "Transport", TRANSPORT[k], "grab"),
+        (20, "Entertainment", FUN[k], "di choi"),
+        (25, "Bills", 150_000, "tien dien"),
+    ]
+
+
+# Four debts (US13). Each: (direction, person, amount, days ago it started, days from today it is
+# due or None, days ago it was settled or None). Mai owes 500,000, overdue since two days ago, and
+# is owed 350,000; the fourth debt was paid back before it was due.
+DEBTS = [
+    (BORROWED, "Nam", 300_000, 40, -25, 26),
+    (LENT, "Hoa", 150_000, 12, None, None),
+    (BORROWED, "anh Minh", 500_000, 20, -2, None),
+    (LENT, "Lan", 200_000, 3, 10, None),
+]
+
+
 @dataclass
 class RowCounts:
     categories: int
     users: int
     transactions: int
     budgets: int
+    debts: int
 
 
 def alembic_config(database_url: str) -> Config:
@@ -118,16 +174,31 @@ def entry_date(today: date, days_ago: int) -> date:
     return max(today - timedelta(days=days_ago), today.replace(day=1))
 
 
+def earlier_month(today: date, months_back: int) -> date:
+    """The 1st of the month `months_back` months before this one."""
+    index = today.year * 12 + today.month - 1 - months_back
+    return date(index // 12, index % 12 + 1, 1)
+
+
 def add_entries(db: Session, account: User, categories: dict[str, Category], today: date) -> None:
     already_seeded = db.scalar(
         select(func.count()).select_from(Transaction).where(Transaction.user_id == account.id)
     )
     if already_seeded:
         return
-    # Oldest first, so ids grow with time, as they would if Mai had typed them day by day.
-    for days_ago, category_name, amount, note in ENTRIES:
+    # Oldest first, so ids grow with time, as they would if Mai had typed them day by day: the
+    # eleven earlier months, then this month's 25 entries.
+    rows = [
+        (earlier_month(today, back).replace(day=day), name, amount, note)
+        for back in range(EARLIER_MONTHS, 0, -1)
+        for day, name, amount, note in month_entries(back)
+    ]
+    rows += [
+        (entry_date(today, days_ago), name, amount, note)
+        for days_ago, name, amount, note in ENTRIES
+    ]
+    for occurred_on, category_name, amount, note in rows:
         category = categories[category_name]
-        occurred_on = entry_date(today, days_ago)
         assert occurred_on <= today, "BR11: an entry is never dated later than today"
         db.add(
             Transaction(
@@ -142,11 +213,29 @@ def add_entries(db: Session, account: User, categories: dict[str, Category], tod
     db.commit()
 
 
+def add_debts(db: Session, account: User, today: date) -> None:
+    if db.scalar(select(func.count()).select_from(Debt).where(Debt.user_id == account.id)):
+        return
+    for direction, person, amount, started_ago, due_in, settled_ago in DEBTS:
+        db.add(
+            Debt(
+                user_id=account.id,
+                direction=direction,
+                person=person,
+                amount=amount,
+                started_on=today - timedelta(days=started_ago),
+                due_on=None if due_in is None else today + timedelta(days=due_in),
+                settled_on=None if settled_ago is None else today - timedelta(days=settled_ago),
+            )
+        )
+    db.commit()
+
+
 def count_rows(db: Session) -> RowCounts:
     def count(model) -> int:
         return db.scalar(select(func.count()).select_from(model)) or 0
 
-    return RowCounts(count(Category), count(User), count(Transaction), count(Budget))
+    return RowCounts(count(Category), count(User), count(Transaction), count(Budget), count(Debt))
 
 
 def seed(database_url: str, *, reset: bool = False, today: date | None = None) -> RowCounts:
@@ -162,6 +251,7 @@ def seed(database_url: str, *, reset: bool = False, today: date | None = None) -
             categories = add_categories(db)
             account = add_demo_account(db)
             add_entries(db, account, categories, today or date.today())
+            add_debts(db, account, today or date.today())
             return count_rows(db)
     finally:
         engine.dispose()
@@ -180,6 +270,7 @@ def main(argv: list[str] | None = None) -> None:
     print(f"  users         {counts.users}")
     print(f"  transactions  {counts.transactions}")
     print(f"  budgets       {counts.budgets}")
+    print(f"  debts         {counts.debts}")
     print(f"Sign in as {DEMO_EMAIL} with the password {DEMO_PASSWORD}")
 
 
