@@ -81,15 +81,16 @@ each value means:
 python -m scripts.seed_data
 ```
 
-It builds the four tables, then adds the demo data. Alembic prints a few `INFO` lines first; the
+It builds the five tables, then adds the demo data. Alembic prints a few `INFO` lines first; the
 output ends with:
 
 ```
 Database ready: .../backend/expense.db
   categories    11
   users         1
-  transactions  25
+  transactions  91
   budgets       0
+  debts         4
 Sign in as mai@example.com with the password demo1234
 ```
 
@@ -101,11 +102,14 @@ real password.
 
 | Email                                 | Password                           | What it holds                                                                           |
 | ------------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `mai@example.com`                     | `demo1234`                         | Persona 1, Mai: 25 entries dated this month, 4,000,000 ₫ received and 2,931,000 ₫ spent |
+| `mai@example.com`                     | `demo1234`                         | Persona 1, Mai: 25 entries dated this month, 4,000,000 ₫ received and 2,931,000 ₫ spent; 66 entries in the eleven months before; 4 debts |
 | any address you create on `/register` | 6 to 128 characters of your choice | Nothing yet: the overview says "No transactions yet this month"                         |
 
-The 25 entries are dated from today back over twelve days, and never before the 1st of this month,
-so the overview shows the same totals on whatever day the project is set up.
+This month's 25 entries are dated from today back over twelve days, and never before the 1st of
+this month, so the overview shows the same totals on whatever day the project is set up. The other
+66 fill the eleven months before it, six a month, for the charts on `/stats`, and the four debts
+are dated from today too: Mai owes 500,000 ₫ to anh Minh, overdue since two days ago, and is owed
+350,000 ₫ by Lan and Hoa.
 
 ---
 
@@ -149,7 +153,7 @@ first. Every number assumes a freshly seeded database (`python -m scripts.seed_d
    in as `mai@example.com` with the password `demo1234`.
 2. **This month, US04.** The address bar changes to `http://localhost:8081/`. The card at the top
    reads **Received 4,000,000 ₫ · Spent 2,931,000 ₫ · Left 1,069,000 ₫**.
-3. **Recent entries, US05.** Under the card: **The 20 most recent of 25 entries**. The first row
+3. **Recent entries, US05.** Under the card: **The 20 most recent of 91 entries**. The first row
    is **tra sua · Food · −55,000 ₫** dated today, and the money received,
    **tien bo me gui · Other income · +4,000,000 ₫**, is the 19th row.
 4. **The rows come from the database.** Open a third terminal in `G5_AI66A_SE/backend` and run the
@@ -157,7 +161,7 @@ first. Every number assumes a freshly seeded database (`python -m scripts.seed_d
    page: the first row now reads **edited in the database**.
 
    ```
-   python -c "import sqlite3; c = sqlite3.connect('expense.db'); c.execute('UPDATE transactions SET note = ? WHERE id = 25', ('edited in the database',)); c.commit()"
+   python -c "import sqlite3; c = sqlite3.connect('expense.db'); c.execute('UPDATE transactions SET note = ? WHERE id = 91', ('edited in the database',)); c.commit()"
    ```
 
    `python -m scripts.seed_data --reset` puts the original data back; press **Refresh** again.
@@ -165,7 +169,7 @@ first. Every number assumes a freshly seeded database (`python -m scripts.seed_d
 5. **Log a purchase, US03.** Press **+ Add an entry**. The address bar shows
    `/transactions/new`, and the amount field has the cursor. Type `30000`, tap **Food**, type the
    note `banh mi`, and press **Save**. Back on `/`, the card reads **Spent 2,961,000 ₫ · Left
-   1,039,000 ₫**, and **banh mi · Food · −30,000 ₫** is the first row of **26 entries**.
+   1,039,000 ₫**, and **banh mi · Food · −30,000 ₫** is the first row of **92 entries**.
 6. **Break a rule on purpose, BR11.** Press **+ Add an entry** again, type `55000`, and change the
    date to tomorrow. **Save** shows, under the form, **The date cannot be in the future** and why,
    and nothing is stored: **Cancel**, and the card still reads **Left 1,039,000 ₫**. An amount of
@@ -232,6 +236,7 @@ with `python -m uvicorn app.main:app --reload --host 0.0.0.0`, then scan the QR 
 | **The server does not offer this yet** on `/register` or `/transactions/new`                                           | The backend still runs code from before Sprint 3                              | `git pull` in the repository, stop the backend with Ctrl+C, then start it again (section 4)                                                    |
 | The page shows an older screen after `git pull`                                                                        | Expo still holds the old bundle                                               | Stop Expo with Ctrl+C, then `npx expo start --web --clear`                                                                                     |
 | **This email is already registered** for an address you meant to create                                                | You created it on an earlier run; the database keeps it                       | Use another address, or `python -m scripts.seed_data --reset` to start again from the demo data                                                |
+| `/stats` shows only this month, or `/debts` is empty, for `mai@example.com`                                             | The database was seeded before Sprint 4; running the seed again adds nothing to an account that has entries | `python -m scripts.seed_data --reset` in `backend/`, then reload the page                                                                      |
 | `'pytest' is not recognized`, or `No module named pytest`                                                              | The virtual environment is not active, or it was filled from `requirements.txt` only | Activate it (section 3), then `python -m pip install -r requirements-dev.txt` in `backend/`                                                   |
 | `ModuleNotFoundError: No module named 'app'` when running pytest                                                       | pytest was started outside the project, so it found no `pytest.ini`           | `cd` to the `G5_AI66A_SE` folder or to `backend/`, then run `pytest` again                                                                     |
 
