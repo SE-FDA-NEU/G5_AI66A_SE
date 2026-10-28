@@ -121,7 +121,7 @@ python -m uvicorn app.main:app --reload
 server and no database needed (SETUP.md, section 7).
 
 `python -m scripts.seed_data` creates the database and prints 11 categories, 1 user,
-25 transactions and 0 budgets.
+91 transactions, 0 budgets and 4 debts.
 
 **Terminal 2, the app**, opened in the folder you cloned into, on every system:
 
@@ -132,7 +132,7 @@ npx expo start --web
 ```
 
 Open http://localhost:8081 and sign in as `mai@example.com` with the password `demo1234`. The page
-shows this month's totals and the 20 most recent of 25 entries, read from the database; the table
+shows this month's totals and the 20 most recent of 91 entries, read from the database; the table
 under **Try the P0 stories** above says where every story starts. The language buttons at the top
 right, **EN** and **VI** so far, change every text on the page.
 
