@@ -6,6 +6,8 @@ export const colors = {
   primary: '#0E6B57',
   primaryLight: '#E3F0EC',
   received: '#0E6B57',
+  // Money received in a chart, lighter than spent, so spending reads first.
+  receivedSoft: '#8CC3B3',
   spent: '#A2452C',
   danger: '#A2452C',
   dangerLight: '#F7E4DF',
