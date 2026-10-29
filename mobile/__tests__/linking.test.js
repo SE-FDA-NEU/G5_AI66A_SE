@@ -13,6 +13,8 @@ test('each screen has the route of the requirements', () => {
     NewEntry: 'transactions/new',
     EditEntry: 'transactions/:id',
     Stats: 'stats',
+    Debts: 'debts',
+    NewDebt: 'debts/new',
   });
 });
 

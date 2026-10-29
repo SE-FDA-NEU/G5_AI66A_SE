@@ -94,4 +94,12 @@ export const api = {
   statsMonths: (year) => request(`/stats/months?year=${year}`),
 
   statsYears: () => request('/stats/years'),
+
+  debts: () => request('/debts'),
+
+  addDebt: (debt) => request('/debts', { method: 'POST', body: debt }),
+
+  settleDebt: (id) => request(`/debts/${id}/settle`, { method: 'POST' }),
+
+  removeDebt: (id) => request(`/debts/${id}`, { method: 'DELETE' }),
 };

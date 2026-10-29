@@ -10,6 +10,8 @@ export const ROUTES = {
   NewEntry: 'transactions/new',
   EditEntry: 'transactions/:id',
   Stats: 'stats',
+  Debts: 'debts',
+  NewDebt: 'debts/new',
 };
 
 export const linking = {
