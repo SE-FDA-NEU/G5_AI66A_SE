@@ -51,6 +51,8 @@ export const ERROR_KEYS = {
   date_in_future: 'error.dateInFuture',
   unknown_category: 'error.unknownCategory',
   invalid_month: 'error.invalidMonth',
+  invalid_year: 'error.invalidYear',
+  year_in_future: 'error.yearInFuture',
   invalid_request: 'error.invalidRequest',
   entry_not_found: 'error.entryNotFound',
   not_found: 'error.notFound',

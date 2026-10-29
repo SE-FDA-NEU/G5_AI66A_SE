@@ -12,6 +12,7 @@ test('each screen has the route of the requirements', () => {
     Overview: '',
     NewEntry: 'transactions/new',
     EditEntry: 'transactions/:id',
+    Stats: 'stats',
   });
 });
 
