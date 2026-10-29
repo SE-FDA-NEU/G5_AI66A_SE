@@ -16,6 +16,7 @@ import LoginScreen from '../screens/LoginScreen';
 import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import StatsScreen from '../screens/StatsScreen';
 import { colors } from '../theme';
 import { linking } from './linking';
 
@@ -66,6 +67,11 @@ export default function AppNavigator() {
               name="EditEntry"
               component={EditEntryScreen}
               options={{ title: t('editEntry.title') }}
+            />
+            <Stack.Screen
+              name="Stats"
+              component={StatsScreen}
+              options={{ title: t('stats.title') }}
             />
           </>
         ) : (

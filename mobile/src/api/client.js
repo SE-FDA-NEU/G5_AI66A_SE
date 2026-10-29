@@ -88,4 +88,10 @@ export const api = {
   correctEntry: (id, entry) => request(`/transactions/${id}`, { method: 'PATCH', body: entry }),
 
   removeEntry: (id) => request(`/transactions/${id}`, { method: 'DELETE' }),
+
+  breakdown: (month) => request(`/stats/breakdown${month ? `?month=${month}` : ''}`),
+
+  statsMonths: (year) => request(`/stats/months?year=${year}`),
+
+  statsYears: () => request('/stats/years'),
 };

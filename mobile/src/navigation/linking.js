@@ -9,6 +9,7 @@ export const ROUTES = {
   Overview: '',
   NewEntry: 'transactions/new',
   EditEntry: 'transactions/:id',
+  Stats: 'stats',
 };
 
 export const linking = {
