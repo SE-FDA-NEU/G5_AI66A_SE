@@ -1,8 +1,15 @@
 /**
- * What the form on /transactions/new sends to the API (US03).
+ * What the form on /transactions/new and /transactions/:id sends to the API (US03, US06).
  */
 
-import { dayBefore, parseAmount, parseDateInput, todayIso } from '../src/utils/entryForm';
+import {
+  dayBefore,
+  emptyForm,
+  formFromEntry,
+  parseAmount,
+  parseDateInput,
+  todayIso,
+} from '../src/utils/entryForm';
 
 describe('parseAmount', () => {
   test('reads whole dong, with or without thousands separators', () => {
@@ -55,5 +62,47 @@ describe('todayIso and dayBefore', () => {
   test('cross the start of a month and of a year', () => {
     expect(dayBefore('2026-11-01')).toBe('2026-10-31');
     expect(dayBefore('2027-01-01')).toBe('2026-12-31');
+  });
+});
+
+describe('the form starts with', () => {
+  test('money spent, today and nothing else for a new entry (US03)', () => {
+    expect(emptyForm(new Date(2026, 10, 12, 6, 30))).toEqual({
+      kind: 'expense',
+      amountText: '',
+      categoryId: null,
+      note: '',
+      dateText: '12/11/2026',
+    });
+  });
+
+  test('every field of a stored entry, to correct it (US06)', () => {
+    const entry = {
+      id: 7,
+      kind: 'expense',
+      amount: 150000,
+      note: 'tra sua',
+      occurred_on: '2026-11-03',
+      category: { id: 1, name: 'Food', kind: 'expense' },
+    };
+    expect(formFromEntry(entry)).toEqual({
+      kind: 'expense',
+      amountText: '150000',
+      categoryId: 1,
+      note: 'tra sua',
+      dateText: '03/11/2026',
+    });
+  });
+
+  test('no kind of spending when the entry has none (BR6)', () => {
+    const entry = { kind: 'income', amount: 4000000, note: '', occurred_on: '2026-11-01', category: null };
+    expect(formFromEntry(entry).categoryId).toBeNull();
+  });
+
+  test('values that read back as the same entry when saved unchanged', () => {
+    const entry = { kind: 'expense', amount: 55000, note: 'x', occurred_on: '2026-02-28', category: null };
+    const form = formFromEntry(entry);
+    expect(parseAmount(form.amountText)).toBe(55000);
+    expect(parseDateInput(form.dateText)).toBe('2026-02-28');
   });
 });

@@ -47,10 +47,12 @@ export const ERROR_KEYS = {
   password_length: 'error.passwordLength',
   invalid_email: 'error.invalidEmail',
   amount_not_positive: 'error.amountNotPositive',
+  amount_too_large: 'error.amountTooLarge',
   date_in_future: 'error.dateInFuture',
   unknown_category: 'error.unknownCategory',
   invalid_month: 'error.invalidMonth',
   invalid_request: 'error.invalidRequest',
+  entry_not_found: 'error.entryNotFound',
   not_found: 'error.notFound',
   server_error: 'error.server',
 };

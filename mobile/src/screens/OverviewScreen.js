@@ -109,7 +109,9 @@ export default function OverviewScreen({ navigation }) {
       contentContainerStyle={styles.list}
       data={entries}
       keyExtractor={(entry) => String(entry.id)}
-      renderItem={({ item }) => <EntryRow entry={item} />}
+      renderItem={({ item }) => (
+        <EntryRow entry={item} onPress={() => navigation.navigate('EditEntry', { id: item.id })} />
+      )}
       initialNumToRender={RECENT_COUNT}
       // On a phone, pulling the list down refreshes it as well. A browser has no such gesture,
       // which is why the Refresh button exists.
