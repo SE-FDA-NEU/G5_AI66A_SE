@@ -23,6 +23,7 @@ import {
 import { api } from '../api/client';
 import EntryRow from '../components/EntryRow';
 import ErrorMessage from '../components/ErrorMessage';
+import MainLayout from '../components/MainLayout';
 import MonthSummary from '../components/MonthSummary';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -104,64 +105,66 @@ export default function OverviewScreen({ navigation }) {
 
   // Empty or data: the month summary decides which, from its count.
   return (
-    <FlatList
-      style={styles.screen}
-      contentContainerStyle={styles.list}
-      data={entries}
-      keyExtractor={(entry) => String(entry.id)}
-      renderItem={({ item }) => (
-        <EntryRow entry={item} onPress={() => navigation.navigate('EditEntry', { id: item.id })} />
-      )}
-      initialNumToRender={RECENT_COUNT}
-      // On a phone, pulling the list down refreshes it as well. A browser has no such gesture,
-      // which is why the Refresh button exists.
-      refreshControl={
-        Platform.OS === 'web' ? undefined : (
-          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
-        )
-      }
-      ListHeaderComponent={
-        <View>
-          <View style={styles.accountRow}>
-            <Text style={styles.account}>{user?.email ?? ''}</Text>
-            <Pressable onPress={signOut} accessibilityRole="button">
-              <Text style={styles.link}>{t('overview.signOut')}</Text>
-            </Pressable>
-          </View>
+    <MainLayout current="Overview">
+      <FlatList
+        style={styles.screen}
+        contentContainerStyle={styles.list}
+        data={entries}
+        keyExtractor={(entry) => String(entry.id)}
+        renderItem={({ item }) => (
+          <EntryRow entry={item} onPress={() => navigation.navigate('EditEntry', { id: item.id })} />
+        )}
+        initialNumToRender={RECENT_COUNT}
+        // On a phone, pulling the list down refreshes it as well. A browser has no such gesture,
+        // which is why the Refresh button exists.
+        refreshControl={
+          Platform.OS === 'web' ? undefined : (
+            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+          )
+        }
+        ListHeaderComponent={
+          <View>
+            <View style={styles.accountRow}>
+              <Text style={styles.account}>{user?.email ?? ''}</Text>
+              <Pressable onPress={signOut} accessibilityRole="button">
+                <Text style={styles.link}>{t('overview.signOut')}</Text>
+              </Pressable>
+            </View>
 
-          <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
+            <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
 
-          <MonthSummary summary={summary} />
+            <MonthSummary summary={summary} />
 
-          <Pressable
-            style={styles.primaryButton}
-            onPress={() => navigation.navigate('NewEntry')}
-            accessibilityRole="button"
-          >
-            <Text style={styles.primaryText}>+ {t('overview.add')}</Text>
-          </Pressable>
-
-          <View style={styles.titleRow}>
-            <Text style={styles.count}>
-              {total > 0
-                ? t('overview.count', { shown: entries.length, total })
-                : t('overview.recent')}
-            </Text>
             <Pressable
-              style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
-              onPress={refresh}
-              disabled={refreshing}
+              style={styles.primaryButton}
+              onPress={() => navigation.navigate('NewEntry')}
               accessibilityRole="button"
             >
-              <Text style={styles.refreshText}>
-                {refreshing ? t('overview.refreshing') : t('overview.refresh')}
-              </Text>
+              <Text style={styles.primaryText}>+ {t('overview.add')}</Text>
             </Pressable>
+
+            <View style={styles.titleRow}>
+              <Text style={styles.count}>
+                {total > 0
+                  ? t('overview.count', { shown: entries.length, total })
+                  : t('overview.recent')}
+              </Text>
+              <Pressable
+                style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
+                onPress={refresh}
+                disabled={refreshing}
+                accessibilityRole="button"
+              >
+                <Text style={styles.refreshText}>
+                  {refreshing ? t('overview.refreshing') : t('overview.refresh')}
+                </Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      }
-      ListEmptyComponent={<Text style={styles.empty}>{t('overview.empty')}</Text>}
-    />
+        }
+        ListEmptyComponent={<Text style={styles.empty}>{t('overview.empty')}</Text>}
+      />
+    </MainLayout>
   );
 }
 
