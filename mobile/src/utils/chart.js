@@ -59,3 +59,15 @@ export function defaultMonth(year, busiest, today) {
   if (thisMonth.startsWith(`${year}-`)) return thisMonth;
   return busiest ?? `${year}-12`;
 }
+
+/**
+ * The last `count` months up to this one, oldest first, from the months of one or two years: the
+ * small chart on /. Months after this one are left out, since nothing can be dated there (BR11).
+ */
+export function lastMonths(periods, today, count) {
+  const thisMonth = today.slice(0, 7);
+  return periods
+    .filter((period) => period.period <= thisMonth)
+    .sort((a, b) => a.period.localeCompare(b.period))
+    .slice(-count);
+}

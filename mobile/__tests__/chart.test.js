@@ -3,7 +3,14 @@
  * and the month broken down first.
  */
 
-import { barHeight, chartMax, defaultMonth, periodLabel, shortAmount } from '../src/utils/chart';
+import {
+  barHeight,
+  chartMax,
+  defaultMonth,
+  lastMonths,
+  periodLabel,
+  shortAmount,
+} from '../src/utils/chart';
 
 describe('barHeight', () => {
   test('scales a value against the tallest bar', () => {
@@ -63,5 +70,27 @@ describe('defaultMonth', () => {
   test('is the month that cost the most in an earlier year, else December', () => {
     expect(defaultMonth(2025, '2025-12', '2026-10-24')).toBe('2025-12');
     expect(defaultMonth(2024, null, '2026-10-24')).toBe('2024-12');
+  });
+});
+
+describe('lastMonths', () => {
+  const year = (y) =>
+    Array.from({ length: 12 }, (_, i) => ({ period: `${y}-${String(i + 1).padStart(2, '0')}` }));
+
+  test('keeps the six months up to this one, oldest first', () => {
+    const months = lastMonths(year(2026), '2026-10-24', 6).map((month) => month.period);
+    expect(months).toEqual(['2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10']);
+  });
+
+  test('reaches back into last year early in the year', () => {
+    const months = lastMonths([...year(2026), ...year(2025)], '2026-02-03', 6);
+    expect(months.map((month) => month.period)).toEqual([
+      '2025-09',
+      '2025-10',
+      '2025-11',
+      '2025-12',
+      '2026-01',
+      '2026-02',
+    ]);
   });
 });

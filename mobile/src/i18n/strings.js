@@ -50,6 +50,10 @@ export const strings = {
     'overview.signOut': 'Sign out',
     'overview.empty': 'No entries yet.',
     'overview.noConnection': 'No connection. Tap Refresh to try again',
+    'overview.whereItWent': 'Where it went this month',
+    'overview.lastMonths': 'The last six months',
+    'overview.toStats': 'Stats',
+    'overview.toDebts': 'All debts',
 
     'newEntry.title': 'New entry',
     'newEntry.spent': 'Money spent',
@@ -246,6 +250,10 @@ export const strings = {
     'overview.signOut': 'Đăng xuất',
     'overview.empty': 'Chưa có giao dịch nào.',
     'overview.noConnection': 'Không có mạng. Bấm Làm mới để thử lại',
+    'overview.whereItWent': 'Tháng này tiền đi đâu',
+    'overview.lastMonths': 'Sáu tháng gần nhất',
+    'overview.toStats': 'Thống kê',
+    'overview.toDebts': 'Tất cả khoản nợ',
 
     'newEntry.title': 'Giao dịch mới',
     'newEntry.spent': 'Tiền chi',

@@ -5,6 +5,10 @@
  * Everything comes from the database through GET /api/summary and GET /api/transactions; nothing
  * on this screen comes from an array in the code. The screen has four states (docs/ui.md,
  * section 2): loading the first time, an error with nothing to show, an empty month, and data.
+ *
+ * On a wide screen the page has two columns: the month, the button and the cards of
+ * components/OverviewCards.js on the left, the list on the right, so the width is used instead of
+ * left empty. On a phone it stays one column, the list under the month.
  */
 
 import { useFocusEffect } from '@react-navigation/native';
@@ -16,7 +20,9 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
+  ScrollView,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
@@ -25,16 +31,20 @@ import EntryRow from '../components/EntryRow';
 import ErrorMessage from '../components/ErrorMessage';
 import MainLayout from '../components/MainLayout';
 import MonthSummary from '../components/MonthSummary';
+import OverviewCards from '../components/OverviewCards';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
 import { colors, radius, spacing } from '../theme';
 
 export const RECENT_COUNT = 20;
+// From this width the overview has two columns.
+const TWO_COLUMNS = 900;
 
 export default function OverviewScreen({ navigation }) {
   const { user, signOut, refreshUser } = useAuth();
   const { t } = useLanguage();
+  const { width } = useWindowDimensions();
   // null until the first answer arrives; the loading and error states depend on it.
   const [summary, setSummary] = useState(null);
   const [entries, setEntries] = useState([]);
@@ -104,6 +114,72 @@ export default function OverviewScreen({ navigation }) {
   }
 
   // Empty or data: the month summary decides which, from its count.
+  const openEntry = (entry) => navigation.navigate('EditEntry', { id: entry.id });
+
+  const top = (
+    <View>
+      <View style={styles.accountRow}>
+        <Text style={styles.account}>{user?.email ?? ''}</Text>
+        <Pressable onPress={signOut} accessibilityRole="button">
+          <Text style={styles.link}>{t('overview.signOut')}</Text>
+        </Pressable>
+      </View>
+
+      <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
+
+      <MonthSummary summary={summary} />
+
+      <Pressable
+        style={styles.primaryButton}
+        onPress={() => navigation.navigate('NewEntry')}
+        accessibilityRole="button"
+      >
+        <Text style={styles.primaryText}>+ {t('overview.add')}</Text>
+      </Pressable>
+    </View>
+  );
+
+  const titleRow = (
+    <View style={styles.titleRow}>
+      <Text style={styles.count}>
+        {total > 0 ? t('overview.count', { shown: entries.length, total }) : t('overview.recent')}
+      </Text>
+      <Pressable
+        style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
+        onPress={refresh}
+        disabled={refreshing}
+        accessibilityRole="button"
+      >
+        <Text style={styles.refreshText}>
+          {refreshing ? t('overview.refreshing') : t('overview.refresh')}
+        </Text>
+      </Pressable>
+    </View>
+  );
+
+  const empty = <Text style={styles.empty}>{t('overview.empty')}</Text>;
+
+  if (width >= TWO_COLUMNS) {
+    return (
+      <MainLayout current="Overview">
+        <ScrollView style={styles.screen} contentContainerStyle={styles.wide}>
+          <View style={styles.side}>
+            {top}
+            <OverviewCards navigation={navigation} />
+          </View>
+          <View style={styles.main}>
+            {titleRow}
+            {entries.length === 0
+              ? empty
+              : entries.map((entry) => (
+                  <EntryRow key={entry.id} entry={entry} onPress={() => openEntry(entry)} />
+                ))}
+          </View>
+        </ScrollView>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout current="Overview">
       <FlatList
@@ -111,9 +187,7 @@ export default function OverviewScreen({ navigation }) {
         contentContainerStyle={styles.list}
         data={entries}
         keyExtractor={(entry) => String(entry.id)}
-        renderItem={({ item }) => (
-          <EntryRow entry={item} onPress={() => navigation.navigate('EditEntry', { id: item.id })} />
-        )}
+        renderItem={({ item }) => <EntryRow entry={item} onPress={() => openEntry(item)} />}
         initialNumToRender={RECENT_COUNT}
         // On a phone, pulling the list down refreshes it as well. A browser has no such gesture,
         // which is why the Refresh button exists.
@@ -124,45 +198,11 @@ export default function OverviewScreen({ navigation }) {
         }
         ListHeaderComponent={
           <View>
-            <View style={styles.accountRow}>
-              <Text style={styles.account}>{user?.email ?? ''}</Text>
-              <Pressable onPress={signOut} accessibilityRole="button">
-                <Text style={styles.link}>{t('overview.signOut')}</Text>
-              </Pressable>
-            </View>
-
-            <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
-
-            <MonthSummary summary={summary} />
-
-            <Pressable
-              style={styles.primaryButton}
-              onPress={() => navigation.navigate('NewEntry')}
-              accessibilityRole="button"
-            >
-              <Text style={styles.primaryText}>+ {t('overview.add')}</Text>
-            </Pressable>
-
-            <View style={styles.titleRow}>
-              <Text style={styles.count}>
-                {total > 0
-                  ? t('overview.count', { shown: entries.length, total })
-                  : t('overview.recent')}
-              </Text>
-              <Pressable
-                style={[styles.refreshButton, refreshing && styles.refreshButtonBusy]}
-                onPress={refresh}
-                disabled={refreshing}
-                accessibilityRole="button"
-              >
-                <Text style={styles.refreshText}>
-                  {refreshing ? t('overview.refreshing') : t('overview.refresh')}
-                </Text>
-              </Pressable>
-            </View>
+            {top}
+            {titleRow}
           </View>
         }
-        ListEmptyComponent={<Text style={styles.empty}>{t('overview.empty')}</Text>}
+        ListEmptyComponent={empty}
       />
     </MainLayout>
   );
@@ -171,6 +211,17 @@ export default function OverviewScreen({ navigation }) {
 const styles = StyleSheet.create({
   screen: { backgroundColor: colors.background, flex: 1 },
   list: { alignSelf: 'center', maxWidth: 640, padding: spacing.md, width: '100%' },
+  wide: {
+    alignItems: 'flex-start',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    gap: spacing.lg,
+    maxWidth: 1200,
+    padding: spacing.md,
+    width: '100%',
+  },
+  side: { width: 400 },
+  main: { flex: 1, minWidth: 0 },
   center: {
     alignItems: 'center',
     backgroundColor: colors.background,
