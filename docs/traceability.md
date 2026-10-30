@@ -13,12 +13,14 @@ a table without updating this file should not be approved (`docs/definition-of-d
 | US03 Log a purchase in seconds | P0 | `/transactions/new` | `POST /api/transactions` · `GET /api/categories` | transactions, categories | BR4, BR5, BR6, BR11 | [#16] | 3 | Done |
 | US04 This month's position | P0 | `/` | `GET /api/summary` | transactions | BR4 | [#17] | 3 | Done |
 | US05 Look back over recent entries | P0 | `/` | `GET /api/transactions` | transactions, categories | BR4 | [#18] | 2 | Done |
-| US06 Correct or remove an entry | P1 | `/transactions/:id` | `PATCH` and `DELETE /api/transactions/{id}` | transactions | BR4, BR5, BR11 | [#19] | Backlog | Not started |
+| US06 Correct or remove an entry | P1 | `/transactions/:id` | `GET`, `PATCH` and `DELETE /api/transactions/{id}` | transactions | BR4, BR5, BR6, BR11 | [#19] | 4 | Done |
 | US07 Suggest the kind of spending | P1 | `/transactions/new` | `GET /api/categories/suggestions` | categories | BR6 | [#20] | Backlog | Not started |
 | US08 Cap spending for a month | P1 | `/budget` | `PUT` and `GET /api/budgets` | budgets | BR7, BR8 | [#21] | Backlog | Not started |
 | US09 Warn before the cap is reached | P2 | `/` | `GET /api/budgets?month=` | budgets, transactions | BR9 | [#22] | Backlog | Not started |
-| US10 See which kinds of spending took the most | P2 | `/stats` | `GET /api/stats/breakdown` | transactions, categories | BR6 | [#23] | Backlog | Not started |
+| US10 See which kinds of spending took the most | P2 | `/stats`, and a card on `/` | `GET /api/stats/breakdown` | transactions, categories | BR4, BR6 | [#23] | 4 | Done |
 | US11 Choose the app's language | P2 | every screen | none: the app translates what the API sends | none | BR3 | [#72] | 2 | Done |
+| US12 See how spending changes month by month | P1 | `/stats`, and a card on `/` | `GET /api/stats/months` · `GET /api/stats/years` | transactions | BR4, BR12 | [#140] | 4 | Done |
+| US13 Keep track of debts and loans | P1 | `/debts`, `/debts/new`, and a card on `/` | `GET` and `POST /api/debts` · `POST /api/debts/{id}/settle` · `DELETE /api/debts/{id}` | debts | BR4, BR5, BR11, BR13, BR14 | [#141] | 4 | Done |
 
 **Built in Sprint 2.** US02 by #58, #60, #61, #63 and #64; US05 by #60, #61, #62, #63 and #65. The
 pull request of #65 closes both stories and sets their Status to Done. US11, added on 28/09, is
@@ -33,6 +35,19 @@ shows it as a message and a hint (`docs/ui.md`, section 3).
 | US03 | #98 `POST /api/transactions`, `GET /api/categories` | #96 `category_repo.get_by_id` | #101 `test_new_entry.py` | #105 `/transactions/new` |
 | US04 | #99 `GET /api/summary` | #96 `transaction_repo.month_totals`; #95 keeps the demo inside the month | #95 `test_seed.py`, #101 `test_summary.py` | #106 `/` |
 
+**Built in Sprint 4.** Every story's test cases are listed by ID in `docs/testing.md`, section 2,
+and the tests carry the same IDs in their names.
+
+| Story | Database | API and its tests | Screen, whose pull request closes the story |
+| --- | --- | --- | --- |
+| US06 | #144 `transaction_repo.get_for_account`, `update`, `delete` | #146 rows 9 to 11 of `docs/design.md`, section 3; TC-46 to TC-52 | #152 `/transactions/:id` |
+| US10 | #148 `transaction_repo.spending_by_category` | #150 row 12; TC-53 to TC-57 | #156 `/stats`; #159 the card on `/` |
+| US12 | #148 `totals_by_month`, `totals_by_year`; #155 eleven earlier months | #150 rows 13 and 14; TC-58 to TC-65 | #156 `/stats`; #159 the card on `/` |
+| US13 | #151 table `debts`, migration `0002`; #155 four debts | #154 rows 15 to 18; TC-66 to TC-78 | #158 `/debts`, `/debts/new`; #159 the card on `/` |
+
+The P0 stories got their test case IDs in Sprint 4 too: US01 to US03 by #147 and #153,
+US04 by #145, US05 by #149. Bug #142 gave BR5 its upper limit.
+
 **Sprint** is the sprint the story is committed to; Backlog until a sprint planning picks it.
 **Status:** Not started / In progress / Done.
 
@@ -42,11 +57,13 @@ shows it as a message and a hint (`docs/ui.md`, section 3).
 | --- | --- | --- | --- | --- |
 | `/login` | Sign in to reach your own records | G | P0 | US02 |
 | `/register` | Create an account and enter immediately | G | P0 | US01 |
-| `/` | This month's income, spending, remainder; cap warnings; recent entries | U | P0 | US04, US05, US09 |
+| `/` | This month's income, spending, remainder; cap warnings; recent entries; on a wide screen, cards for US10, US12 and US13 | U | P0 | US04, US05, US09, US10, US12, US13 |
 | `/transactions/new` | Log one amount of money spent or received | U | P0 | US03, US07 |
-| `/transactions/:id` | Correct or remove one entry | U | P1 | US06 |
+| `/transactions/:id` | Correct or remove one entry; opened by tapping a row on `/` | U | P1 | US06 |
 | `/budget` | Set and read monthly caps per kind of spending | U | P1 | US08 |
-| `/stats` | Breakdown of one month by kind of spending | U | P2 | US10 |
+| `/stats` | Spending month by month and year by year; one month by kind of spending | U | P1 | US10, US12 |
+| `/debts` | Money borrowed and lent: who, how much, by when; mark it settled | U | P1 | US13 |
+| `/debts/new` | Write down one debt or loan | U | P1 | US13 |
 
 **Access:** G guest, not signed in · U signed-in user. No route needs A this semester: every
 account reads and changes only its own entries (BR4).
@@ -81,3 +98,5 @@ first, then here. Test names are in `backend/tests/` unless a path says otherwis
 [#22]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/22
 [#23]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/23
 [#72]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/72
+[#140]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/140
+[#141]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/141
