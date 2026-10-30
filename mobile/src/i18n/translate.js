@@ -55,6 +55,10 @@ export const ERROR_KEYS = {
   year_in_future: 'error.yearInFuture',
   invalid_request: 'error.invalidRequest',
   entry_not_found: 'error.entryNotFound',
+  debt_not_found: 'error.debtNotFound',
+  already_settled: 'error.alreadySettled',
+  person_length: 'error.personLength',
+  due_before_start: 'error.dueBeforeStart',
   not_found: 'error.notFound',
   server_error: 'error.server',
 };

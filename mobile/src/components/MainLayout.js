@@ -16,6 +16,7 @@ export const WIDE = 768;
 const TABS = [
   { name: 'Overview', label: 'nav.overview', icon: '◐' },
   { name: 'Stats', label: 'nav.stats', icon: '▥' },
+  { name: 'Debts', label: 'nav.debts', icon: '⇄' },
 ];
 
 export default function MainLayout({ current, children }) {

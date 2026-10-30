@@ -11,6 +11,9 @@ export const colors = {
   spent: '#A2452C',
   danger: '#A2452C',
   dangerLight: '#F7E4DF',
+  // Due today or tomorrow: not late yet, but soon (BR14).
+  warning: '#8A5A00',
+  warningLight: '#FBEFD5',
 
   background: '#F4F6F5',
   surface: '#FFFFFF',
