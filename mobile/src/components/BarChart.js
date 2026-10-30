@@ -4,7 +4,7 @@
  *
  * Spent and received have their own colour and are named in the legend under the chart, and the
  * month that cost the most carries its amount in words above its bar, so the chart reads without
- * colour vision as well. Tapping a group selects it.
+ * colour vision as well. Tapping a group selects it. `height` is the tallest bar, in pixels.
  */
 
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -16,7 +16,7 @@ import { formatDong } from '../utils/format';
 
 const HEIGHT = 160;
 
-export default function BarChart({ periods, selected, onSelect, busiest }) {
+export default function BarChart({ periods, selected, onSelect, busiest, height = HEIGHT }) {
   const { language, t } = useLanguage();
   const max = chartMax(periods);
 
@@ -42,19 +42,19 @@ export default function BarChart({ periods, selected, onSelect, busiest }) {
               <Text style={[styles.value, period.period === busiest && styles.valueBusiest]}>
                 {period.spending > 0 ? shortAmount(period.spending, language) : ''}
               </Text>
-              <View style={styles.bars}>
+              <View style={[styles.bars, { height }]}>
                 <View
                   style={[
                     styles.bar,
                     styles.spent,
-                    { height: barHeight(period.spending, max, HEIGHT) },
+                    { height: barHeight(period.spending, max, height) },
                   ]}
                 />
                 <View
                   style={[
                     styles.bar,
                     styles.received,
-                    { height: barHeight(period.income, max, HEIGHT) },
+                    { height: barHeight(period.income, max, height) },
                   ]}
                 />
               </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   groupSelected: { backgroundColor: colors.primaryLight },
   value: { color: colors.textMuted, fontSize: 10, marginBottom: 2 },
   valueBusiest: { color: colors.spent, fontWeight: '700' },
-  bars: { alignItems: 'flex-end', flexDirection: 'row', gap: 2, height: HEIGHT },
+  bars: { alignItems: 'flex-end', flexDirection: 'row', gap: 2 },
   bar: { borderTopLeftRadius: 3, borderTopRightRadius: 3, width: 9 },
   spent: { backgroundColor: colors.spent },
   received: { backgroundColor: colors.receivedSoft },
