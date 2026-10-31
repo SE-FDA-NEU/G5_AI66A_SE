@@ -17,6 +17,13 @@ Every story starts from a screen; no address needs typing.
 | US03 Log a purchase in seconds | **+ Add an entry** on `/` → `/transactions/new` | Amount, a kind of spending, **Save**; `/` shows the new totals |
 | US01 Create an account | **Create an account** on `/login` → `/register` | An email and a password of 6 to 128 characters; lands on `/` signed in |
 
+**Built in Sprint 4:** tap a row on `/` to correct or delete it (US06); the **Stats** tab shows
+spending month by month and year by year, and where a month's money went (US10, US12); the
+**Debts** tab keeps money borrowed and lent (US13). On a wide screen `/` has two columns.
+
+**Test it:** `pytest` in the cloned folder runs every backend test, no server needed. Every test
+case, with its ID, is in [docs/testing.md](docs/testing.md).
+
 **Test account:** `mai@example.com` with the password `demo1234`, created by
 `python -m scripts.seed_data`. It is a test value for this project only, never a real password.
 To see a rule refused, date an entry tomorrow on `/transactions/new`: the screen says why and
@@ -76,6 +83,7 @@ needs CI green. Full text: [docs/definition-of-done.md](docs/definition-of-done.
 | [docs/requirements.md](docs/requirements.md) | Milestone 1 — vision, personas, scenarios, user stories, business rules, screens |
 | [docs/design.md](docs/design.md)             | Milestone 2 — architecture, data model, API, walking skeleton, design decisions  |
 | [docs/ui.md](docs/ui.md)                     | Milestone 3 — P0 stories and status, wireframes, error messages, changes since M2 |
+| [docs/testing.md](docs/testing.md)           | Milestone 4 — what we test and why, test cases by ID, the automated tests, what they found |
 | [docs/SETUP.md](docs/SETUP.md)               | Install and run the project on a machine that has never seen it                  |
 | [docs/traceability.md](docs/traceability.md) | Every story traced to its screen, endpoint, table, rules and issue               |
 | [docs/changelog.md](docs/changelog.md)       | Every requirement or technology change after a sprint started, with its cost     |
