@@ -146,23 +146,31 @@ Committed: 11 points · Completed: 11 points
 
 **Scrum Master:** @Chidokato5376
 
+The retrospective was facilitated by @levanduc36, as the README says.
+
 ### Keep / Stop / Start
 
 | Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
+| --- | --- | --- |
+| Test case IDs in the test names: the reviewer could find the test of any row of `docs/testing.md` with `pytest -k` | Opening a test pull request before breaking the rule once on purpose | Writing the boundary rows of a new rule in the issue, before the code |
+| One owner per file, with the owner's commit on the same branch when two changes must merge together (#142) | Merging three pull requests on the same evening because the day before slipped | A pull request a day, not three on the last evening |
 
 ### Action for next sprint
 
-| Action | Owner | Checked at     |
-| ------ | ----- | -------------- |
-|        | @     | Sprint 5 retro |
+| Action | Owner | Checked at |
+| --- | --- | --- |
+| Every new business rule arrives with its boundary test cases written in its issue before the code, and the reviewer runs them red once | @levanduc36 | Sprint 5 retro |
 
 ### Did last sprint's action happen?
 
+The action was "Every pull request lists the test case IDs it adds or changes, and its reviewer
+runs `pytest` from the repository root and pastes the last line of the output in the review".
+Checked by @levanduc36 on 01/11/2026 from the reviews of #143 to #160: write here how many
+reviews pasted the last line of `pytest`, out of how many pull requests.
+
 ### Velocity
 
-Committed: ** points · Completed: ** points
+Committed: 18 points · Completed: 18 points
 
 ---
 
