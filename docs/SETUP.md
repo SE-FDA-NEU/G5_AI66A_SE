@@ -183,6 +183,19 @@ first. Every number assumes a freshly seeded database (`python -m scripts.seed_d
    every text on the page, error messages included, and the choice is kept when the page is
    reloaded. The app always opens in English the first time.
 
+9. **Correct an entry, US06.** Sign out, and sign in again as `mai@example.com`. On `/`, tap
+   the row **banh mi**. `/transactions/:id` shows it in
+   the same form; change the amount to `20000` and press **Save changes**: the card reads
+   **Spent 2,951,000 ₫**. Tap the row again, **Delete this entry**, then **Delete**: it is gone.
+10. **Where the money went, US10 and US12.** The **Stats** tab, at the top on a computer or at the
+   bottom on a phone, shows this year month by month, the months with the most and the least
+   spent, and under or beside it this month by kind of spending, **Bills** first. **By year**
+   shows one bar per year. The arrow **›** stops at this year (BR12).
+11. **Debts and loans, US13.** The **Debts** tab reads **You owe 500,000 ₫** and **Owed to you
+   350,000 ₫**; **anh Minh** is marked **Overdue**. **+ Write down a debt**, a due date before
+   the start date, and **Save** shows **The due date cannot be before the start date** (BR13).
+12. **The tests.** `pytest` in the `G5_AI66A_SE` folder, as section 7 says: **177 passed**.
+
 Every message the app can show, and the rule behind it, is listed in `docs/ui.md`, section 3.
 
 ---
@@ -199,7 +212,7 @@ pytest
 ```
 
 `pytest -v` lists every test by name, with the test case ID from `docs/testing.md` in it. The last
-line reads `75 passed`, in about two seconds; nothing may fail or be skipped. The same command
+line reads `177 passed`, in about three seconds; nothing may fail or be skipped. The same command
 works from `backend/`.
 
 The app has tests of its own, for how amounts, dates and messages are shown. In terminal 2, in
