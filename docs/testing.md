@@ -182,11 +182,88 @@ so each column is one test case.
 
 ## 3. Automated tests
 
-_Written in #161: the command, the screenshot of its output, and which file holds which test
-case. Until then: `pytest` in the cloned folder runs every test (`docs/SETUP.md`, section 7)._
+Every test case of section 2 is a pytest test in `backend/tests/`, with its ID in the test's name,
+such as `test_tc14_to_tc16_a_sign_in_lasts_seven_days`, and in the name of each of its rows, such
+as `[TC-15 7 days]`. One command runs them all, from the cloned folder:
+
+```
+pytest
+```
+
+`pytest -v` lists every test by name; `pytest -k tc26` runs one test case. The root `pytest.ini`
+points pytest at `backend/tests/`, so the same command also works from `backend/`.
+
+**No server, no real database.** `backend/tests/conftest.py` sets `DATABASE_URL` to a SQLite
+database in memory before the app is imported, gives every test its own empty database, and calls
+the routes through FastAPI's `TestClient`, in the same process. The seed script's tests use a file
+in pytest's temporary folder. Nothing reads `backend/expense.db`, `backend/.env` or today's date
+where a rule depends on it: the services take `today` as a parameter and the tests fix it. A fresh
+clone passes on any day; CI proves it on every pull request by running `pytest` from the repository
+root on a machine that has never seen the project (`.github/workflows/ci.yml`).
+
+| File | Test cases | Stories | Written by |
+| --- | --- | --- | --- |
+| `test_users.py` | TC-01 to TC-08 | US01 | @levanduc36 |
+| `test_auth.py` | TC-09 to TC-16 | US02 | @levanduc36 |
+| `test_new_entry.py` | TC-17 to TC-30 | US03 | @levanduc36; the fix of bug #142 by @Chidokato5376 |
+| `test_summary.py` | TC-31 to TC-38 | US04 | @levanduc36 (Sprint 3), test case IDs and month edges by @nguyennhien2412 |
+| `test_transactions.py` | TC-39 to TC-45 | US05 | @levanduc36 (Sprint 2), test case IDs and the 20/21 edge by @vantran2801 |
+| `test_correct_entry.py` | TC-46 to TC-52 | US06 | @Chidokato5376 |
+| `test_stats.py` | TC-53 to TC-65 | US10, US12 | @Chidokato5376 |
+| `test_debts.py` | TC-66 to TC-78 | US13 | @Chidokato5376 |
+| `test_repositories.py` | the queries behind US04 to US13 | | @nguyennhien2412 |
+| `test_database_rules.py`, `test_seed.py`, `test_errors.py`, `test_health.py` | the constraints, the demo data, the error shape | | @levanduc36, @nguyennhien2412 |
+
+Each member wrote tests in `backend/tests/` this sprint; the author of a service wrote its unit
+tests, and another member reviewed them in the pull request (`docs/process.md`, rule 6).
+
+**Result:** 177 passed in about 3 seconds, on Python 3.12, Windows 11. The app's Jest tests:
+`npm test` in `mobile/`, 101 passed.
+
+![The full output of pytest -v: 177 passed](images/testing/pytest-output.png)
 
 ---
 
 ## 4. What the tests found
 
-_Written in #161: bug #142, found by the boundary tests of BR5, and a rule broken on purpose._
+**Bug #142 — a huge amount broke the month's totals for good.** Writing the test cases of US03, we
+gave BR5 the partition every amount rule needs, "a very large amount", and it had no test. Steps: sign
+in as `mai@example.com`, add an entry of 9,223,372,036,854,775,807 ₫, the largest number SQLite
+stores, then any other entry this month. Expected: a message under the form, the overview unchanged.
+Actual: the first entry was stored, and from then on `GET /api/summary` answered 500, because the
+month's SUM no longer fits in 64 bits: `/` showed its error state for good. One dong more,
+9,223,372,036,854,775,808, was refused with a 500 instead of a message.
+
+**Fix.** The Product Owner gave BR5 an upper limit, at most 1,000,000,000,000 ₫ per entry
+(`docs/changelog.md`, 26/10/2026): `transaction_service.check_amount` refuses more with "Enter an
+amount of at most 1,000,000,000,000" (code `amount_too_large`), and debts follow the same check. At
+that size a month needs over nine million entries before its sum could overflow. Fixed by the pull
+request that closes #142.
+
+**The tests that guard it now:** TC-24, TC-25 and TC-26, as regression tests. Without the fix, the
+same tests are red:
+
+```
+$ pytest -k "tc19_to_tc26 or tc26_" backend/tests/test_new_entry.py
+>       assert refused.status_code == 422
+E       assert 201 == 422
+FAILED tests/test_new_entry.py::test_tc19_to_tc26_...[TC-25 1,000,000,000,001]
+FAILED tests/test_new_entry.py::test_tc19_to_tc26_...[TC-26 2^63]
+FAILED tests/test_new_entry.py::test_tc26_the_month_still_adds_up_after_the_largest_entries
+3 failed, 5 passed, 15 deselected in 0.26s
+```
+
+**A rule broken on purpose, BR14.** Before committing the tests of US13, we changed one character in
+`debt_service.is_overdue`, `today > debt.due_on` to `today >= debt.due_on`, so a debt was overdue on
+its due date itself. The boundary test went red at once, then we put the code back:
+
+```
+$ pytest -k tc69_tc70 backend/tests/test_debts.py
+>       assert debts(db, account.id).items[0].overdue is overdue
+E       assert True is False
+FAILED tests/test_debts.py::test_tc69_tc70_...[TC-70 due today]
+1 failed, 3 passed, 22 deselected in 0.15s
+```
+
+Every member broke one rule of their own the same way before opening their test pull request; the
+pull requests say which line they changed.
