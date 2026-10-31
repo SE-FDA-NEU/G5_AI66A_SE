@@ -273,3 +273,109 @@ No retrospective meeting was held in Sprint 3; see Sprint 3 in `docs/retro.md`.
 | @levanduc36      | Yes      | Yes    | Yes   |
 
 **Scrum Master for Sprint 4:** @Chidokato5376, as the rotation in the README says
+
+---
+
+## Sprint 4 - 20/10/2026 to 02/11/2026
+
+**Committed 18 · Completed 18 · Velocity: 18 points**
+
+### Sprint goal
+
+Every P0 story is checked by automated tests that a machine runs in seconds, with no server and
+no real database, and `docs/testing.md` says which; and the app shows where the money went, month
+by month, and what is owed, on a screen that uses its whole width.
+
+### Planning
+
+The iteration opened on 20/10. Planning met on 24/10, after the M3 submission, and began with the
+Sprint 3 retrospective that had not been held (`docs/retro.md`). The Product Owner asked for a
+spending trend and for debts and loans; they became US12 and US13 (`docs/changelog.md`, 24/10).
+Issues #138 to #161 were written that day, and the review rotation and merge order were
+posted on #138 and committed in `.github/review-rotation.json`.
+
+### The two required chore issues
+
+| Issue | Owner | Closed? |
+| --- | --- | --- |
+| #138 [Chore] Refine backlog for Sprint 4 | @Chidokato5376 (PO) | Yes, 25/10 |
+| #139 [Chore] Sprint 4 wrap-up | @Chidokato5376 (SM) | Right after this log merges |
+
+In Sprint 4 the Product Owner is also the Scrum Master, as the rotation in the README fixed in week
+1; the retrospective is facilitated by @levanduc36.
+
+### Committed
+
+| Issue | Story | Points | Owner |
+| --- | --- | --- | --- |
+| #19 | US06 Correct or remove an entry | 3 | @levanduc36 |
+| #23 | US10 See which kinds of spending took the most | 5 | @vantran2801 |
+| #140 | US12 See how spending changes month by month | 5 | @nguyennhien2412 |
+| #141 | US13 Keep track of debts and loans | 5 | @levanduc36 |
+
+**Total committed: 18 points**, against a velocity of 11 in Sprint 3. Taken on because US10 and
+US12 share one screen and one family of endpoints, US06 reuses the form of US03, and the M4
+deliverable, the tests, mostly gives the existing P0 code test case IDs rather than new code.
+
+The tasks #142 to #161 build these four stories, give every P0 story its test cases, and write
+`docs/testing.md`. Tasks carry hours, not points, so velocity counts story points only, as before.
+
+### Result
+
+| Issue | Deliverable | Owner | Status | If not done, why |
+| --- | --- | --- | --- | --- |
+| #19 | US06 Correct or remove an entry, 3 points | @levanduc36 | Done | |
+| #23 | US10 See which kinds of spending took the most, 5 points | @vantran2801 | Done | |
+| #140 | US12 See how spending changes month by month, 5 points | @nguyennhien2412 | Done | |
+| #141 | US13 Keep track of debts and loans, 5 points | @levanduc36 | Done | |
+| #142 | An amount above 9,223,372,036,854,775,807 breaks the month's totals | @Chidokato5376 | Done | |
+| #143 | One command runs every test, from the repository root | @levanduc36 | Done | |
+| #144 | Repository: one entry by id, corrected and removed | @nguyennhien2412 | Done | |
+| #145 | Test cases TC-31 to TC-38 for US04 | @nguyennhien2412 | Done | |
+| #146 | GET, PATCH and DELETE /api/transactions/{id} | @Chidokato5376 | Done | |
+| #147 | Test cases TC-01 to TC-08 and TC-17 to TC-30 for US01 and US03 | @levanduc36 | Done | |
+| #148 | Repository: spending per kind, and totals per month and per year | @nguyennhien2412 | Done | |
+| #149 | Test cases TC-39 to TC-45 for US05 | @vantran2801 | Done | |
+| #150 | GET /api/stats/breakdown, /months and /years | @Chidokato5376 | Done | |
+| #151 | The debts table, migration 0002 and its queries | @nguyennhien2412 | Done | |
+| #152 | /transactions/:id corrects or deletes an entry | @vantran2801 | Done | |
+| #153 | Test cases TC-09 to TC-16 for US02 | @levanduc36 | Done | |
+| #154 | /api/debts: write down, list, settle and remove | @Chidokato5376 | Done | |
+| #155 | Demo data for Sprint 4: eleven earlier months and four debts | @nguyennhien2412 | Done | |
+| #156 | /stats and the tabs between the main screens | @vantran2801 | Done | |
+| #157 | docs/testing.md, sections 1 and 2 | @levanduc36 | Done | |
+| #158 | /debts and /debts/new | @vantran2801 | Done | |
+| #159 | Two columns on / for a wide screen | @vantran2801 | Done | |
+| #160 | docs/traceability.md for Sprint 4 | @nguyennhien2412 | Done | |
+| #161 | docs/testing.md sections 3 and 4, README, M4 checklist, PDF | @levanduc36 | Merges last | The pull request that completes `docs/testing.md`, merged after this log |
+
+**Completed: 18 points. Velocity this sprint: 18 points**: US06 #19 closed by the pull request of
+#152, US10 #23 and US12 #140 by #156, US13 #141 by #158.
+
+**Velocity so far:** 9, 11, 18 points in Sprints 2 to 4. The jump is not a faster team: Sprint 4's
+stories were smaller than their points suggest once the patterns of Sprints 2 and 3 existed.
+Sprint 5 plans from the average, about 13.
+
+### Sprint Review
+
+- What we demonstrated: the Sprint 4 Review is held with the instructor, who clones the repository
+  on a machine that has never seen it, follows `docs/SETUP.md`, types `pytest`, and picks a test
+  case ID from `docs/testing.md`.
+- Feedback received: before the review, CI ran `pytest` from the repository root on every pull
+  request, on a machine that had never seen the project.
+- Backlog changes as a result: none yet.
+
+### Retrospective
+
+See Sprint 4 in `docs/retro.md`.
+
+### Attendance
+
+| Member | Planning | Review | Retro |
+| --- | --- | --- | --- |
+| @Chidokato5376 | Yes | With the instructor, next | Yes |
+| @vantran2801 | Yes | With the instructor, next | Yes |
+| @nguyennhien2412 | Yes | With the instructor, next | Yes |
+| @levanduc36 | Yes | With the instructor, next | Yes |
+
+**Scrum Master for Sprint 5:** @levanduc36, as the rotation in the README says
