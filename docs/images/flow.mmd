@@ -1,7 +1,10 @@
 flowchart TD
     Start([Open]) --> Check{Session valid?}
 
-    Check -- no --> Login["/login"]
+    Check -- no --> Welcome["/welcome"]
+    Welcome -- "sign in" --> Login["/login"]
+    Welcome -- "create an account" --> Register
+    Welcome --> About["/about"]
     Check -- yes --> Home["/"]
 
     Login -- "no account yet" --> Register["/register"]
@@ -33,4 +36,14 @@ flowchart TD
     Debts -- "settled or removed" --> Debts
     Debts --> Home
 
-    Home -- "sign out" --> Login
+    Home -- "☰ menu" --> Profile["/profile"]
+    Profile -- saved --> Home
+    Home -- "☰ menu" --> Categories["/categories"]
+    Categories -- "pick one" --> Category["/categories/:id"]
+    Category -- "pick an entry" --> Edit
+    Home -- "☰ menu" --> About
+    Home -- "☰ menu" --> Delete["/account/delete"]
+    Delete -- "deleted, after Are you sure?" --> Welcome
+    Delete -- abandoned --> Home
+
+    Home -- "sign out" --> Welcome

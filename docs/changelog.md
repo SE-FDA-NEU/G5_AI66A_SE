@@ -158,3 +158,37 @@ limit is far above anything a student spends, and at that size nine million entr
 before a month's sum can overflow. No story changed priority or points. Cost: one service check,
 one regression test, and one message in each language of the app.
 
+---
+
+## 2026-11-06 — The app goes online: Render, PostgreSQL on Neon, deploy from CI
+
+**Reason.** Milestone 5 asks for one public `https://` address that a stranger opens with nothing
+to install, deployed from `main` only when CI is green, and with data that survives a reload. The
+week 13 lecture adds that CI should take two to three minutes at most.
+
+**Impact.** ADR 4 in `docs/design.md`: PostgreSQL on Neon on the server, SQLite still on laptops;
+`psycopg[binary]==3.3.6` added to `backend/requirements.txt`. New settings `ENVIRONMENT`,
+`LOG_LEVEL`, `SLOW_REQUEST_MS`, all in `backend/.env.example`; in production the API refuses to
+start with the development `SECRET_KEY`, `CORS_ORIGINS=*` or SQLite. `/health` now checks the
+database and answers 503 when it does not answer. `ci.yml` gained a PostgreSQL job, a deploy job
+and a three-minute limit per job; `live-check.yml` is new. Nothing changes for a user: no story,
+rule or screen moved.
+
+---
+
+## 2026-11-07 — Six stories added for Sprint 5: US14 to US19
+
+**Reason.** The Product Owner asked, at Sprint 5 planning, for the app to feel finished before the
+final demo: a first screen that says what the app is for before any form (US15); a profile, so the
+greeting stops reading "Hello, <email>" (US16); how much went into each category (US17); a way to
+delete the account (US18); a dark look and a page about the app (US19). US14 names the milestone
+itself, the app at a public address, as a story with acceptance criteria.
+
+**Impact.** Two new rules: BR15 (the profile; the email never changes) and BR16 (deleting needs
+the email, the password and a confirmation). Migration 0003 adds four optional columns to
+`users`. New endpoints `GET`, `PATCH` and `DELETE /api/users/me`, `GET /api/categories/spending`
+and `GET /api/categories/{id}/spending`. Six screens, the ☰ menu, and a light and a dark palette
+in `mobile/src/theme.js`; every screen now takes its colours from the palette in use. The language
+switch moves into the menu once signed in. The signed-out app opens on `/welcome` instead of
+`/login`. Sixteen points, against a velocity of 18 in Sprint 4.
+
