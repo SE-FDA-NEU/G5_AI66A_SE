@@ -31,7 +31,7 @@ what to do. Every message is listed in [docs/ui.md](docs/ui.md), section 3.
 
 **Group:** G5_AI66A
 **Product Owner (fixed for the entire semester):** @Chidokato5376
-**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · @levanduc36 (Sprint 3) · **@Chidokato5376 (Sprint 4, current)**
+**Scrum Master (rotates every sprint):** @vantran2801 (Sprint 1) · @nguyennhien2412 (Sprint 2) · @levanduc36 (Sprint 3) · @Chidokato5376 (Sprint 4) · **@levanduc36 (Sprint 5, current)**
 **Board:** [Sprint Board — Personal Expense Management App](https://github.com/orgs/SE-FDA-NEU/projects/12/views/1)
 
 ## Team
