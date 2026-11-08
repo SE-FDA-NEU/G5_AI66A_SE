@@ -244,7 +244,7 @@ by git, and CI fails any pull request that commits a `.env` file. The app needs 
 
 ## 5. Design decisions
 
-Three decisions that shape everything else. Each lists the options we weighed, what we chose,
+Four decisions that shape everything else. Each lists the options we weighed, what we chose,
 why, the quality it buys and what it costs, and what would make us change our mind.
 
 ### ADR 1 — A SQLite file instead of PostgreSQL
@@ -320,6 +320,34 @@ open to the internet, where Argon2's memory-hard design matters more. The scheme
 each hash lets old and new hashes live side by side, each password re-hashed at its next sign-in.
 
 ---
+
+### ADR 4 — PostgreSQL on Neon for the URL, SQLite on the laptops
+
+Added in Sprint 5, when the app went online (`docs/changelog.md`, 06/11/2026). It keeps ADR 1 for
+the laptops and replaces it on the server.
+
+**Options.** Keep SQLite on Render and seed it again at every start · a PostgreSQL database on
+Render · PostgreSQL on Neon · Supabase.
+
+**Chose.** PostgreSQL 16 on Neon's free plan for the URL, reached through psycopg 3; SQLite stays
+the database of `docs/SETUP.md`, of the tests and of every laptop.
+
+**Why.** ADR 1 named the case that would change our mind: one shared server serving several users.
+The URL is that case. A free Render service starts from a clean disk at every deploy and every time
+it wakes from sleep, so a SQLite file there loses every entry a visitor typed, and the brief asks
+that a record survives a reload. Render's own free PostgreSQL is deleted after 30 days, before the
+grades are published; Neon's free plan keeps the data and suspends the database when idle. Because
+the app reaches the database only through SQLAlchemy and every table comes from a migration, the
+switch is a `DATABASE_URL` and one driver in `requirements.txt`. CI runs the whole test suite on
+PostgreSQL as well, in its own job, and on its first run it found the one difference that matters
+to us: PostgreSQL refuses a value longer than its `VARCHAR` before the CHECK constraint does.
+
+**Quality it buys.** Reliability: data survives deploys, restarts and sleep, and many visitors can
+write at once. It costs a second database to keep in mind; the CI job is what keeps the two equal.
+
+**What would change our mind.** A test that passes on SQLite and fails on PostgreSQL more than once
+a sprint: then the laptops move to PostgreSQL too, through the dev container. Or Neon's free plan
+ending: the data moves with `pg_dump` to Supabase (`docs/operations.md`, section 5).
 
 ## 6. What changed since M1
 
