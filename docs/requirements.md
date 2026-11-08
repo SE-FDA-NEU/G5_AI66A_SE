@@ -152,9 +152,15 @@ The amounts in this scenario are illustrative and are used to demonstrate the sc
 | US11 | As a user, I want to choose the app's language, so that I understand every screen and message in the language I read best.                      | P2       | 3      |
 | US12 | As a user, I want to see what I spent in each month and in each year, so that I know which months cost the most and which the least.                     | P1       | 5      |
 | US13 | As a student who borrows from and lends to friends, I want to write down who owes whom and by when, so that I pay back on time and never forget money I lent. | P1       | 5      |
+| US14 | As a student with only a phone, I want to open the app from a link, with nothing to install, so that I can start in the minute I hear about it. | P1       | 3      |
+| US15 | As someone opening the app for the first time, I want to see what it is for and choose to sign in, create an account or change the language, so that I am not dropped into a form. | P2       | 2      |
+| US16 | As a user, I want a profile with my name, the name to call me, my phone and my picture, so that the app greets me by name instead of by my email. | P2       | 3      |
+| US17 | As a user, I want to see how much I put into each category, this month and in all, so that I know what each kind of spending costs me. | P1       | 3      |
+| US18 | As a user who no longer wants the app, I want to delete my account and everything in it, so that none of my data stays behind. | P1       | 3      |
+| US19 | As a user, I want a light or a dark look and a page about the app, so that it is easy on my eyes at night and I know who made it. | P2       | 2      |
 
-**Five P0 · five P1 · three P2 · 53 points total.** US11 was added in Sprint 2, on 28/09;
-US12 and US13 in Sprint 4, on 24/10.
+**Five P0 · eight P1 · six P2 · 69 points total.** US11 was added in Sprint 2, on 28/09;
+US12 and US13 in Sprint 4, on 24/10; US14 to US19 in Sprint 5, on 07/11 (`docs/changelog.md`).
 
 ---
 
@@ -309,6 +315,68 @@ US12 and US13 in Sprint 4, on 24/10.
 - Given debt id **88** belongs to another account, when this user asks for it, then the answer is
   **"not found"**. _(BR4)_
 
+### US14 — Use the app from a link · P1 · 3 points · every screen
+
+- Given a stranger with a phone or a laptop and no account, when they open the app's `https://`
+  address in a private window, then the welcome screen appears, with nothing to install.
+- Given a merge into `main` with CI green, when the deploy finishes, then the address runs that
+  commit: `/health` reports its first seven characters. A merge with CI red never reaches it.
+- Given an entry saved at the address, when the page is reloaded or the server restarts, then the
+  entry is still there.
+- Given the database cannot be reached, when `/health` is asked, then it answers **503**; when it
+  can, **200**.
+
+### US15 — The first screen · P2 · 2 points · `/welcome`
+
+- Given someone signed out, when the app opens, then `/welcome` shows a picture, what the app is
+  for, and three choices: **Sign in**, **Create an account** and the language. No form appears
+  until one is chosen.
+- Given a screen wider than it is tall and at least 720 pixels wide, when `/welcome` loads, then
+  the choices sit beside the picture; on a phone held upright, under it.
+- Given **Tiếng Việt** is chosen on `/welcome`, when Sign in is tapped, then `/login` is in
+  Vietnamese too. _(US11)_
+
+### US16 — A profile, and a greeting by name · P2 · 3 points · `/profile`
+
+- Given an account with no name, when `/` loads, then it reads **"Hello, mai@example.com"**.
+- Given the full name **"Nguyen Thi Mai"** is saved, then `/` reads **"Hello, Nguyen Thi Mai"**;
+  given the name to call her, **"Mai"**, is saved too, then **"Hello, Mai"**.
+- Given any field of the profile, when it is left empty, then it is accepted: every field but the
+  email is optional. _(BR15)_
+- Given a request that changes the email, then it is refused and the email stays the same.
+  _(BR15)_
+- Given a full name of **81 characters**, a name to call of **41**, or a phone number of **7
+  digits**, when it is saved, then it is refused with the sentence of BR15; **80**, **40** and
+  **8 digits** are accepted. _(BR15)_
+- Given a picture is chosen, when it is saved, then it is cut to a square, made small, and shown in
+  the menu and next to the greeting; a picture over **200 KB** is refused. _(BR15)_
+
+### US17 — What each category holds · P1 · 3 points · `/categories`
+
+- Given **55,000** and **45,000** spent on Food this month and **40,000** on the last day of last
+  month, when `/categories` loads, then Food reads **100,000** this month and **140,000** in all.
+- Given another account spent **999,000** on Food, then this account's Food does not change.
+  _(BR4)_
+- Given a tap on Food, when `/categories/:id` opens, then it shows the last six months, months
+  without an entry at 0, and the ten newest Food entries.
+
+### US18 — Delete the account · P1 · 3 points · `/account/delete`
+
+- Given the account's email and current password, when **Delete my account** is tapped and **"Are
+  you sure?"** is answered yes, then the account and every entry, cap and debt in it are deleted,
+  the app is signed out and `/welcome` says **"Your account has been deleted."** _(BR16)_
+- Given a wrong password, or another account's email, then it is refused with **"The email or
+  password does not match this account"** and nothing is deleted. _(BR16)_
+- Given **"Are you sure?"** is answered no, then nothing is sent.
+- Given the account is deleted, when its old password or old token is used, then both are refused.
+
+### US19 — Light or dark, and about the app · P2 · 2 points · the ☰ menu, `/about`
+
+- Given **Dark** is chosen in the ☰ menu, then every screen turns dark at once, and stays dark
+  when the app is opened again; **Device** follows the phone's or the browser's setting.
+- Given `/about`, then it says what the app is for and whom it serves, its version, the Expo SDK
+  and React Native it runs on, and whether the server answers.
+
 ---
 
 ## 5. Business rules
@@ -329,6 +397,8 @@ US12 and US13 in Sprint 4, on 24/10.
 | **BR12** | Months and years are compared on money spent. The month with the most spent and the month with the least are chosen among the months up to this one that have at least one entry; on a tie, the earlier month. A year later than this one cannot be chosen. | Today is 24/10/2026. In 2026, January has no entries, February and March 900,000 spent each, October 2,931,000. Most spent: October. Least: February, earlier than March. January, November and December are never named. Asking for 2027 → rejected with "The year cannot be in the future". |
 | **BR13** | A debt names who the money is with in 1 to 60 characters, and its amount follows BR5. It started today or earlier (BR11), and its due date, if it has one, is not before the day it started. | Lent 200,000 to "Lan" on 24/10, due 24/10 → accepted. Due 23/10 → rejected with "The due date cannot be before the start date". A name of 61 characters → rejected with "Write a name of 1 to 60 characters". |
 | **BR14** | An open debt is overdue from the day after its due date; on the due date itself it is not yet overdue. A settled debt is never overdue and cannot be settled twice. | Due 23/10, today 24/10, not settled → "Overdue". Due 24/10 → open, not overdue. Settled on 20/10 → never overdue; settling it again → "This debt is already settled". |
+| **BR15** | An account's email never changes. Its full name (at most 80 characters), the name to call it (at most 40), its phone number (8 to 15 digits) and its picture (a PNG, JPEG or WebP of at most 200 KB) are all optional; an empty field means "not given". | "Nguyen Thi Mai" → accepted; 81 letters → rejected with "Write a full name of at most 80 characters". "0912 3456" (8 digits) → accepted; "0912 345" (7) → rejected with "Enter a phone number of 8 to 15 digits". A request that names a new email → rejected; the email stays. |
+| **BR16** | An account is deleted only after its email and current password are typed again and the deletion is confirmed; it takes every entry, cap and debt of the account with it, and cannot be undone. | `mai@example.com` types her password, then answers "Are you sure?" yes → the account and its 91 entries are gone; signing in again → "Incorrect email or password". A wrong password → "The email or password does not match this account", nothing deleted. |
 
 ---
 
@@ -347,14 +417,20 @@ US12 and US13 in Sprint 4, on 24/10.
 | `/stats`            | Spending month by month and year by year; one month by kind of spending | **U**  | P1       |
 | `/debts`            | Money borrowed and lent: who, how much, by when; mark it settled        | **U**  | P1       |
 | `/debts/new`        | Write down one debt or loan                                             | **U**  | P1       |
+| `/welcome`          | What the app is for; choose sign in, create an account, or the language | **G**  | P2       |
+| `/profile`          | Name, the name to call you, phone and picture; the email, read-only     | **U**  | P2       |
+| `/categories`       | Every category with what went into it, this month and in all            | **U**  | P1       |
+| `/categories/:id`   | One category: the last six months and its newest entries                | **U**  | P1       |
+| `/account/delete`   | Delete the account, after the email, the password and "Are you sure?"   | **U**  | P1       |
+| `/about`            | What the app is for, its version, and who made it                       | **G U** | P2      |
 
-Nine screens against the required five. **No `A` screen exists this semester:** every account
+Fifteen screens against the required five. **No `A` screen exists this semester:** every account
 sees only its own records (BR4), so there is no administrator role to build. This is stated so
 the absence reads as a decision rather than an omission.
 
 ### Flow
 
-Every screen in the table above appears below and is reachable from `/login`.
+Every screen in the table above appears below and is reachable from `/welcome`.
 
 ![Screen flow: every screen is reachable from /login](images/flow.png)
 
