@@ -7,11 +7,23 @@ from app.core.config import settings
 
 
 def make_engine(url: str, **options) -> Engine:
-    """Create an engine. On SQLite, foreign keys are switched on for every connection."""
+    """Create an engine. On SQLite, foreign keys are switched on for every connection.
+
+    The values sent with a query are left out of SQLAlchemy's error messages, so a crash logged
+    by app/core/errors.py never shows an email address or a password hash.
+    """
+    options.setdefault("hide_parameters", True)
     is_sqlite = url.startswith("sqlite")
     if is_sqlite:
         # uvicorn answers requests from several threads, which SQLite refuses by default.
         options.setdefault("connect_args", {"check_same_thread": False})
+    else:
+        # Neon suspends an idle database after a few minutes and drops its connections. Testing a
+        # connection before use replaces a dropped one instead of failing the request; the timeout
+        # makes /health answer 503 within seconds when the database cannot be reached.
+        options.setdefault("pool_pre_ping", True)
+        options.setdefault("pool_recycle", 300)
+        options.setdefault("connect_args", {"connect_timeout": 3})
     engine = create_engine(url, **options)
 
     if is_sqlite:
