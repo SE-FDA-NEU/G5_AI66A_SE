@@ -108,7 +108,7 @@ jobs:
     env:
       # A throwaway database inside this job; the password exists only here.
       DATABASE_URL: postgresql://g5:ci-only@localhost:5432/expense
-      TEST_DATABASE_URL: postgresql://g5:ci-only@localhost:5432/expense
+      TEST_DATABASE_URL: postgresql+psycopg://g5:ci-only@localhost:5432/expense
     defaults:
       run:
         working-directory: backend
