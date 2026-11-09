@@ -1,0 +1,86 @@
+name: Live check
+
+# After CI deploys main, wait until the URL really runs that commit, then check the pages a
+# stranger opens first. It is the last box of the pipeline in docs/operations.md, section 2, and
+# the measurement of section 3: how long a merge takes to go live (lead time), and whether the
+# live app still answers. It is a workflow of its own, so CI itself stays under 2 minutes while
+# Render builds.
+#
+# Needs two repository variables (Settings → Secrets and variables → Actions → Variables):
+#   API_URL  https://<api>.onrender.com        APP_URL  https://<web>.onrender.com
+# They are public addresses, not secrets.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # Once a day as well, so a URL that went down between merges is noticed (section 3).
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    name: The URL runs main
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      API_URL: ${{ vars.API_URL }}
+      APP_URL: ${{ vars.APP_URL }}
+      # The commit CI just deployed; on a daily run, whatever main is now.
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - name: Wait until /health reports this commit
+        run: |
+          if [ -z "$API_URL" ] || [ -z "$APP_URL" ]; then
+            echo "::warning::API_URL or APP_URL is not set: nothing to check yet."
+            exit 0
+          fi
+          want="${SHA::7}"
+          start=$(date +%s)
+          # Render builds for a few minutes, and a free service asleep takes up to a minute to
+          # wake up, so keep asking for up to 12 minutes.
+          for i in $(seq 1 72); do
+            body=$(curl -s --max-time 60 "$API_URL/health" || true)
+            echo "$(date +%H:%M:%S) $body"
+            if echo "$body" | grep -q "\"version\":\"$want\""; then
+              if echo "$body" | grep -q '"status":"ok"'; then
+                echo "LIVE_SECONDS=$(( $(date +%s) - start ))" >> "$GITHUB_ENV"
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo "::error::$API_URL/health never reported $want with status ok."
+          exit 1
+
+      - name: The pages a stranger opens answer
+        if: env.API_URL != '' && env.APP_URL != ''
+        run: |
+          for path in / /login /register; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "$APP_URL$path")
+            echo "$APP_URL$path → $code"
+            [ "$code" = "200" ] || { echo "::error::$APP_URL$path answered $code"; exit 1; }
+          done
+          # The web app may call the API: CORS lets the web app's address in.
+          allowed=$(curl -s -o /dev/null -D - -X OPTIONS "$API_URL/api/auth/login" \
+            -H "Origin: $APP_URL" -H "Access-Control-Request-Method: POST" \
+            | grep -i '^access-control-allow-origin' || true)
+          echo "CORS: $allowed"
+          [ -n "$allowed" ] || { echo "::error::The API does not let $APP_URL call it (CORS_ORIGINS)."; exit 1; }
+
+      - name: Summary
+        if: env.API_URL != '' && env.APP_URL != ''
+        run: |
+          {
+            echo "### Live"
+            echo "- Commit \`${SHA::7}\` answers at $APP_URL"
+            if [ -n "$LIVE_SECONDS" ]; then
+              echo "- From the deploy to live: **$LIVE_SECONDS s** (see docs/operations.md, section 3)"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

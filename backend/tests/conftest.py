@@ -3,6 +3,11 @@
 
 Each test gets its own empty database in memory, so tests never touch backend/expense.db and
 never affect one another.
+
+With TEST_DATABASE_URL set to a PostgreSQL database, the same tests run there instead, as the
+production database does (ADR 4, docs/design.md). The tables are made once; each test runs inside
+one transaction that is rolled back at the end, so the tests still never see one another's rows.
+CI runs both, in the jobs "Python tests" and "Python tests on PostgreSQL".
 """
 
 import os
@@ -13,6 +18,7 @@ os.environ["DATABASE_URL"] = "sqlite://"
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
@@ -28,23 +34,57 @@ DEMO_EMAIL = "mai@example.com"
 DEMO_SECRET = "demo1234"
 
 
-@pytest.fixture()
-def db():
-    """An empty in-memory database with three categories.
+TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL", "")
 
-    StaticPool keeps one connection open, so the test and the app see the same in-memory database.
+
+def add_categories(session: Session) -> None:
+    session.add_all(
+        [
+            Category(name="Food", kind=KIND_SPENDING),
+            Category(name="Transport", kind=KIND_SPENDING),
+            Category(name="Salary", kind=KIND_INCOME),
+        ]
+    )
+    session.commit()
+
+
+@pytest.fixture(scope="session")
+def postgres_engine():
+    """One PostgreSQL engine for the whole run, its tables made from the models once."""
+    engine = make_engine(TEST_DATABASE_URL)
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    yield engine
+    Base.metadata.drop_all(engine)
+    engine.dispose()
+
+
+@pytest.fixture()
+def db(request):
+    """An empty database with three categories.
+
+    On SQLite, a new in-memory database per test; StaticPool keeps one connection open, so the
+    test and the app see the same database. On PostgreSQL, one transaction per test, rolled back
+    at the end: the app's own commits become savepoints inside it.
     """
+    if TEST_DATABASE_URL:
+        engine: Engine = request.getfixturevalue("postgres_engine")
+        connection = engine.connect()
+        outer = connection.begin()
+        session = Session(
+            bind=connection, expire_on_commit=False, join_transaction_mode="create_savepoint"
+        )
+        add_categories(session)
+        yield session
+        session.close()
+        outer.rollback()
+        connection.close()
+        return
+
     engine = make_engine("sqlite://", poolclass=StaticPool)
     Base.metadata.create_all(engine)
     with Session(engine, expire_on_commit=False) as session:
-        session.add_all(
-            [
-                Category(name="Food", kind=KIND_SPENDING),
-                Category(name="Transport", kind=KIND_SPENDING),
-                Category(name="Salary", kind=KIND_INCOME),
-            ]
-        )
-        session.commit()
+        add_categories(session)
         yield session
     engine.dispose()
 

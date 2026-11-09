@@ -8,7 +8,7 @@ from datetime import date
 
 import pytest
 from sqlalchemy import text
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DataError, IntegrityError
 
 from app.db.models import Budget, Debt, Transaction
 from app.db.repositories import category_repo
@@ -82,9 +82,14 @@ def debt(account, **fields) -> Debt:
     ids=["due before start", "no name", "61-character name", "amount 0", "unknown direction"],
 )
 def test_a_debt_that_breaks_br13_cannot_be_stored(db, account, fields):
-    """BR13 and BR5 hold in the table itself, even if a future endpoint forgets to check."""
+    """BR13 and BR5 hold in the table itself, even if a future endpoint forgets to check.
+
+    SQLite ignores the length of a VARCHAR, so there the CHECK refuses a 61-character name.
+    PostgreSQL refuses it one step earlier, as too long for VARCHAR(60), and says DataError.
+    Either way the row is not stored, which is the rule.
+    """
     db.add(debt(account, **fields))
-    with pytest.raises(IntegrityError):
+    with pytest.raises((IntegrityError, DataError)):
         db.commit()
 
 
