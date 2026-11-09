@@ -180,6 +180,27 @@ so each column is one test case.
 
 ---
 
+### 2.7 Running the app for others, Sprint 5 · `test_health.py`, `test_seed.py`
+
+What the URL needs (`docs/operations.md`, sections 1 and 3). The rule with a number, a
+`SECRET_KEY` of at least 32 characters, is tested on both sides.
+
+| ID | Story | Input | Expected result | Kind |
+| --- | --- | --- | --- | --- |
+| TC-79 | /health | the database answers | 200 `{"status":"ok","database":"ok","version":"dev"}` | normal |
+| TC-80 | /health | the database cannot be opened | 503, `"database":"unreachable"` | error |
+| TC-81 | the log | a sign-in, then `GET /api/transactions?limit=5` | one line each: method, path without the query string, status, time; the password and the email appear nowhere | normal |
+| TC-82 | the log | a request slower than `SLOW_REQUEST_MS` | logged as `WARNING` | edge |
+| TC-83 | production | the key of `.env.example`, a 31-character key, `CORS_ORIGINS=*`, a SQLite address | the API refuses to start and names the setting | error |
+| TC-84 | production | a 32-character key, one web address, Neon's `postgresql://` address | starts; the address uses psycopg; `/health` reports the commit's first 7 characters | edge |
+| TC-85 | US04 demo | seeded on 20/10, started again on 03/11 | the demo account has its 25 entries in November again | normal |
+| TC-86 | US04 demo | started again in the same month after a visitor added an entry | nothing is replaced; the visitor's entry is still there | edge |
+
+Every test also runs on PostgreSQL 16 in CI, in the job *Python tests on PostgreSQL*: set
+`TEST_DATABASE_URL` to a PostgreSQL database to run it there on a laptop. On its first run it found
+that PostgreSQL refuses a 61-character name as too long for `VARCHAR(60)` before the CHECK of BR13
+does; `test_a_debt_that_breaks_br13_cannot_be_stored` now accepts either refusal.
+
 ## 3. Automated tests
 
 Every test case of section 2 is a pytest test in `backend/tests/`, with its ID in the test's name,
@@ -211,13 +232,15 @@ root on a machine that has never seen the project (`.github/workflows/ci.yml`).
 | `test_correct_entry.py` | TC-46 to TC-52 | US06 | @Chidokato5376 |
 | `test_stats.py` | TC-53 to TC-65 | US10, US12 | @Chidokato5376 |
 | `test_debts.py` | TC-66 to TC-78 | US13 | @Chidokato5376 |
+| `test_health.py` | TC-79 to TC-84 | /health, the log, production settings | @levanduc36 (Sprint 5) |
+| `test_seed.py` | TC-85, TC-86 | the demo data at start-up | @nguyennhien2412 (Sprint 5) |
 | `test_repositories.py` | the queries behind US04 to US13 | | @nguyennhien2412 |
-| `test_database_rules.py`, `test_seed.py`, `test_errors.py`, `test_health.py` | the constraints, the demo data, the error shape | | @levanduc36, @nguyennhien2412 |
+| `test_database_rules.py`, `test_seed.py`, `test_errors.py` | the constraints, the demo data, the error shape | | @levanduc36, @nguyennhien2412 |
 
 Each member wrote tests in `backend/tests/` this sprint; the author of a service wrote its unit
 tests, and another member reviewed them in the pull request (`docs/process.md`, rule 6).
 
-**Result:** 177 passed in about 3 seconds, on Python 3.12, Windows 11. The app's Jest tests:
+**Result:** 177 passed in about 3 seconds, on Python 3.12, Windows 11 (M4). In Sprint 5: 188 passed, on SQLite and on PostgreSQL 16. The app's Jest tests:
 `npm test` in `mobile/`, 101 passed.
 
 ![The full output of pytest -v: 177 passed](images/testing/pytest-output.png)
