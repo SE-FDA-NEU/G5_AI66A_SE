@@ -1,0 +1,18 @@
+{
+  "name": "G5 Personal Expense Management App",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
+  },
+  "postCreateCommand": "pip install -r backend/requirements-dev.txt && cd backend && python -m scripts.seed_data && cd ../mobile && npm ci --no-audit --no-fund",
+  "forwardPorts": [8000, 8081],
+  "portsAttributes": {
+    "8000": { "label": "API" },
+    "8081": { "label": "Web app" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "charliermarsh.ruff"]
+    }
+  }
+}

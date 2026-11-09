@@ -3,6 +3,9 @@
     python -m scripts.seed_data            create the tables, then add the demo data once
     python -m scripts.seed_data --reset    empty the database and seed it again
 
+On Render, scripts/start.py calls seed() at every start, with refresh_stale_demo=True: the demo
+account's entries are made again when none of them falls in this month (refresh_demo_if_stale).
+
 The Alembic migrations run first, so the tables always match app/db/models. Running the script a
 second time adds nothing.
 
@@ -17,7 +20,7 @@ from datetime import date, timedelta
 
 from alembic import command
 from alembic.config import Config
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, make_url, select
 from sqlalchemy.orm import Session
 
 from app.core.config import BACKEND_DIR, settings
@@ -231,6 +234,35 @@ def add_debts(db: Session, account: User, today: date) -> None:
     db.commit()
 
 
+def refresh_demo_if_stale(db: Session, account: User, today: date) -> bool:
+    """Make the demo account's entries and debts again if none of its entries is this month's.
+
+    The demo is dated back from the day it was seeded. A server that runs for weeks would cross
+    into a new month and the overview, which shows this month only (US04), would open empty. Only
+    the demo account is touched; it is a shared test account, so what a visitor added to it in an
+    earlier month goes too (docs/operations.md, section 4). Answers whether it refreshed.
+    """
+    this_month = db.scalar(
+        select(func.count())
+        .select_from(Transaction)
+        .where(Transaction.user_id == account.id, Transaction.occurred_on >= today.replace(day=1))
+    )
+    if this_month:
+        return False
+    db.execute(delete(Transaction).where(Transaction.user_id == account.id))
+    db.execute(delete(Debt).where(Debt.user_id == account.id))
+    db.commit()
+    return True
+
+
+def describe(database_url: str) -> str:
+    """Where the database is, for a person to read: a SQLite path, or the address without the
+    password. Render keeps the log, so the Neon password must never be printed."""
+    if database_url.startswith("sqlite:///"):
+        return database_url.removeprefix("sqlite:///")
+    return make_url(database_url).render_as_string(hide_password=True)
+
+
 def count_rows(db: Session) -> RowCounts:
     def count(model) -> int:
         return db.scalar(select(func.count()).select_from(model)) or 0
@@ -238,7 +270,13 @@ def count_rows(db: Session) -> RowCounts:
     return RowCounts(count(Category), count(User), count(Transaction), count(Budget), count(Debt))
 
 
-def seed(database_url: str, *, reset: bool = False, today: date | None = None) -> RowCounts:
+def seed(
+    database_url: str,
+    *,
+    reset: bool = False,
+    today: date | None = None,
+    refresh_stale_demo: bool = False,
+) -> RowCounts:
     """Migrate the database at `database_url`, add the demo data once, and count the rows."""
     config = alembic_config(database_url)
     if reset:
@@ -250,6 +288,8 @@ def seed(database_url: str, *, reset: bool = False, today: date | None = None) -
         with Session(engine) as db:
             categories = add_categories(db)
             account = add_demo_account(db)
+            if refresh_stale_demo:
+                refresh_demo_if_stale(db, account, today or date.today())
             add_entries(db, account, categories, today or date.today())
             add_debts(db, account, today or date.today())
             return count_rows(db)
@@ -265,7 +305,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     counts = seed(settings.DATABASE_URL, reset=args.reset)
-    print(f"Database ready: {settings.DATABASE_URL.removeprefix('sqlite:///')}")
+    print(f"Database ready: {describe(settings.DATABASE_URL)}")
     print(f"  categories    {counts.categories}")
     print(f"  users         {counts.users}")
     print(f"  transactions  {counts.transactions}")
