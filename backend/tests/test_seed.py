@@ -110,3 +110,60 @@ def test_the_four_debts_owe_500000_overdue_and_are_owed_350000(database_url):
     for view in debts.items:
         assert view.debt.started_on <= today
         assert view.debt.due_on is None or view.debt.due_on >= view.debt.started_on
+
+
+def entries_this_month(database_url: str, today: date) -> int:
+    engine = make_engine(database_url)
+    with Session(engine) as db:
+        count = db.scalar(
+            select(func.count())
+            .select_from(Transaction)
+            .where(Transaction.occurred_on >= today.replace(day=1))
+        )
+    engine.dispose()
+    return count
+
+
+def test_tc85_at_start_the_demo_is_dated_again_in_a_new_month(database_url):
+    """Seeded on 20/10; the server starts again on 03/11 and the overview must not be empty."""
+    seed(database_url, today=date(2026, 10, 20))
+    assert entries_this_month(database_url, date(2026, 11, 3)) == 0
+
+    counts = seed(database_url, today=date(2026, 11, 3), refresh_stale_demo=True)
+
+    assert counts == EXPECTED
+    assert entries_this_month(database_url, date(2026, 11, 3)) == 25
+
+
+def test_tc86_at_start_a_demo_with_this_months_entries_is_left_alone(database_url):
+    """The same month: what a visitor added to the demo account is still there after a restart."""
+    seed(database_url, today=date(2026, 11, 3))
+    engine = make_engine(database_url)
+    with Session(engine) as db:
+        account = db.scalar(select(User).where(User.email == DEMO_EMAIL))
+        food = db.scalar(select(Transaction.category_id).limit(1))
+        db.add(
+            Transaction(
+                user_id=account.id,
+                kind="expense",
+                amount=35_000,
+                note="tra sua",
+                occurred_on=date(2026, 11, 4),
+                category_id=food,
+            )
+        )
+        db.commit()
+    engine.dispose()
+
+    counts = seed(database_url, today=date(2026, 11, 9), refresh_stale_demo=True)
+
+    assert counts.transactions == EXPECTED.transactions + 1
+
+
+def test_the_address_printed_never_shows_the_password():
+    from scripts.seed_data import describe
+
+    shown = describe("postgresql+psycopg://mai:s3cret@ep-x.neon.tech/expense")
+
+    assert "s3cret" not in shown
+    assert "ep-x.neon.tech/expense" in shown
