@@ -6,14 +6,16 @@ from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.errors import register_error_handlers
-from app.routers import auth, categories, debts, stats, summary, transactions, users
+from app.core.request_log import register_request_log
+from app.routers import auth, categories, debts, health, stats, summary, transactions, users
 
 app = FastAPI(
     title=settings.APP_NAME,
-    version="0.4.0",
+    version="1.0.0",
     description="API of the Personal Expense Management App, Team 05 (AI66A).",
 )
 register_error_handlers(app)
+register_request_log(app)
 
 # The Expo web page is served from another port, so the browser needs CORS to call the API.
 # Sign-in travels as a bearer token, not a cookie, so credentials stay switched off.
@@ -31,11 +33,7 @@ def root() -> RedirectResponse:
     return RedirectResponse(url="/docs")
 
 
-@app.get("/health", tags=["system"], summary="Check that the API is running")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
-
-
+app.include_router(health.router)
 app.include_router(users.router, prefix=settings.API_PREFIX)
 app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(transactions.router, prefix=settings.API_PREFIX)
