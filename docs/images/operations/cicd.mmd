@@ -1,0 +1,14 @@
+flowchart TB
+  dev["Step 1: git push, open a pull request"]
+  dev --> py["Python tests<br/>install · ruff · migrations<br/>pytest · pytest from root"]
+  dev --> pg["Python tests on PostgreSQL<br/>migrations · pytest<br/>seed twice"]
+  dev --> node["Node build and tests<br/>npm ci · Jest<br/>expo export"]
+  dev --> sec["No secrets committed<br/>credential scan<br/>no .env or .db"]
+  py & pg & node & sec --> gate{"Step 2: CI, about 1 minute<br/>all four green?"}
+  gate -- "no: merge button locked" --> fix["fix on the same branch, push again"]
+  fix --> dev
+  gate -- "yes, and 1 approval" --> merge["Step 3: merge into protected main"]
+  merge --> ci2["Step 4: the four checks again, on main"]
+  ci2 -- "all green" --> deploy["Step 5: Deploy to Render, two deploy hooks"]
+  deploy --> render["Step 6: Render builds the API and the web app<br/>and switches only when /health answers 200"]
+  render --> live["Step 7: Live check<br/>/health reports the commit; /, /login, /register answer"]
