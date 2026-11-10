@@ -106,3 +106,37 @@ Actions tab), the four DORA metrics of week 13:
 
 `main` has never been red, because a red pull request cannot be merged. Our failures happen on
 branches, where they cost nobody else anything.
+
+## 3. Monitoring
+
+**What the app logs.** One line per request, written by `app/core/request_log.py`:
+
+```
+2026-11-09 10:12:03 INFO app.requests POST /api/auth/login 200 263ms
+2026-11-09 10:12:04 WARNING app.requests GET /api/stats/months 200 1240ms
+```
+
+the method, the path without its query string, the status and the time. A crash adds its stack
+trace. At start-up, the database address without its password and the row counts.
+
+**What it never logs.** Request bodies (a sign-in body holds the password), headers (the
+`Authorization` header holds the token), query strings, email addresses and the values sent with a
+query: SQLAlchemy is told to hide them (`hide_parameters`), and uvicorn's own access log is off.
+TC-81 fails if a password or an email reaches the log.
+
+**Where to read it.** Render → the API service → *Logs*, searchable, kept for 7 days on the free
+plan. The Actions tab keeps every CI, deploy and live-check run.
+
+**What `/health` checks.** That the API runs and the database answers `SELECT 1`, within 3 seconds
+per attempt: 200 with `{"status":"ok","database":"ok","version":"<commit>"}`, or 503 with
+`"database":"unreachable"`. Render calls it before switching to a new version.
+
+**The two numbers we watch.**
+
+| Number | Healthy | How we would notice it going bad |
+| --- | --- | --- |
+| Error rate: share of requests answered 5xx | 0; any 500 is a bug to open | search the Render log for ` 500 `; a 503 from `/health` fails the Live check, and GitHub emails whoever merged |
+| Response time | under 300 ms; a sign-in takes longer on purpose (PBKDF2, BR2) | a request over `SLOW_REQUEST_MS` (1000 ms) is logged as `WARNING`; search the log for it |
+
+The Live check also runs every morning at 08:00 Vietnam time, so the URL going down between two
+merges is noticed the same day, not by the instructor.
