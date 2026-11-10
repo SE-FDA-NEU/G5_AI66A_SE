@@ -7,9 +7,9 @@ could look after it. Team 05 (G5_AI66A), Sprint 5.
 
 | What | Where |
 | --- | --- |
-| The app, for everyone | **https://g5-expense-web.onrender.com** |
-| The API and its documentation | https://g5-expense-api.onrender.com · https://g5-expense-api.onrender.com/docs |
-| Health | https://g5-expense-api.onrender.com/health |
+| The app, for everyone | **⟦APP_URL⟧** |
+| The API and its documentation | ⟦API_URL⟧ · ⟦API_URL⟧/docs |
+| Health | ⟦API_URL⟧/health |
 | Platform | Render, free plan: a Web Service for the API, a Static Site for the web app |
 | Database | PostgreSQL 16 on Neon, free plan (ADR 4, `docs/design.md`) |
 | Test account | `mai@example.com` / `demo1234`, a test value seeded at start-up, never a real password |
@@ -33,10 +33,10 @@ could look after it. Team 05 (G5_AI66A), Sprint 5.
 | --- | --- | --- |
 | API, Web Service | Root directory · Build · Start | `backend` · `pip install -r requirements.txt` · `python -m scripts.start` |
 | | Health check path · Auto-Deploy | `/health` · **Off** (CI deploys through the hook) |
-| | Environment | `ENVIRONMENT=production`, `DATABASE_URL` (Neon), `SECRET_KEY` (random, 64 hex), `CORS_ORIGINS=https://g5-expense-web.onrender.com`, `PYTHON_VERSION=3.12.12` |
+| | Environment | `ENVIRONMENT=production`, `DATABASE_URL` (Neon), `SECRET_KEY` (random, 64 hex), `CORS_ORIGINS=⟦APP_URL⟧`, `PYTHON_VERSION=3.12.12` |
 | Web, Static Site | Root directory · Build · Publish | `mobile` · `npm ci && npm run build` · `dist` |
 | | Rewrite · Auto-Deploy | `/*` → `/index.html` · **Off** |
-| | Environment | `EXPO_PUBLIC_API_URL=https://g5-expense-api.onrender.com/api`, `NODE_VERSION=22` |
+| | Environment | `EXPO_PUBLIC_API_URL=⟦API_URL⟧/api`, `NODE_VERSION=22` |
 | GitHub | Secrets · Variables | `RENDER_DEPLOY_HOOK_API`, `RENDER_DEPLOY_HOOK_WEB` · `API_URL`, `APP_URL` |
 
 **Rolling back.** If a release breaks something:
@@ -49,3 +49,60 @@ could look after it. Team 05 (G5_AI66A), Sprint 5.
 
 A release that cannot reach the database never goes live: its `/health` answers 503, and Render
 keeps the previous version.
+
+## 2. The CI pipeline
+
+```mermaid
+flowchart TB
+  dev["Step 1: git push, open a pull request"]
+  dev --> py["Python tests<br/>install · ruff · migrations<br/>pytest · pytest from root"]
+  dev --> pg["Python tests on PostgreSQL<br/>migrations · pytest<br/>seed twice"]
+  dev --> node["Node build and tests<br/>npm ci · Jest<br/>expo export"]
+  dev --> sec["No secrets committed<br/>credential scan<br/>no .env or .db"]
+  py & pg & node & sec --> gate{"Step 2: CI, about 1 minute<br/>all four green?"}
+  gate -- "no: merge button locked" --> fix["fix on the same branch, push again"]
+  fix --> dev
+  gate -- "yes, and 1 approval" --> merge["Step 3: merge into protected main"]
+  merge --> ci2["Step 4: the four checks again, on main"]
+  ci2 -- "all green" --> deploy["Step 5: Deploy to Render, two deploy hooks"]
+  deploy --> render["Step 6: Render builds the API and the web app<br/>and switches only when /health answers 200"]
+  render --> live["Step 7: Live check<br/>/health reports the commit; /, /login, /register answer"]
+```
+
+| Job · step | What it checks | Time |
+| --- | --- | --- |
+| **Python tests** · install | `requirements-dev.txt` installs on a clean Python 3.12, from the pip cache | ~5 s |
+| · Lint | `ruff check`: style and errors, before any test runs (fail fast) | 1 s |
+| · Migrations match the models | `alembic upgrade head` then `alembic check` on a new SQLite file | 2 s |
+| · Test | every pytest test, with coverage; the count goes to the run's summary | ~10 s |
+| · One command from the root | `pytest` from the clone's root finds every test, as `docs/SETUP.md` says | ~10 s |
+| **Python tests on PostgreSQL** | the migrations up and down, every test and the seed on a real PostgreSQL 16, as on the URL | ~40 s |
+| **Node build and tests** | `npm ci` from the lock file, 101 Jest tests, and the web build Render runs | ~35 s |
+| **No secrets committed** | no key, token, Neon password, `.env` or database file in the history | ~5 s |
+| **Deploy to Render** | push to `main` only, after the four above: calls the deploy hooks | ~5 s |
+
+The jobs run side by side, so a run takes as long as its slowest job: **about one minute** (median
+46 s on `main` in Sprint 4, longest 115 s since Sprint 2), under the two to three minutes the week
+13 lecture sets. Each check job stops after **3 minutes**, so a hung test turns red rather than
+keeping a pull request waiting. A newer push cancels the run still going on the same branch.
+
+Latest green run on `main`: ⟦RUN_URL⟧.
+
+`main` is protected by two rulesets (Settings → Rules): a pull request with one approval, and the
+checks *Python tests*, *Python tests on PostgreSQL*, *Node build and tests* and *No secrets
+committed* green. Force pushes and deleting `main` are blocked.
+
+![The rulesets on main](images/operations/rulesets.png)
+
+**How fast and how safely we ship**, measured from our own history (`git log --merges`, the
+Actions tab), the four DORA metrics of week 13:
+
+| Sprint | Deploy frequency (merges into `main` per week) | Lead time (PR opened → merged, median) | Change failure rate (runs on `main` that went red) | Time to restore |
+| --- | --- | --- | --- | --- |
+| 1 | 8.0 | 6.2 h | 0 of 16 | — |
+| 2 | 8.5 | 1.1 h | 0 of 17 | — |
+| 3 | 10.5 | 3.4 h | 0 of 21 | — |
+| 4 | 11.0 | 0.5 h | 0 of 22 | — |
+
+`main` has never been red, because a red pull request cannot be merged. Our failures happen on
+branches, where they cost nobody else anything.
