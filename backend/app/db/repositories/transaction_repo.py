@@ -173,3 +173,51 @@ def totals_by_year(db: Session, user_id: int) -> dict[int, MonthTotals]:
         int(number): MonthTotals(income=income, spending=spending, count=count)
         for number, income, spending, count in rows
     }
+
+
+def totals_by_category(
+    db: Session, user_id: int, *, since: date | None = None
+) -> dict[int | None, tuple[int, int]]:
+    """Money in each category, and how many entries, keyed by category id (US17).
+
+    From `since` onwards, or over all time when `since` is None. Entries with no kind chosen
+    (BR6) are keyed None.
+    """
+    query = (
+        select(Transaction.category_id, func.sum(Transaction.amount), func.count())
+        .where(Transaction.user_id == user_id)
+        .group_by(Transaction.category_id)
+    )
+    if since is not None:
+        query = query.where(Transaction.occurred_on >= since)
+    return {category_id: (int(total), count) for category_id, total, count in db.execute(query)}
+
+
+def list_in_category(
+    db: Session, user_id: int, category_id: int, *, limit: int
+) -> list[Transaction]:
+    """The account's newest entries of one category, newest first (US17)."""
+    return list(
+        db.scalars(
+            select(Transaction)
+            .where(Transaction.user_id == user_id, Transaction.category_id == category_id)
+            .order_by(Transaction.occurred_on.desc(), Transaction.id.desc())
+            .limit(limit)
+        )
+    )
+
+
+def category_totals_by_month(
+    db: Session, user_id: int, category_id: int, *, first_day: date
+) -> dict[str, int]:
+    """Money in one category for each month from `first_day` on, keyed "YYYY-MM" (US17)."""
+    year = extract("year", Transaction.occurred_on)
+    month = extract("month", Transaction.occurred_on)
+    rows = db.execute(
+        select(year, month, func.sum(Transaction.amount))
+        .where(Transaction.user_id == user_id, Transaction.category_id == category_id)
+        .where(Transaction.occurred_on >= first_day)
+        .group_by(year, month)
+    ).all()
+    return {f"{int(y):04d}-{int(m):02d}": int(total) for y, m, total in rows}
+
