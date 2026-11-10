@@ -7,9 +7,9 @@ could look after it. Team 05 (G5_AI66A), Sprint 5.
 
 | What | Where |
 | --- | --- |
-| The app, for everyone | **⟦APP_URL⟧** |
-| The API and its documentation | ⟦API_URL⟧ · ⟦API_URL⟧/docs |
-| Health | ⟦API_URL⟧/health |
+| The app, for everyone | **https://g5-expense-web.onrender.com** |
+| The API and its documentation | https://g5-expense-api.onrender.com · https://g5-expense-api.onrender.com/docs |
+| Health | https://g5-expense-api.onrender.com/health |
 | Platform | Render, free plan: a Web Service for the API, a Static Site for the web app |
 | Database | PostgreSQL 16 on Neon, free plan (ADR 4, `docs/design.md`) |
 | Test account | `mai@example.com` / `demo1234`, a test value seeded at start-up, never a real password |
@@ -33,10 +33,10 @@ could look after it. Team 05 (G5_AI66A), Sprint 5.
 | --- | --- | --- |
 | API, Web Service | Root directory · Build · Start | `backend` · `pip install -r requirements.txt` · `python -m scripts.start` |
 | | Health check path · Auto-Deploy | `/health` · **Off** (CI deploys through the hook) |
-| | Environment | `ENVIRONMENT=production`, `DATABASE_URL` (Neon), `SECRET_KEY` (random, 64 hex), `CORS_ORIGINS=⟦APP_URL⟧`, `PYTHON_VERSION=3.12.12` |
+| | Environment | `ENVIRONMENT=production`, `DATABASE_URL` (Neon), `SECRET_KEY` (random, 64 hex), `CORS_ORIGINS=https://g5-expense-web.onrender.com`, `PYTHON_VERSION=3.12.12` |
 | Web, Static Site | Root directory · Build · Publish | `mobile` · `npm ci && npm run build` · `dist` |
 | | Rewrite · Auto-Deploy | `/*` → `/index.html` · **Off** |
-| | Environment | `EXPO_PUBLIC_API_URL=⟦API_URL⟧/api`, `NODE_VERSION=22` |
+| | Environment | `EXPO_PUBLIC_API_URL=https://g5-expense-api.onrender.com/api`, `NODE_VERSION=22` |
 | GitHub | Secrets · Variables | `RENDER_DEPLOY_HOOK_API`, `RENDER_DEPLOY_HOOK_WEB` · `API_URL`, `APP_URL` |
 
 **Rolling back.** If a release breaks something:
@@ -86,7 +86,7 @@ The jobs run side by side, so a run takes as long as its slowest job: **about on
 13 lecture sets. Each check job stops after **3 minutes**, so a hung test turns red rather than
 keeping a pull request waiting. A newer push cancels the run still going on the same branch.
 
-Latest green run on `main`: ⟦RUN_URL⟧.
+Latest green run on `main`: https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/runs/42853107259.
 
 `main` is protected by two rulesets (Settings → Rules): a pull request with one approval, and the
 checks *Python tests*, *Python tests on PostgreSQL*, *Node build and tests* and *No secrets
