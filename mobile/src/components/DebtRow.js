@@ -8,12 +8,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { dueState } from '../utils/debts';
 import { todayIso } from '../utils/entryForm';
 import { formatDate, formatDong } from '../utils/format';
 
 export default function DebtRow({ debt, onSettle, onRemove, busy }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
   const [confirming, setConfirming] = useState(false);
   const borrowed = debt.direction === 'borrowed';
@@ -86,56 +87,57 @@ export default function DebtRow({ debt, onSettle, onRemove, busy }) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    backgroundColor: colors.surface,
-    borderLeftColor: colors.border,
-    borderLeftWidth: 4,
-    borderRadius: radius.sm,
-    marginBottom: spacing.sm,
-    padding: spacing.md,
-  },
-  rowOverdue: { borderLeftColor: colors.danger },
-  rowSettled: { opacity: 0.75 },
-  top: { alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'space-between' },
-  left: { flex: 1, paddingRight: spacing.sm },
-  person: { color: colors.text, fontSize: 16, fontWeight: '700' },
-  direction: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
-  amount: { fontSize: 16, fontWeight: '700' },
-  owe: { color: colors.spent },
-  owed: { color: colors.received },
-  bottom: { alignItems: 'center', flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
-  badge: { borderRadius: radius.md, paddingHorizontal: spacing.sm, paddingVertical: 2 },
-  badgeText: { fontSize: 12, fontWeight: '600' },
-  muted: { backgroundColor: colors.background },
-  mutedText: { color: colors.textMuted },
-  danger: { backgroundColor: colors.dangerLight },
-  dangerText: { color: colors.danger },
-  warning: { backgroundColor: colors.warningLight },
-  warningText: { color: colors.warning },
-  note: { color: colors.textMuted, flex: 1, fontSize: 13 },
-  actions: { flexDirection: 'row', gap: spacing.sm, justifyContent: 'flex-end', marginTop: spacing.sm },
-  confirm: {
-    alignItems: 'center',
-    backgroundColor: colors.dangerLight,
-    borderRadius: radius.sm,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    marginTop: spacing.sm,
-    padding: spacing.sm,
-  },
-  confirmText: { color: colors.danger, flex: 1, fontSize: 14, fontWeight: '700' },
-  small: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  smallText: { color: colors.text, fontSize: 13, fontWeight: '600' },
-  smallPrimary: { backgroundColor: colors.primary, borderColor: colors.primary },
-  smallPrimaryText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
-  smallDanger: { backgroundColor: colors.danger, borderColor: colors.danger },
-  smallDangerText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    row: {
+      backgroundColor: colors.surface,
+      borderLeftColor: colors.border,
+      borderLeftWidth: 4,
+      borderRadius: radius.sm,
+      marginBottom: spacing.sm,
+      padding: spacing.md,
+    },
+    rowOverdue: { borderLeftColor: colors.danger },
+    rowSettled: { opacity: 0.75 },
+    top: { alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'space-between' },
+    left: { flex: 1, paddingRight: spacing.sm },
+    person: { color: colors.text, fontSize: 16, fontWeight: '700' },
+    direction: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
+    amount: { fontSize: 16, fontWeight: '700' },
+    owe: { color: colors.spent },
+    owed: { color: colors.received },
+    bottom: { alignItems: 'center', flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
+    badge: { borderRadius: radius.md, paddingHorizontal: spacing.sm, paddingVertical: 2 },
+    badgeText: { fontSize: 12, fontWeight: '600' },
+    muted: { backgroundColor: colors.background },
+    mutedText: { color: colors.textMuted },
+    danger: { backgroundColor: colors.dangerLight },
+    dangerText: { color: colors.danger },
+    warning: { backgroundColor: colors.warningLight },
+    warningText: { color: colors.warning },
+    note: { color: colors.textMuted, flex: 1, fontSize: 13 },
+    actions: { flexDirection: 'row', gap: spacing.sm, justifyContent: 'flex-end', marginTop: spacing.sm },
+    confirm: {
+      alignItems: 'center',
+      backgroundColor: colors.dangerLight,
+      borderRadius: radius.sm,
+      flexDirection: 'row',
+      gap: spacing.sm,
+      marginTop: spacing.sm,
+      padding: spacing.sm,
+    },
+    confirmText: { color: colors.danger, flex: 1, fontSize: 14, fontWeight: '700' },
+    small: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+    },
+    smallText: { color: colors.text, fontSize: 13, fontWeight: '600' },
+    smallPrimary: { backgroundColor: colors.primary, borderColor: colors.primary },
+    smallPrimaryText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
+    smallDanger: { backgroundColor: colors.danger, borderColor: colors.danger },
+    smallDangerText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
+  });

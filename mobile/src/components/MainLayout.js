@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, spacing } from '../theme';
+import { useStyles, spacing } from '../theme';
 
 export const WIDE = 768;
 
@@ -20,6 +20,7 @@ const TABS = [
 ];
 
 export default function MainLayout({ current, children }) {
+  const styles = useStyles(makeStyles);
   const navigation = useNavigation();
   const { t } = useLanguage();
   const { width } = useWindowDimensions();
@@ -56,39 +57,40 @@ export default function MainLayout({ current, children }) {
   );
 }
 
-const styles = StyleSheet.create({
-  frame: { backgroundColor: colors.background, flex: 1 },
-  content: { flex: 1 },
-  strip: {
-    backgroundColor: colors.surface,
-    borderBottomColor: colors.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.md,
-  },
-  stripTab: {
-    borderBottomColor: 'transparent',
-    borderBottomWidth: 3,
-    marginHorizontal: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  bottom: {
-    backgroundColor: colors.surface,
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    flexDirection: 'row',
-  },
-  bottomTab: {
-    alignItems: 'center',
-    borderTopColor: 'transparent',
-    borderTopWidth: 3,
-    flex: 1,
-    paddingVertical: spacing.xs,
-  },
-  selected: { borderBottomColor: colors.primary, borderTopColor: colors.primary },
-  icon: { color: colors.textMuted, fontSize: 18 },
-  tabText: { color: colors.textMuted, fontSize: 14, fontWeight: '600' },
-  textSelected: { color: colors.primary },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    frame: { backgroundColor: colors.background, flex: 1 },
+    content: { flex: 1 },
+    strip: {
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border,
+      borderBottomWidth: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      paddingHorizontal: spacing.md,
+    },
+    stripTab: {
+      borderBottomColor: 'transparent',
+      borderBottomWidth: 3,
+      marginHorizontal: spacing.sm,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    bottom: {
+      backgroundColor: colors.surface,
+      borderTopColor: colors.border,
+      borderTopWidth: 1,
+      flexDirection: 'row',
+    },
+    bottomTab: {
+      alignItems: 'center',
+      borderTopColor: 'transparent',
+      borderTopWidth: 3,
+      flex: 1,
+      paddingVertical: spacing.xs,
+    },
+    selected: { borderBottomColor: colors.primary, borderTopColor: colors.primary },
+    icon: { color: colors.textMuted, fontSize: 18 },
+    tabText: { color: colors.textMuted, fontSize: 14, fontWeight: '600' },
+    textSelected: { color: colors.primary },
+  });

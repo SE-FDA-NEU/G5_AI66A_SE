@@ -1,11 +1,13 @@
 /**
  * Which screens exist. Signed out, only /login and /register; signed in, only the screens of an
  * account. A signed-in screen typed into the address bar without a session lands on /login
- * (BR4 as navigation), and signing in or creating an account lands on / by itself.
+ * (BR4 as navigation), and signing in or creating an account lands on / by itself. The top bar
+ * and the space behind each screen take the palette in use, light or dark (US19).
  */
 
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import LanguageSwitch from '../components/LanguageSwitch';
@@ -19,27 +21,49 @@ import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import StatsScreen from '../screens/StatsScreen';
-import { colors } from '../theme';
+import { useTheme } from '../theme';
 import { linking } from './linking';
 
 const Stack = createNativeStackNavigator();
 
-const screenOptions = {
-  headerStyle: { backgroundColor: colors.primary },
-  headerTintColor: colors.textInverse,
-  headerTitleStyle: { fontWeight: '600' },
-  // The language switch sits in the top bar of every screen (US11).
-  headerRight: () => <LanguageSwitch />,
-};
-
 export default function AppNavigator() {
   const { status } = useAuth();
   const { t } = useLanguage();
+  const { colors, scheme } = useTheme();
+  const signedIn = status === 'signed-in';
+
+  const screenOptions = useMemo(
+    () => ({
+      headerStyle: { backgroundColor: colors.header },
+      headerTintColor: colors.headerText,
+      headerTitleStyle: { fontWeight: '600' },
+      // The language switch sits in the top bar of every screen (US11).
+      headerRight: () => <LanguageSwitch />,
+      contentStyle: { backgroundColor: colors.background },
+    }),
+    [colors],
+  );
+
+  // The navigator's own colours (the space behind a screen while it slides in) follow the theme.
+  const navigationTheme = useMemo(() => {
+    const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        primary: colors.primary,
+        background: colors.background,
+        card: colors.header,
+        text: colors.headerText,
+        border: colors.border,
+      },
+    };
+  }, [colors, scheme]);
 
   // While the stored token is read, show a spinner rather than flash the sign-in screen.
   if (status === 'loading') {
     return (
-      <View style={styles.splash}>
+      <View style={[styles.splash, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -51,9 +75,9 @@ export default function AppNavigator() {
   };
 
   return (
-    <NavigationContainer linking={linking} documentTitle={documentTitle}>
+    <NavigationContainer linking={linking} documentTitle={documentTitle} theme={navigationTheme}>
       <Stack.Navigator screenOptions={screenOptions}>
-        {status === 'signed-in' ? (
+        {signedIn ? (
           <>
             <Stack.Screen
               name="Overview"
@@ -106,10 +130,5 @@ export default function AppNavigator() {
 }
 
 const styles = StyleSheet.create({
-  splash: {
-    alignItems: 'center',
-    backgroundColor: colors.background,
-    flex: 1,
-    justifyContent: 'center',
-  },
+  splash: { alignItems: 'center', flex: 1, justifyContent: 'center' },
 });

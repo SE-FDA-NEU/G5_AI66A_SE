@@ -13,14 +13,17 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { api } from '../api/client';
 import EntryForm from '../components/EntryForm';
 import ErrorMessage from '../components/ErrorMessage';
-import { formStyles } from '../components/formStyles';
+import { useFormStyles } from '../components/formStyles';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 import { formFromEntry } from '../utils/entryForm';
 
 export default function EditEntryScreen({ navigation, route }) {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
+  const formStyles = useFormStyles();
   const { signOut } = useAuth();
   const { t } = useLanguage();
   const id = route.params?.id;
@@ -143,48 +146,49 @@ export default function EditEntryScreen({ navigation, route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  center: {
-    alignItems: 'center',
-    backgroundColor: colors.background,
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
-  },
-  centerText: { color: colors.textMuted, fontSize: 15, marginTop: spacing.md },
-  narrow: { maxWidth: 480, width: '100%' },
-  danger: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    marginTop: spacing.lg,
-    paddingTop: spacing.md,
-  },
-  removeLink: { alignItems: 'center', padding: spacing.sm },
-  removeText: { color: colors.danger, fontSize: 15, fontWeight: '600' },
-  confirm: {
-    backgroundColor: colors.dangerLight,
-    borderRadius: radius.sm,
-    padding: spacing.md,
-  },
-  confirmTitle: { color: colors.danger, fontSize: 16, fontWeight: '700' },
-  confirmHint: { color: colors.text, fontSize: 14, marginTop: spacing.xs },
-  confirmRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  keep: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flex: 1,
-    padding: spacing.sm,
-  },
-  keepText: { color: colors.text, fontSize: 15, fontWeight: '600' },
-  delete: {
-    alignItems: 'center',
-    backgroundColor: colors.danger,
-    borderRadius: radius.sm,
-    flex: 1,
-    padding: spacing.sm,
-  },
-  deleteText: { color: colors.textInverse, fontSize: 15, fontWeight: '700' },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    center: {
+      alignItems: 'center',
+      backgroundColor: colors.background,
+      flex: 1,
+      justifyContent: 'center',
+      padding: spacing.lg,
+    },
+    centerText: { color: colors.textMuted, fontSize: 15, marginTop: spacing.md },
+    narrow: { maxWidth: 480, width: '100%' },
+    danger: {
+      borderTopColor: colors.border,
+      borderTopWidth: 1,
+      marginTop: spacing.lg,
+      paddingTop: spacing.md,
+    },
+    removeLink: { alignItems: 'center', padding: spacing.sm },
+    removeText: { color: colors.danger, fontSize: 15, fontWeight: '600' },
+    confirm: {
+      backgroundColor: colors.dangerLight,
+      borderRadius: radius.sm,
+      padding: spacing.md,
+    },
+    confirmTitle: { color: colors.danger, fontSize: 16, fontWeight: '700' },
+    confirmHint: { color: colors.text, fontSize: 14, marginTop: spacing.xs },
+    confirmRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
+    keep: {
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flex: 1,
+      padding: spacing.sm,
+    },
+    keepText: { color: colors.text, fontSize: 15, fontWeight: '600' },
+    delete: {
+      alignItems: 'center',
+      backgroundColor: colors.danger,
+      borderRadius: radius.sm,
+      flex: 1,
+      padding: spacing.sm,
+    },
+    deleteText: { color: colors.textInverse, fontSize: 15, fontWeight: '700' },
+  });

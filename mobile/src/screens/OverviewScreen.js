@@ -35,13 +35,15 @@ import OverviewCards from '../components/OverviewCards';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 
 export const RECENT_COUNT = 20;
 // From this width the overview has two columns.
 const TWO_COLUMNS = 900;
 
 export default function OverviewScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
   const { user, signOut, refreshUser } = useAuth();
   const { t } = useLanguage();
   const { width } = useWindowDimensions();
@@ -208,59 +210,60 @@ export default function OverviewScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { backgroundColor: colors.background, flex: 1 },
-  list: { alignSelf: 'center', maxWidth: 640, padding: spacing.md, width: '100%' },
-  wide: {
-    alignItems: 'flex-start',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    gap: spacing.lg,
-    maxWidth: 1200,
-    padding: spacing.md,
-    width: '100%',
-  },
-  side: { width: 400 },
-  main: { flex: 1, minWidth: 0 },
-  center: {
-    alignItems: 'center',
-    backgroundColor: colors.background,
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
-  },
-  centerText: { color: colors.textMuted, fontSize: 15, marginTop: spacing.md },
-  narrow: { maxWidth: 480, width: '100%' },
-  accountRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm,
-  },
-  account: { color: colors.textMuted, fontSize: 14 },
-  link: { color: colors.primary, fontSize: 14, fontWeight: '600' },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: radius.sm,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
-  primaryText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
-  titleRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.md,
-  },
-  count: { color: colors.text, flex: 1, fontSize: 16, fontWeight: '700' },
-  refreshButton: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  refreshButtonBusy: { opacity: 0.6 },
-  refreshText: { color: colors.textInverse, fontSize: 14, fontWeight: '600' },
-  empty: { color: colors.textMuted, marginTop: spacing.lg, textAlign: 'center' },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    screen: { backgroundColor: colors.background, flex: 1 },
+    list: { alignSelf: 'center', maxWidth: 640, padding: spacing.md, width: '100%' },
+    wide: {
+      alignItems: 'flex-start',
+      alignSelf: 'center',
+      flexDirection: 'row',
+      gap: spacing.lg,
+      maxWidth: 1200,
+      padding: spacing.md,
+      width: '100%',
+    },
+    side: { width: 400 },
+    main: { flex: 1, minWidth: 0 },
+    center: {
+      alignItems: 'center',
+      backgroundColor: colors.background,
+      flex: 1,
+      justifyContent: 'center',
+      padding: spacing.lg,
+    },
+    centerText: { color: colors.textMuted, fontSize: 15, marginTop: spacing.md },
+    narrow: { maxWidth: 480, width: '100%' },
+    accountRow: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: spacing.sm,
+    },
+    account: { color: colors.textMuted, fontSize: 14 },
+    link: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+    primaryButton: {
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: radius.sm,
+      marginBottom: spacing.md,
+      padding: spacing.md,
+    },
+    primaryText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+    titleRow: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: spacing.md,
+    },
+    count: { color: colors.text, flex: 1, fontSize: 16, fontWeight: '700' },
+    refreshButton: {
+      backgroundColor: colors.primary,
+      borderRadius: radius.sm,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    refreshButtonBusy: { opacity: 0.6 },
+    refreshText: { color: colors.textInverse, fontSize: 14, fontWeight: '600' },
+    empty: { color: colors.textMuted, marginTop: spacing.lg, textAlign: 'center' },
+  });

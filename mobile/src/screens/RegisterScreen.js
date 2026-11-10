@@ -18,13 +18,15 @@ import {
 
 import { api } from '../api/client';
 import ErrorMessage from '../components/ErrorMessage';
-import { formStyles as styles } from '../components/formStyles';
+import { useFormStyles } from '../components/formStyles';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors } from '../theme';
+import { useTheme } from '../theme';
 
 export default function RegisterScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useFormStyles();
   const { signUp } = useAuth();
   const { t } = useLanguage();
   const [email, setEmail] = useState('');

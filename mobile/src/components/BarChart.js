@@ -10,13 +10,14 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { barHeight, chartMax, periodLabel, shortAmount } from '../utils/chart';
 import { formatDong } from '../utils/format';
 
 const HEIGHT = 160;
 
 export default function BarChart({ periods, selected, onSelect, busiest, height = HEIGHT }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
   const max = chartMax(periods);
 
@@ -75,32 +76,33 @@ export default function BarChart({ periods, selected, onSelect, busiest, height 
   );
 }
 
-const styles = StyleSheet.create({
-  chart: {
-    alignItems: 'flex-end',
-    borderBottomColor: colors.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    gap: 2,
-  },
-  group: {
-    alignItems: 'center',
-    borderRadius: radius.sm,
-    flex: 1,
-    minWidth: 0,
-    paddingBottom: spacing.xs,
-    paddingTop: spacing.xs,
-  },
-  groupSelected: { backgroundColor: colors.primaryLight },
-  value: { color: colors.textMuted, fontSize: 10, marginBottom: 2 },
-  valueBusiest: { color: colors.spent, fontWeight: '700' },
-  bars: { alignItems: 'flex-end', flexDirection: 'row', gap: 2 },
-  bar: { borderTopLeftRadius: 3, borderTopRightRadius: 3, width: 9 },
-  spent: { backgroundColor: colors.spent },
-  received: { backgroundColor: colors.receivedSoft },
-  label: { color: colors.textMuted, fontSize: 11, marginTop: spacing.xs },
-  labelSelected: { color: colors.primary, fontWeight: '700' },
-  legend: { alignItems: 'center', flexDirection: 'row', gap: spacing.xs, marginTop: spacing.sm },
-  key: { borderRadius: 2, height: 10, marginLeft: spacing.sm, width: 10 },
-  legendText: { color: colors.textMuted, fontSize: 12 },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    chart: {
+      alignItems: 'flex-end',
+      borderBottomColor: colors.border,
+      borderBottomWidth: 1,
+      flexDirection: 'row',
+      gap: 2,
+    },
+    group: {
+      alignItems: 'center',
+      borderRadius: radius.sm,
+      flex: 1,
+      minWidth: 0,
+      paddingBottom: spacing.xs,
+      paddingTop: spacing.xs,
+    },
+    groupSelected: { backgroundColor: colors.primaryLight },
+    value: { color: colors.textMuted, fontSize: 10, marginBottom: 2 },
+    valueBusiest: { color: colors.spent, fontWeight: '700' },
+    bars: { alignItems: 'flex-end', flexDirection: 'row', gap: 2 },
+    bar: { borderTopLeftRadius: 3, borderTopRightRadius: 3, width: 9 },
+    spent: { backgroundColor: colors.spent },
+    received: { backgroundColor: colors.receivedSoft },
+    label: { color: colors.textMuted, fontSize: 11, marginTop: spacing.xs },
+    labelSelected: { color: colors.primary, fontWeight: '700' },
+    legend: { alignItems: 'center', flexDirection: 'row', gap: spacing.xs, marginTop: spacing.sm },
+    key: { borderRadius: 2, height: 10, marginLeft: spacing.sm, width: 10 },
+    legendText: { color: colors.textMuted, fontSize: 12 },
+  });

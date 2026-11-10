@@ -15,7 +15,7 @@ import { api } from '../api/client';
 import BarChart from './BarChart';
 import KindBreakdown from './KindBreakdown';
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { lastMonths } from '../utils/chart';
 import { overdueCount } from '../utils/debts';
 import { todayIso } from '../utils/entryForm';
@@ -25,6 +25,7 @@ const SHOWN_KINDS = 4;
 const SHOWN_MONTHS = 6;
 
 export default function OverviewCards({ navigation }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
   const [breakdown, setBreakdown] = useState(null);
   const [months, setMonths] = useState(null);
@@ -106,6 +107,7 @@ export default function OverviewCards({ navigation }) {
 }
 
 function Card({ title, more, onMore, children }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.card}>
       <View style={styles.head}>
@@ -119,26 +121,27 @@ function Card({ title, more, onMore, children }) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
-  head: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm,
-  },
-  title: { color: colors.text, fontSize: 15, fontWeight: '700' },
-  more: { color: colors.primary, fontSize: 13, fontWeight: '600' },
-  debts: { flexDirection: 'row', gap: spacing.md },
-  debt: { flex: 1 },
-  debtLabel: { color: colors.textMuted, fontSize: 13 },
-  debtValue: { fontSize: 17, fontWeight: '700', marginTop: 2 },
-  owe: { color: colors.spent },
-  owed: { color: colors.received },
-  overdue: { color: colors.danger, fontSize: 13, fontWeight: '700', marginTop: spacing.sm },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: radius.md,
+      marginBottom: spacing.md,
+      padding: spacing.md,
+    },
+    head: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: spacing.sm,
+    },
+    title: { color: colors.text, fontSize: 15, fontWeight: '700' },
+    more: { color: colors.primary, fontSize: 13, fontWeight: '600' },
+    debts: { flexDirection: 'row', gap: spacing.md },
+    debt: { flex: 1 },
+    debtLabel: { color: colors.textMuted, fontSize: 13 },
+    debtValue: { fontSize: 17, fontWeight: '700', marginTop: 2 },
+    owe: { color: colors.spent },
+    owed: { color: colors.received },
+    overdue: { color: colors.danger, fontSize: 13, fontWeight: '700', marginTop: spacing.sm },
+  });
