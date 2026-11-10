@@ -21,11 +21,11 @@ import {
 
 import { api } from '../api/client';
 import ErrorMessage from '../components/ErrorMessage';
-import { formStyles } from '../components/formStyles';
+import { useFormStyles } from '../components/formStyles';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 import { addDays } from '../utils/debts';
 import { dayBefore, parseAmount, parseDateInput, todayIso } from '../utils/entryForm';
 import { formatDate } from '../utils/format';
@@ -36,6 +36,9 @@ const DIRECTIONS = [
 ];
 
 export default function NewDebtScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
+  const formStyles = useFormStyles();
   const { signOut } = useAuth();
   const { t } = useLanguage();
   const today = todayIso();
@@ -214,6 +217,7 @@ export default function NewDebtScreen({ navigation }) {
 }
 
 function Chip({ label, onPress }) {
+  const styles = useStyles(makeStyles);
   return (
     <Pressable style={styles.chip} onPress={onPress}>
       <Text style={styles.chipText}>{label}</Text>
@@ -221,29 +225,30 @@ function Chip({ label, onPress }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { justifyContent: 'flex-start' },
-  segment: {
-    borderColor: colors.primary,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
-  segmentSelected: { backgroundColor: colors.primary },
-  segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
-  segmentTextSelected: { color: colors.textInverse },
-  amount: { fontSize: 22, fontWeight: '700' },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
-  chip: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  chipText: { color: colors.text, fontSize: 14 },
-  cancel: { alignItems: 'center', marginTop: spacing.md, padding: spacing.sm },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    container: { justifyContent: 'flex-start' },
+    segment: {
+      borderColor: colors.primary,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flexDirection: 'row',
+      overflow: 'hidden',
+    },
+    segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
+    segmentSelected: { backgroundColor: colors.primary },
+    segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
+    segmentTextSelected: { color: colors.textInverse },
+    amount: { fontSize: 22, fontWeight: '700' },
+    chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
+    chip: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+    },
+    chipText: { color: colors.text, fontSize: 14 },
+    cancel: { alignItems: 'center', marginTop: spacing.md, padding: spacing.sm },
+  });

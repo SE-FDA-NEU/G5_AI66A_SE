@@ -27,7 +27,7 @@ import MainLayout from '../components/MainLayout';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 import { overdueCount } from '../utils/debts';
 import { formatDong } from '../utils/format';
 
@@ -37,6 +37,8 @@ const FILTERS = [
 ];
 
 export default function DebtsScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
   const { signOut } = useAuth();
   const { language, t } = useLanguage();
   const { width } = useWindowDimensions();
@@ -174,40 +176,41 @@ export default function DebtsScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  page: { alignSelf: 'center', maxWidth: 1100, padding: spacing.md, width: '100%' },
-  columns: { alignItems: 'flex-start', flexDirection: 'row', gap: spacing.lg },
-  side: { width: 360 },
-  main: { flex: 1, minWidth: 0 },
-  totals: { flexDirection: 'row', gap: spacing.sm },
-  total: { borderRadius: radius.md, flex: 1, padding: spacing.md },
-  oweBox: { backgroundColor: colors.dangerLight },
-  owedBox: { backgroundColor: colors.primaryLight },
-  totalLabel: { color: colors.text, fontSize: 13, fontWeight: '600' },
-  totalValue: { fontSize: 20, fontWeight: '800', marginTop: spacing.xs },
-  oweText: { color: colors.spent },
-  owedText: { color: colors.received },
-  overdueLine: { color: colors.danger, fontSize: 14, fontWeight: '700', marginTop: spacing.sm },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: radius.sm,
-    marginTop: spacing.md,
-    padding: spacing.md,
-  },
-  primaryText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
-  note: { color: colors.textMuted, fontSize: 13, marginBottom: spacing.md, marginTop: spacing.sm },
-  segment: {
-    borderColor: colors.primary,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flexDirection: 'row',
-    marginBottom: spacing.md,
-    overflow: 'hidden',
-  },
-  segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
-  segmentSelected: { backgroundColor: colors.primary },
-  segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
-  segmentTextSelected: { color: colors.textInverse },
-  empty: { color: colors.textMuted, marginTop: spacing.md, textAlign: 'center' },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    page: { alignSelf: 'center', maxWidth: 1100, padding: spacing.md, width: '100%' },
+    columns: { alignItems: 'flex-start', flexDirection: 'row', gap: spacing.lg },
+    side: { width: 360 },
+    main: { flex: 1, minWidth: 0 },
+    totals: { flexDirection: 'row', gap: spacing.sm },
+    total: { borderRadius: radius.md, flex: 1, padding: spacing.md },
+    oweBox: { backgroundColor: colors.dangerLight },
+    owedBox: { backgroundColor: colors.primaryLight },
+    totalLabel: { color: colors.text, fontSize: 13, fontWeight: '600' },
+    totalValue: { fontSize: 20, fontWeight: '800', marginTop: spacing.xs },
+    oweText: { color: colors.spent },
+    owedText: { color: colors.received },
+    overdueLine: { color: colors.danger, fontSize: 14, fontWeight: '700', marginTop: spacing.sm },
+    primaryButton: {
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: radius.sm,
+      marginTop: spacing.md,
+      padding: spacing.md,
+    },
+    primaryText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+    note: { color: colors.textMuted, fontSize: 13, marginBottom: spacing.md, marginTop: spacing.sm },
+    segment: {
+      borderColor: colors.primary,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flexDirection: 'row',
+      marginBottom: spacing.md,
+      overflow: 'hidden',
+    },
+    segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
+    segmentSelected: { backgroundColor: colors.primary },
+    segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
+    segmentTextSelected: { color: colors.textInverse },
+    empty: { color: colors.textMuted, marginTop: spacing.md, textAlign: 'center' },
+  });

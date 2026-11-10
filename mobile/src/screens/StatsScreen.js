@@ -28,7 +28,7 @@ import MainLayout from '../components/MainLayout';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 import { defaultMonth } from '../utils/chart';
 import { todayIso } from '../utils/entryForm';
 import { formatDong, formatMonth } from '../utils/format';
@@ -39,6 +39,8 @@ const VIEWS = [
 ];
 
 export default function StatsScreen() {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
   const { signOut } = useAuth();
   const { language, t } = useLanguage();
   const { width } = useWindowDimensions();
@@ -222,6 +224,7 @@ export default function StatsScreen() {
 }
 
 function Highlight({ label, period, amount, tone }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={[styles.highlight, { borderLeftColor: tone }]}>
       <Text style={styles.highlightLabel}>{label}</Text>
@@ -231,54 +234,55 @@ function Highlight({ label, period, amount, tone }) {
   );
 }
 
-const styles = StyleSheet.create({
-  page: { alignSelf: 'center', maxWidth: 1100, padding: spacing.md, width: '100%' },
-  columns: { alignItems: 'flex-start', flexDirection: 'row', gap: spacing.md },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
-  chartCard: { flex: 3, minWidth: 0 },
-  breakdownCard: { flex: 2, minWidth: 0 },
-  segment: {
-    borderColor: colors.primary,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
-  segmentSelected: { backgroundColor: colors.primary },
-  segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
-  segmentTextSelected: { color: colors.textInverse },
-  yearRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: spacing.md,
-  },
-  arrow: { paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
-  arrowOff: { opacity: 0.25 },
-  arrowText: { color: colors.primary, fontSize: 24, fontWeight: '700' },
-  year: { color: colors.text, fontSize: 18, fontWeight: '700', minWidth: 64, textAlign: 'center' },
-  loading: { marginVertical: spacing.lg },
-  emptyBox: { alignItems: 'center', paddingVertical: spacing.lg },
-  emptyTitle: { color: colors.text, fontSize: 17, fontWeight: '700' },
-  emptyHint: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs, textAlign: 'center' },
-  highlights: { flexDirection: 'row', gap: spacing.sm, marginVertical: spacing.md },
-  highlight: {
-    backgroundColor: colors.background,
-    borderLeftWidth: 4,
-    borderRadius: radius.sm,
-    flex: 1,
-    padding: spacing.sm,
-  },
-  highlightLabel: { color: colors.textMuted, fontSize: 12 },
-  highlightPeriod: { color: colors.text, fontSize: 16, fontWeight: '700', marginTop: 2 },
-  highlightAmount: { fontSize: 14, fontWeight: '700', marginTop: 2 },
-  tapHint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.xs },
-  cardTitle: { color: colors.text, fontSize: 16, fontWeight: '700' },
-  total: { color: colors.textMuted, fontSize: 13, marginBottom: spacing.md, marginTop: 2 },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    page: { alignSelf: 'center', maxWidth: 1100, padding: spacing.md, width: '100%' },
+    columns: { alignItems: 'flex-start', flexDirection: 'row', gap: spacing.md },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: radius.md,
+      marginBottom: spacing.md,
+      padding: spacing.md,
+    },
+    chartCard: { flex: 3, minWidth: 0 },
+    breakdownCard: { flex: 2, minWidth: 0 },
+    segment: {
+      borderColor: colors.primary,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flexDirection: 'row',
+      overflow: 'hidden',
+    },
+    segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
+    segmentSelected: { backgroundColor: colors.primary },
+    segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
+    segmentTextSelected: { color: colors.textInverse },
+    yearRow: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginTop: spacing.md,
+    },
+    arrow: { paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
+    arrowOff: { opacity: 0.25 },
+    arrowText: { color: colors.primary, fontSize: 24, fontWeight: '700' },
+    year: { color: colors.text, fontSize: 18, fontWeight: '700', minWidth: 64, textAlign: 'center' },
+    loading: { marginVertical: spacing.lg },
+    emptyBox: { alignItems: 'center', paddingVertical: spacing.lg },
+    emptyTitle: { color: colors.text, fontSize: 17, fontWeight: '700' },
+    emptyHint: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs, textAlign: 'center' },
+    highlights: { flexDirection: 'row', gap: spacing.sm, marginVertical: spacing.md },
+    highlight: {
+      backgroundColor: colors.background,
+      borderLeftWidth: 4,
+      borderRadius: radius.sm,
+      flex: 1,
+      padding: spacing.sm,
+    },
+    highlightLabel: { color: colors.textMuted, fontSize: 12 },
+    highlightPeriod: { color: colors.text, fontSize: 16, fontWeight: '700', marginTop: 2 },
+    highlightAmount: { fontSize: 14, fontWeight: '700', marginTop: 2 },
+    tapHint: { color: colors.textMuted, fontSize: 12, marginTop: spacing.xs },
+    cardTitle: { color: colors.text, fontSize: 16, fontWeight: '700' },
+    total: { color: colors.textMuted, fontSize: 13, marginBottom: spacing.md, marginTop: 2 },
+  });
