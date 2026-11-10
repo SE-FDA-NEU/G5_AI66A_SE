@@ -60,6 +60,12 @@ export const ERROR_KEYS = {
   person_length: 'error.personLength',
   due_before_start: 'error.dueBeforeStart',
   not_found: 'error.notFound',
+  name_too_long: 'error.nameTooLong',
+  nickname_too_long: 'error.nicknameTooLong',
+  invalid_phone: 'error.invalidPhone',
+  invalid_avatar: 'error.invalidAvatar',
+  confirmation_mismatch: 'error.confirmationMismatch',
+  category_not_found: 'error.categoryNotFound',
   server_error: 'error.server',
 };
 
