@@ -41,6 +41,8 @@ from app.db.session import make_engine
 
 DEMO_EMAIL = "mai@example.com"
 DEMO_PASSWORD = "demo1234"
+DEMO_FULL_NAME = "Nguyen Thi Mai"
+DEMO_NICKNAME = "Mai"
 
 # BR6 names the eight kinds of spending; BR8 names the three kinds of money received.
 CATEGORIES = [
@@ -163,6 +165,11 @@ def add_demo_account(db: Session) -> User:
         account = user_repo.create(
             db, email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD)
         )
+        # US16: the demo greets "Hello, Mai". Set once, when the account is made, so a visitor's
+        # change to the profile is never undone at the next start.
+        account.full_name = DEMO_FULL_NAME
+        account.nickname = DEMO_NICKNAME
+        db.commit()
     return account
 
 
