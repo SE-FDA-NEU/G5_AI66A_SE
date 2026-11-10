@@ -9,10 +9,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { formatDong } from '../utils/format';
 
 export default function KindBreakdown({ breakdown, limit }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
 
   if (!breakdown || breakdown.total === 0) {
@@ -44,12 +45,13 @@ export default function KindBreakdown({ breakdown, limit }) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: { marginBottom: spacing.sm },
-  line: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-  name: { color: colors.text, flex: 1, fontSize: 14, fontWeight: '600', paddingRight: spacing.sm },
-  amount: { color: colors.textMuted, fontSize: 13 },
-  track: { backgroundColor: colors.background, borderRadius: radius.sm, height: 8 },
-  fill: { backgroundColor: colors.spent, borderRadius: radius.sm, height: 8 },
-  empty: { color: colors.textMuted, fontSize: 14, paddingVertical: spacing.md, textAlign: 'center' },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    row: { marginBottom: spacing.sm },
+    line: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
+    name: { color: colors.text, flex: 1, fontSize: 14, fontWeight: '600', paddingRight: spacing.sm },
+    amount: { color: colors.textMuted, fontSize: 13 },
+    track: { backgroundColor: colors.background, borderRadius: radius.sm, height: 8 },
+    fill: { backgroundColor: colors.spent, borderRadius: radius.sm, height: 8 },
+    empty: { color: colors.textMuted, fontSize: 14, paddingVertical: spacing.md, textAlign: 'center' },
+  });

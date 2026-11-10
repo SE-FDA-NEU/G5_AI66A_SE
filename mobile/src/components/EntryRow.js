@@ -7,10 +7,11 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { formatAmount, formatDate } from '../utils/format';
 
 export default function EntryRow({ entry, onPress }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
   const received = entry.kind === 'income';
   const note = entry.note || t('entry.noNote');
@@ -42,23 +43,24 @@ export default function EntryRow({ entry, onPress }) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: radius.sm,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm,
-    padding: spacing.md,
-  },
-  rowHovered: { backgroundColor: colors.primaryLight },
-  left: { flex: 1, paddingRight: spacing.sm },
-  note: { color: colors.text, fontSize: 15, fontWeight: '600' },
-  kind: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
-  right: { alignItems: 'flex-end' },
-  amount: { fontSize: 15, fontWeight: '700' },
-  received: { color: colors.received },
-  spent: { color: colors.spent },
-  date: { color: colors.textMuted, fontSize: 12, marginTop: 2 },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    row: {
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      borderRadius: radius.sm,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: spacing.sm,
+      padding: spacing.md,
+    },
+    rowHovered: { backgroundColor: colors.primaryLight },
+    left: { flex: 1, paddingRight: spacing.sm },
+    note: { color: colors.text, fontSize: 15, fontWeight: '600' },
+    kind: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
+    right: { alignItems: 'flex-end' },
+    amount: { fontSize: 15, fontWeight: '700' },
+    received: { color: colors.received },
+    spent: { color: colors.spent },
+    date: { color: colors.textMuted, fontSize: 12, marginTop: 2 },
+  });

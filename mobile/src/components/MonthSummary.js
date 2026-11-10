@@ -9,10 +9,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 import { formatDong, formatMonth, formatSigned } from '../utils/format';
 
 export default function MonthSummary({ summary }) {
+  const styles = useStyles(makeStyles);
   const { language, t } = useLanguage();
   const month = t('overview.month', { month: formatMonth(summary.month) });
 
@@ -45,6 +46,7 @@ export default function MonthSummary({ summary }) {
 }
 
 function Figure({ label, value }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.figure}>
       <Text style={styles.figureLabel}>{label}</Text>
@@ -53,27 +55,28 @@ function Figure({ label, value }) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    marginBottom: spacing.md,
-    padding: spacing.md,
-  },
-  month: { color: colors.textMuted, fontSize: 13, fontWeight: '600', marginBottom: spacing.sm },
-  row: { flexDirection: 'row', gap: spacing.md },
-  figure: { flex: 1 },
-  figureLabel: { color: colors.textMuted, fontSize: 13 },
-  figureValue: { color: colors.text, fontSize: 17, fontWeight: '700', marginTop: 2 },
-  left: {
-    borderTopColor: colors.border,
-    borderTopWidth: 1,
-    marginTop: spacing.md,
-    paddingTop: spacing.sm,
-  },
-  leftLabel: { color: colors.textMuted, fontSize: 13 },
-  leftValue: { color: colors.received, fontSize: 28, fontWeight: '800', marginTop: 2 },
-  over: { color: colors.spent },
-  emptyTitle: { color: colors.text, fontSize: 17, fontWeight: '700' },
-  emptyHint: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: radius.md,
+      marginBottom: spacing.md,
+      padding: spacing.md,
+    },
+    month: { color: colors.textMuted, fontSize: 13, fontWeight: '600', marginBottom: spacing.sm },
+    row: { flexDirection: 'row', gap: spacing.md },
+    figure: { flex: 1 },
+    figureLabel: { color: colors.textMuted, fontSize: 13 },
+    figureValue: { color: colors.text, fontSize: 17, fontWeight: '700', marginTop: 2 },
+    left: {
+      borderTopColor: colors.border,
+      borderTopWidth: 1,
+      marginTop: spacing.md,
+      paddingTop: spacing.sm,
+    },
+    leftLabel: { color: colors.textMuted, fontSize: 13 },
+    leftValue: { color: colors.received, fontSize: 28, fontWeight: '800', marginTop: 2 },
+    over: { color: colors.spent },
+    emptyTitle: { color: colors.text, fontSize: 17, fontWeight: '700' },
+    emptyHint: { color: colors.textMuted, fontSize: 14, marginTop: spacing.xs },
+  });

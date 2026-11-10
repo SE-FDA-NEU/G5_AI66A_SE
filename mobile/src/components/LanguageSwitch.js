@@ -7,9 +7,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { LANGUAGE_NAMES, LANGUAGES } from '../i18n/translate';
 import { useLanguage } from '../i18n/LanguageContext';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, radius, spacing } from '../theme';
 
 export default function LanguageSwitch() {
+  const styles = useStyles(makeStyles);
   const { language, setLanguage, t } = useLanguage();
 
   return (
@@ -35,17 +36,18 @@ export default function LanguageSwitch() {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    borderColor: colors.textInverse,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flexDirection: 'row',
-    marginRight: spacing.sm,
-    overflow: 'hidden',
-  },
-  option: { paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
-  optionSelected: { backgroundColor: colors.textInverse },
-  label: { color: colors.textInverse, fontSize: 13, fontWeight: '600' },
-  labelSelected: { color: colors.primary },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    row: {
+      borderColor: colors.headerText,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flexDirection: 'row',
+      marginRight: spacing.sm,
+      overflow: 'hidden',
+    },
+    option: { paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
+    optionSelected: { backgroundColor: colors.headerText },
+    label: { color: colors.headerText, fontSize: 13, fontWeight: '600' },
+    labelSelected: { color: colors.header },
+  });

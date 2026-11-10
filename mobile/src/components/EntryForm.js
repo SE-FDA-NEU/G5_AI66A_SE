@@ -23,11 +23,11 @@ import {
 
 import { api } from '../api/client';
 import ErrorMessage from './ErrorMessage';
-import { formStyles } from './formStyles';
+import { useFormStyles } from './formStyles';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
-import { colors, radius, spacing } from '../theme';
+import { useStyles, useTheme, radius, spacing } from '../theme';
 import { dayBefore, emptyForm, parseAmount, parseDateInput, todayIso } from '../utils/entryForm';
 import { formatDate } from '../utils/format';
 
@@ -41,6 +41,9 @@ const KINDS = [
  * to the API and throws its error; `submitLabel` names the button. `children` comes under Cancel.
  */
 export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, children }) {
+  const { colors } = useTheme();
+  const styles = useStyles(makeStyles);
+  const formStyles = useFormStyles();
   const { signOut } = useAuth();
   const { t } = useLanguage();
   const start = initial ?? emptyForm();
@@ -253,33 +256,34 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
   );
 }
 
-const styles = StyleSheet.create({
-  // A long form starts at the top instead of in the middle of the page.
-  container: { justifyContent: 'flex-start' },
-  segment: {
-    borderColor: colors.primary,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
-  segmentSelected: { backgroundColor: colors.primary },
-  segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
-  segmentTextSelected: { color: colors.textInverse },
-  amount: { fontSize: 22, fontWeight: '700' },
-  loadingRow: { alignItems: 'center', flexDirection: 'row', gap: spacing.sm },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
-  chip: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  chipSelected: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
-  chipText: { color: colors.text, fontSize: 14 },
-  chipTextSelected: { color: colors.primary, fontWeight: '700' },
-  cancel: { alignItems: 'center', marginTop: spacing.md, padding: spacing.sm },
-});
+const makeStyles = (colors) =>
+  StyleSheet.create({
+    // A long form starts at the top instead of in the middle of the page.
+    container: { justifyContent: 'flex-start' },
+    segment: {
+      borderColor: colors.primary,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      flexDirection: 'row',
+      overflow: 'hidden',
+    },
+    segmentOption: { alignItems: 'center', flex: 1, paddingVertical: spacing.sm },
+    segmentSelected: { backgroundColor: colors.primary },
+    segmentText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
+    segmentTextSelected: { color: colors.textInverse },
+    amount: { fontSize: 22, fontWeight: '700' },
+    loadingRow: { alignItems: 'center', flexDirection: 'row', gap: spacing.sm },
+    chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
+    chip: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+    },
+    chipSelected: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
+    chipText: { color: colors.text, fontSize: 14 },
+    chipTextSelected: { color: colors.primary, fontWeight: '700' },
+    cancel: { alignItems: 'center', marginTop: spacing.md, padding: spacing.sm },
+  });
