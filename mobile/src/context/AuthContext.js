@@ -14,6 +14,8 @@ export function AuthProvider({ children }) {
   // 'loading' while the stored token is read, then 'signed-in' or 'signed-out'.
   const [status, setStatus] = useState('loading');
   const [user, setUser] = useState(null);
+  // A sentence for the welcome screen after signing out for a reason, such as a deleted account.
+  const [notice, setNotice] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,9 +84,50 @@ export function AuthProvider({ children }) {
     setStatus('signed-out');
   }, []);
 
+  // US16: the profile screen saves, then every screen greets the new name at once.
+  const updateProfile = useCallback(async (changes) => {
+    const saved = await api.updateProfile(changes);
+    setUser(saved);
+    return saved;
+  }, []);
+
+  // US18, BR16: the server checks the email and password again; only then is the app signed out.
+  const deleteAccount = useCallback(
+    async (email, password) => {
+      await api.deleteAccount(email, password);
+      await signOut();
+      setNotice('welcome.deleted');
+    },
+    [signOut],
+  );
+
+  const clearNotice = useCallback(() => setNotice(null), []);
+
   const value = useMemo(
-    () => ({ status, user, signIn, signUp, signOut, refreshUser }),
-    [status, user, signIn, signUp, signOut, refreshUser],
+    () => ({
+      status,
+      user,
+      notice,
+      signIn,
+      signUp,
+      signOut,
+      refreshUser,
+      updateProfile,
+      deleteAccount,
+      clearNotice,
+    }),
+    [
+      status,
+      user,
+      notice,
+      signIn,
+      signUp,
+      signOut,
+      refreshUser,
+      updateProfile,
+      deleteAccount,
+      clearNotice,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

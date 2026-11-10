@@ -102,4 +102,21 @@ export const api = {
   settleDebt: (id) => request(`/debts/${id}/settle`, { method: 'POST' }),
 
   removeDebt: (id) => request(`/debts/${id}`, { method: 'DELETE' }),
+
+  profile: () => request('/users/me'),
+
+  updateProfile: (changes) => request('/users/me', { method: 'PATCH', body: changes }),
+
+  deleteAccount: (email, password) =>
+    request('/users/me', { method: 'DELETE', body: { email, password } }),
+
+  categorySpending: () => request('/categories/spending'),
+
+  categoryDetail: (id) => request(`/categories/${id}/spending`),
+
+  // Not under /api: /health answers whether the server and its database are up (operations.md).
+  health: () =>
+    fetch(`${BASE_URL.replace(/\/api$/, '')}/health`)
+      .then((response) => response.json())
+      .catch(() => null),
 };
