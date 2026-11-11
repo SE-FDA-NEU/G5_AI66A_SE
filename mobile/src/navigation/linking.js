@@ -15,6 +15,7 @@ export const ROUTES = {
   NewDebt: 'debts/new',
   Categories: 'categories',
   Category: 'categories/:id',
+  About: 'about',
 };
 
 export const linking = {

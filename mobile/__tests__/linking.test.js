@@ -18,6 +18,7 @@ test('each screen has the route of the requirements', () => {
     NewDebt: 'debts/new',
     Categories: 'categories',
     Category: 'categories/:id',
+    About: 'about',
   });
 });
 
