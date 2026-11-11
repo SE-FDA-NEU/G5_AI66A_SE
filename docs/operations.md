@@ -153,3 +153,14 @@ merges is noticed the same day, not by the instructor.
 | Render settings live in its dashboard, not in Git | docs | A setting changed by hand is lost or never explained | Section 1 lists every setting; anyone changing one updates it in the same pull request |
 | Profile pictures are kept in the database | data | Many large pictures fill Neon's free 0.5 GB | Accepted: BR15 caps one at 200 KB and the app sends about 20 KB; 1,000 accounts take under 20 MB |
 | US07, US08 and US09 are not built | code | A user cannot cap spending or be warned before the cap | Accepted: P1 and P2, after every P0 story; they stay open on the board |
+
+## 5. Maintenance plan
+
+| Area | What to do | Owner | How often |
+| --- | --- | --- | --- |
+| Bugs | Each bug becomes an issue with the `bug` label and a failing test first, as #142 did; fixed through a pull request | @Chidokato5376 triages, the owner of the file fixes | Within the sprint it is found |
+| Dependency updates | `pip list --outdated` and `npm outdated`; bump the pins in one pull request, CI decides; Dependabot alerts on GitHub are read | @levanduc36 | Monthly, and at once for a security alert |
+| Backups of the data | `pg_dump "$DATABASE_URL" > g5-YYYYMMDD.sql`, kept on the team drive, never in Git; restore tried once on a fresh Neon branch | @nguyennhien2412 | Weekly, and before every demo |
+| Monitoring | Read the failed-run emails of CI and the Live check; search the Render log for ` 500 ` and `WARNING` | @Chidokato5376 | Daily while the app is graded |
+| Secrets | `SECRET_KEY`, the Neon password and both deploy hooks: rotate at once if one is ever seen in Git, a log or a chat | @Chidokato5376 | When one leaks, and at the end of the course |
+| Keeping the docs true | A pull request that changes a behaviour, a setting or a command changes its line in `README.md`, `docs/SETUP.md` or this file; the reviewer checks it | the author, checked by the reviewer | Every pull request |

@@ -197,7 +197,11 @@ answers 500 in the same shape.
 | 422 `amount_not_positive` | BR5 | **"Enter an amount greater than 0"** Write it in whole dong, such as 55000. Nothing was saved. |
 | 422 `unknown_category` | BR6 | **"Choose a kind of spending from the list"** Tap one of the kinds shown, or none at all. Nothing was saved. |
 | 422 `date_in_future` | BR11 | **"The date cannot be in the future"** An entry records money already spent or received, so choose today or an earlier day. Nothing was saved. |
-| 401 `sign_in_again` | BR10 | **"Please sign in again"** A sign-in lasts 7 days, and yours has ended. The app then opens `/login`. |
+| 401 `sign_in_again` | BR10 | **"Please sign in again"** A sign-in lasts 7 days, and yours has ended. The app then opens `/welcome`. |
+| 422 `name_too_long` | BR15 | **"Write a full name of at most 80 characters"** Shorten it, or leave it empty: it is optional. |
+| 422 `invalid_phone` | BR15 | **"Enter a phone number of 8 to 15 digits"** Digits, with spaces or dashes between them if you like, and + in front for another country. |
+| 422 `invalid_avatar` | BR15 | **"Choose a PNG, JPEG or WebP picture of 200 KB or less"** The app makes a picture smaller by itself; try another one. |
+| 422 `confirmation_mismatch` | BR16 | **"The email or password does not match this account"** Type the email you signed up with and your current password. Nothing was deleted. |
 | 400 `invalid_email` | none, a malformed request | **"Enter a valid email address"** An address looks like name@example.com. |
 | no answer | none, the server is not running | **"Cannot reach the server at http://localhost:8000/api"** Check that the backend is running (docs/SETUP.md, section 4), then try again. |
 | 500 `server_error` | none, a fault in the API | **"The server could not finish this request"** Try again in a moment. If it keeps happening, the backend terminal shows what went wrong. |
