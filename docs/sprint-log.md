@@ -379,3 +379,112 @@ See Sprint 4 in `docs/retro.md`.
 | @levanduc36 | Yes | With the instructor, next | Yes |
 
 **Scrum Master for Sprint 5:** @levanduc36, as the rotation in the README says
+
+## Sprint 5 - 03/11/2026 to 16/11/2026
+
+**Committed 16 · Completed 16 · Velocity: 16 points**
+
+### Sprint goal
+
+Anyone opens the app at one public `https://` address, on a phone or a laptop, and uses every P0
+story with nothing to install; a merge into `main` reaches that address only after CI is green;
+and `docs/operations.md` says how we watch the app and how we would fix it. On top of that, the
+finishing touches the Product Owner asked for: a first screen, a profile, the categories, deleting
+an account, and a dark look.
+
+### Planning
+
+Planning met on 07/11, after the week 13 lecture on CI/CD. The Product Owner asked for US15 to US19
+(`docs/changelog.md`, 07/11); US14 names the milestone itself. Issues #184 to
+#213 were written that day, and the review rotation and merge order were posted on
+#184 and committed in `.github/review-rotation.json`.
+
+### The two required chore issues
+
+| Issue | Owner | Closed? |
+| --- | --- | --- |
+| #184 [Chore] Refine backlog for Sprint 5 | @Chidokato5376 (PO) | Yes, 08/11 |
+| #185 [Chore] Sprint 5 wrap-up | @levanduc36 (SM) | Right after this log merges |
+
+### Committed
+
+| Issue | Story | Points | Owner |
+| --- | --- | --- | --- |
+| #186 | US14 Use the app from a link | 3 | @Chidokato5376 |
+| #187 | US15 The first screen | 2 | @vantran2801 |
+| #188 | US16 A profile, and a greeting by name | 3 | @Chidokato5376 |
+| #189 | US17 What each category holds | 3 | @nguyennhien2412 |
+| #190 | US18 Delete the account | 3 | @levanduc36 |
+| #191 | US19 Light or dark, and about the app | 2 | @vantran2801 |
+
+**Total committed: 16 points**, against 18 in Sprint 4 and an average of 13 over Sprints 2 to 4.
+The deployment work (Neon, Render, CI) has no story points of its own beyond US14: it is tasks with
+hours, as before.
+
+### Result
+
+| Issue | Deliverable | Owner | Status | If not done, why |
+| --- | --- | --- | --- | --- |
+| #186 | US14 Use the app from a link, 3 points | @Chidokato5376 | Done | |
+| #187 | US15 The first screen, 2 points | @vantran2801 | Done | |
+| #188 | US16 A profile, and a greeting by name, 3 points | @Chidokato5376 | Done | |
+| #189 | US17 What each category holds, 3 points | @nguyennhien2412 | Done | |
+| #190 | US18 Delete the account, 3 points | @levanduc36 | Done | |
+| #191 | US19 Light or dark, and about the app, 2 points | @vantran2801 | Done | |
+| #192 | Reach PostgreSQL through psycopg; ADR 4 | @nguyennhien2412 | Done |  |
+| #193 | A web build Render can publish | @vantran2801 | Done |  |
+| #194 | /health checks the database; one log line per request; production settings refused | @Chidokato5376 | Done |  |
+| #195 | Start script for Render; demo data dated again in a new month; dev container | @nguyennhien2412 | Done |  |
+| #196 | CI: every test on PostgreSQL, deploy to Render after green, live check | @levanduc36 | Done |  |
+| #197 | Put the app online on Render and Neon; operations.md section 1 | @Chidokato5376 | Done |  |
+| #198 | A light and a dark palette; every screen takes its colours from it | @vantran2801 | Done |  |
+| #199 | operations.md sections 2 and 3: the pipeline and monitoring | @levanduc36 | Done |  |
+| #200 | Migration 0003: the profile columns; totals per category | @nguyennhien2412 | Done |  |
+| #201 | The Sprint 5 texts in both languages, and the app's new API calls | @vantran2801 | Done |  |
+| #202 | GET, PATCH and DELETE /api/users/me (BR15, BR16) | @Chidokato5376 | Done |  |
+| #203 | GET /api/categories/spending and /api/categories/{id}/spending | @nguyennhien2412 | Done |  |
+| #204 | /welcome with its picture, for a wide and an upright screen | @vantran2801 | Done |  |
+| #205 | Test cases TC-87 to TC-98 for US16 and US18 | @levanduc36 | Done |  |
+| #206 | /categories and /categories/:id | @nguyennhien2412 | Done |  |
+| #207 | /about: what the app is for, its versions, who made it | @levanduc36 | Done |  |
+| #208 | /account/delete with "Are you sure?" | @levanduc36 | Done |  |
+| #209 | The ☰ menu, /profile with a picture, and the greeting by name | @vantran2801 | Done |  |
+| #210 | design.md and traceability.md for Sprint 5; operations.md section 4 | @nguyennhien2412 | Done |  |
+| #211 | docs/ui.md messages for BR15 and BR16; operations.md section 5 | @vantran2801 | Done |  |
+| #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Merges last | Completes `docs/operations.md` and the README first screen, after this log |
+| #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Backup and restore completed 12/11/2026 | Issue remains open; record the dump date and row counts in its comment and complete its checklist |
+
+**Completed: 16 points. Velocity this sprint: 16 points**: US14 #186 by #197, US15 #187 by #204, US16 #188 by #209, US17 #189 by #206, US18 #190 by #208, US19 #191 by #207.
+
+### Five sprints side by side
+
+| Sprint | Dates | Scrum Master | Committed | Completed | Velocity | Pull requests merged |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 08/09 to 21/09 | @vantran2801 | 0 | 0 | not applicable (requirements) | 16 |
+| 2 | 22/09 to 05/10 | @nguyennhien2412 | 9 | 9 | 9 | 17 |
+| 3 | 06/10 to 19/10 | @levanduc36 | 11 | 11 | 11 | 21 |
+| 4 | 20/10 to 02/11 | @Chidokato5376 | 18 | 18 | 18 | 22 |
+| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 21 |
+
+Velocity rose from 9 to 18 as the patterns of Sprints 2 and 3 were reused, and settled at 16 once
+the work moved from code to running it. The number never meant speed: each sprint committed what
+its milestone needed and finished it.
+
+### Sprint Review
+
+- What we demonstrated: the final demo on the URL in a private window is planned for week 15; it has not happened yet.
+- Feedback received: The demo is after this log.
+- Backlog changes as a result: none; Sprint 5 is the last sprint.
+
+### Retrospective
+
+See Sprint 5 and the whole-semester retrospective in `docs/retro.md`.
+
+### Attendance
+
+| Member | Planning | Review | Retro |
+| --- | --- | --- | --- |
+| @Chidokato5376 | Not confirmed | Not held yet | No meeting held |
+| @vantran2801 | Not confirmed | Not held yet | No meeting held |
+| @nguyennhien2412 | Not confirmed | Not held yet | No meeting held |
+| @levanduc36 | Not confirmed | Not held yet | No meeting held |

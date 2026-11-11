@@ -165,8 +165,11 @@ The retrospective was facilitated by @levanduc36, as the README says.
 
 The action was "Every pull request lists the test case IDs it adds or changes, and its reviewer
 runs `pytest` from the repository root and pastes the last line of the output in the review".
-Checked by @levanduc36 on 01/11/2026 from the reviews of #143 to #160: write here how many
-reviews pasted the last line of `pytest`, out of how many pull requests.
+Checked by @levanduc36 on 07/11/2026 from the reviews of the 22 pull requests merged in
+Sprint 4 (#162 to #183): 3 of them, #167, #176 and #178, had a review that pasted the last line
+of `pytest`. The other 19 said what the reviewer ran, or only approved. The action did not
+happen: the line was read as optional. This sentence was left as a blank when Sprint 4 closed;
+since Sprint 5, CI refuses to merge a document with a blank in it.
 
 ### Velocity
 
@@ -174,32 +177,54 @@ Committed: 18 points · Completed: 18 points
 
 ---
 
-## Sprint 5 - <start date> to <end date>
+## Sprint 5 - 03/11/2026 to 16/11/2026
 
-**Scrum Master:** @
+**Scrum Master:** @levanduc36
+
+The team did not hold a Sprint 5 retrospective. The Keep / Stop / Start below remains the draft;
+it was not discussed or confirmed at a meeting.
 
 ### Keep / Stop / Start
 
 | Keep doing | Stop doing | Start doing |
-| ---------- | ---------- | ----------- |
-|            |            |             |
+| --- | --- | --- |
+| Deploying from CI: nobody copied files to a server, and a merge reached the URL only after green | Building for weeks on the laptop alone: PostgreSQL, Render's disk and Metro's cache showed their differences only once the app was online | Putting the walking skeleton on a URL in the first coding sprint |
+| Boundary test cases written in the issue before the code (BR15 and BR16 in #202) | Leaving a draft sentence in a document for later | Quoting the test count from the CI summary in every review |
 
-### Action for next sprint
+### Proposed action for the next project
 
-| Action | Owner | Checked at      |
-| ------ | ----- | --------------- |
-|        | @     | - (last sprint) |
+There is no Sprint 6. This is a proposed action for the team's next project, not an agreed retro
+action.
+
+| Action | Owner | Checked at |
+| --- | --- | --- |
+| Deploy the walking skeleton with deploy-after-green in the first coding sprint, and keep the live check running from then on | @levanduc36 | The next project's first sprint review |
 
 ### Did last sprint's action happen?
 
+The action was "Every new business rule arrives with its boundary test cases written in its issue
+before the code, and the reviewer runs them red once". The two new rules, BR15 and BR16, had their
+boundary cases in #202 before the code was written. The review of #228 records that
+@nguyennhien2412 changed `PHONE_DIGITS_MIN` from 8 to 7, and TC-91 failed on `0912 345`. The value
+was restored and the full suite passed with 219 tests. The action happened.
+
 ### Velocity
 
-Committed: ** points · Completed: ** points
+Committed: 16 points · Completed: 16 points
 
 ---
 
 ## Whole-semester retrospective
 
-Written for the Milestone 5 report. What the team would keep, drop, and do
-differently on the next project, and what the velocity trend across five
-sprints actually showed.
+Written for the Milestone 5 report from five sprint records and the retrospectives held in Sprints
+1 to 4. No Sprint 5 retrospective meeting was held.
+
+**What the velocity showed.** 0, 9, 11, 18, 16. Sprint 1 wrote requirements, so it has no velocity.
+The jump to 18 in Sprint 4 came from reusing the patterns of Sprints 2 and 3, not from working
+faster; Sprint 5 spent its time on running the app rather than on new code.
+
+| Keep on the next project | Drop | Do differently |
+| --- | --- | --- |
+| One owner per folder, and a commit by the owner on another's branch when two changes must merge together | Several pull requests merged on the last evening | Deploy in the first coding sprint, not the last |
+| Error codes next to the sentences: wording changed without breaking the Vietnamese screens | Redoing a pull request instead of fixing it | Write the boundary test cases in the issue before the code, from the first sprint |
+| CI as the gate: `main` was never red in five sprints | Retro actions without a number to check them by | Check each retro action with a count at the next planning, not at the end |
