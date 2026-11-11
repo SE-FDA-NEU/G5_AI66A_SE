@@ -4,6 +4,7 @@
  */
 
 export const ROUTES = {
+  Welcome: 'welcome',
   Login: 'login',
   Register: 'register',
   Overview: '',

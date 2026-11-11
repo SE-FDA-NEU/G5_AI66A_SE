@@ -7,6 +7,7 @@ import { ROUTES, linking } from '../src/navigation/linking';
 
 test('each screen has the route of the requirements', () => {
   expect(ROUTES).toEqual({
+    Welcome: 'welcome',
     Login: 'login',
     Register: 'register',
     Overview: '',
