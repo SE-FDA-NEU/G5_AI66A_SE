@@ -201,6 +201,34 @@ Every test also runs on PostgreSQL 16 in CI, in the job *Python tests on Postgre
 that PostgreSQL refuses a 61-character name as too long for `VARCHAR(60)` before the CHECK of BR13
 does; `test_a_debt_that_breaks_br13_cannot_be_stored` now accepts either refusal.
 
+### 2.8 The Sprint 5 stories · `test_profile.py`, `test_category_spending.py`
+
+US16 to US18. Each rule with a number is tested on both sides of its limit.
+
+| ID | Story | Input | Expected result | Kind |
+| --- | --- | --- | --- | --- |
+| TC-87 | US16 | `GET /api/users/me` for a new account | the email, every profile field null | normal |
+| TC-88 | US16 | full name " Nguyen Thi Mai ", name "Mai", phone "+84 912 345 678" | saved, trimmed, and returned at the next sign-in | normal |
+| TC-89 | US16 | only the name sent, then sent empty | the full name unchanged; the name cleared | edge |
+| TC-90 | US16 | full name of 80 and 81 characters; name of 40 and 41 | 80 and 40 accepted; 81 and 41 refused, `name_too_long`, `nickname_too_long` (BR15) | edge |
+| TC-91 | US16 | phone of 8, 7, 15 and 16 digits; letters; + not first; 43 characters | 8 and 15 digits accepted; the rest refused, `invalid_phone` (BR15) | edge |
+| TC-92 | US16 | `email` sent with a name | 400; neither the email nor the name changes (BR15) | error |
+| TC-93 | US16 | a PNG of 200,000 and 200,001 bytes, a JPEG, a GIF, a link, broken base64 | 200,000 bytes and the JPEG accepted, then removed with null; the rest refused, `invalid_avatar` (BR15) | edge |
+| TC-94 | US16, US18 | read, change or delete the profile with no token | 401 each time | error |
+| TC-95 | US18 | the right email and password | 204; the account, its entries and debts gone; the password and the token no longer work (BR16) | normal |
+| TC-96 | US18 | a wrong password; another account's email | 422 `confirmation_mismatch`; the account still answers (BR16) | error |
+| TC-97 | US18 | the email typed in capitals | deleted: the same account (BR1) | edge |
+| TC-98 | US18 | delete one account | another account's entries and debts untouched | normal |
+| TC-99 | US17 | Food 55,000 and 45,000, Transport 32,000; another account's Food 999,000 | Food 100,000 this month and in all, 2 entries; the other account not counted (BR4); unused categories at 0 | normal |
+| TC-100 | US17 | 40,000 on the last day of last month, 15,000 on the 1st of this month | this month 15,000; in all 55,000 | edge |
+| TC-101 | US17 | 12 Food entries this month, 1 last month, 1 Transport | six months, oldest first, this month 78,000; the ten newest Food entries only | normal |
+| TC-102 | US17 | category 999 | 404 `category_not_found` | error |
+
+The screens of US15 to US19 are checked by Jest in `mobile/__tests__/`: the greeting falls back
+from the name to the full name to the email, the profile form sends only what changed, both
+palettes name the same colours, and `/welcome` puts the choices beside the picture only on a
+screen wider than tall and at least 720 pixels wide.
+
 ## 3. Automated tests
 
 Every test case of section 2 is a pytest test in `backend/tests/`, with its ID in the test's name,
@@ -234,13 +262,15 @@ root on a machine that has never seen the project (`.github/workflows/ci.yml`).
 | `test_debts.py` | TC-66 to TC-78 | US13 | @Chidokato5376 |
 | `test_health.py` | TC-79 to TC-84 | /health, the log, production settings | @levanduc36 (Sprint 5) |
 | `test_seed.py` | TC-85, TC-86 | the demo data at start-up | @nguyennhien2412 (Sprint 5) |
+| `test_profile.py` | TC-87 to TC-98 | US16, US18 | @levanduc36 (Sprint 5) |
+| `test_category_spending.py` | TC-99 to TC-102 | US17 | @nguyennhien2412 (Sprint 5) |
 | `test_repositories.py` | the queries behind US04 to US13 | | @nguyennhien2412 |
 | `test_database_rules.py`, `test_seed.py`, `test_errors.py` | the constraints, the demo data, the error shape | | @levanduc36, @nguyennhien2412 |
 
 Each member wrote tests in `backend/tests/` this sprint; the author of a service wrote its unit
 tests, and another member reviewed them in the pull request (`docs/process.md`, rule 6).
 
-**Result:** 177 passed in about 3 seconds, on Python 3.12, Windows 11 (M4). In Sprint 5: 188 passed, on SQLite and on PostgreSQL 16. The app's Jest tests:
+**Result:** 177 passed in about 3 seconds, on Python 3.12, Windows 11 (M4). In Sprint 5: 219 passed, on SQLite and on PostgreSQL 16; Jest 132. The app's Jest tests:
 `npm test` in `mobile/`, 101 passed.
 
 ![The full output of pytest -v: 177 passed](images/testing/pytest-output.png)
