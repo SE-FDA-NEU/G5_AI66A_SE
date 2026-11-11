@@ -21,10 +21,18 @@ class RegisterRequest(BaseModel):
 
 
 class UserOut(BaseModel):
+    """The account and its profile (US16). The app greets it by nickname, else full name, else
+    email, so every sign-in answer carries the profile too."""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: int
     email: str
+    full_name: str | None = None
+    nickname: str | None = None
+    phone: str | None = None
+    # A data: URL of at most 200 KB (BR15), or null.
+    avatar: str | None = None
 
 
 class TokenOut(BaseModel):
