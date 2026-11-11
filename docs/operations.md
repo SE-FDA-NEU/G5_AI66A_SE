@@ -86,7 +86,7 @@ The jobs run side by side, so a run takes as long as its slowest job: **about on
 13 lecture sets. Each check job stops after **3 minutes**, so a hung test turns red rather than
 keeping a pull request waiting. A newer push cancels the run still going on the same branch.
 
-Latest green run on `main`: https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/runs/42853107259.
+Latest green run on `main`: https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/runs/42662453565.
 
 `main` is protected by two rulesets (Settings → Rules): a pull request with one approval, and the
 checks *Python tests*, *Python tests on PostgreSQL*, *Node build and tests* and *No secrets
@@ -140,3 +140,16 @@ per attempt: 200 with `{"status":"ok","database":"ok","version":"<commit>"}`, or
 
 The Live check also runs every morning at 08:00 Vietnam time, so the URL going down between two
 merges is noticed the same day, not by the instructor.
+
+## 4. Known risks and technical debt
+
+| Item | Layer | What could happen | Plan |
+| --- | --- | --- | --- |
+| The free API sleeps after 15 minutes idle | infrastructure | The first visit waits about a minute; someone thinks the app is down | Accepted: allowed by the brief; we open the URL five minutes before the demo |
+| Neon's free plan has no backup we control | data | A mistake or the end of the free plan loses every account | #213: `pg_dump` weekly and before the demo, kept outside Git (section 5) |
+| The demo account is made again in a new month | data | What a visitor added to `mai@example.com` in an earlier month disappears at the next start | Accepted: it is a shared test account, and the overview must never open empty (TC-85, TC-86) |
+| SQLite on laptops, PostgreSQL on the URL | tests | A query that works on one fails on the other | Accepted: CI runs every test on both; it already caught the `VARCHAR` difference |
+| Metro caches `EXPO_PUBLIC_API_URL` between builds | infrastructure | A changed API address is ignored and the web app calls the old one | Fixed: `npm run build` clears the cache (`--clear`); Render builds on a clean machine |
+| Render settings live in its dashboard, not in Git | docs | A setting changed by hand is lost or never explained | Section 1 lists every setting; anyone changing one updates it in the same pull request |
+| Profile pictures are kept in the database | data | Many large pictures fill Neon's free 0.5 GB | Accepted: BR15 caps one at 200 KB and the app sends about 20 KB; 1,000 accounts take under 20 MB |
+| US07, US08 and US09 are not built | code | A user cannot cap spending or be warned before the cap | Accepted: P1 and P2, after every P0 story; they stay open on the board |
