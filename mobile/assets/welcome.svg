@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <!-- The welcome illustration of the Personal Expense Management App, drawn for the project
+       (Team 05, 2026). Two students at a table plan the month: a phone with this month's chart,
+       a notebook, coins, a calculator and a piggy bank. Rendered to welcome.png by
+       scripts/render-illustration.mjs; edit this file, not the PNG. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDF6E9"/>
+      <stop offset="1" stop-color="#F3E7D3"/>
+    </linearGradient>
+    <linearGradient id="table" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C98B55"/>
+      <stop offset="1" stop-color="#A86C3C"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#EEF6F3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- the room -->
+  <rect width="1200" height="900" rx="48" fill="url(#sky)"/>
+  <circle cx="960" cy="190" r="120" fill="#FFE3A3" opacity="0.6"/>
+  <!-- window -->
+  <g transform="translate(110 90)">
+    <rect width="250" height="210" rx="18" fill="#CFE7F2"/>
+    <rect x="12" y="12" width="104" height="186" rx="10" fill="#E6F4FA"/>
+    <rect x="134" y="12" width="104" height="186" rx="10" fill="#E6F4FA"/>
+    <path d="M30 170 q40 -60 80 -10 q30 -40 60 0 q30 -30 60 10 v28 h-200 z" fill="#B7DCC8"/>
+  </g>
+  <!-- shelf with books -->
+  <g transform="translate(820 110)">
+    <rect x="0" y="150" width="280" height="14" rx="7" fill="#B07A4A"/>
+    <rect x="20" y="62" width="34" height="88" rx="5" fill="#0E6B57"/>
+    <rect x="58" y="78" width="28" height="72" rx="5" fill="#E07A5F"/>
+    <rect x="90" y="54" width="36" height="96" rx="5" fill="#F2C14E"/>
+    <rect x="130" y="84" width="26" height="66" rx="5" fill="#5B8DB8"/>
+    <rect x="186" y="96" width="62" height="54" rx="27" fill="#8CC3B3"/>
+    <path d="M200 96 q17 -50 34 0" fill="#5FA48C"/>
+  </g>
+
+  <!-- left student, writing -->
+  <g transform="translate(250 330)">
+    <rect x="-10" y="150" width="230" height="150" rx="90" fill="#F2C14E"/>
+    <circle cx="105" cy="95" r="92" fill="#F6D2B5"/>
+    <path d="M14 92 q0 -105 96 -106 q92 2 92 100 q-26 -54 -96 -58 q-62 4 -92 64 z" fill="#3B2A26"/>
+    <path d="M196 70 q38 30 18 92 q-12 -36 -24 -46 z" fill="#3B2A26"/>
+    <circle cx="74" cy="108" r="9" fill="#2B1E1B"/>
+    <circle cx="136" cy="108" r="9" fill="#2B1E1B"/>
+    <circle cx="58" cy="136" r="14" fill="#F4A9A0" opacity="0.6"/>
+    <circle cx="152" cy="136" r="14" fill="#F4A9A0" opacity="0.6"/>
+    <path d="M88 146 q17 16 34 0" fill="none" stroke="#2B1E1B" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- right student, holding the phone -->
+  <g transform="translate(700 300)">
+    <rect x="-20" y="170" width="250" height="160" rx="100" fill="#8CC3B3"/>
+    <circle cx="105" cy="105" r="96" fill="#EDC3A0"/>
+    <path d="M8 104 q-6 -120 104 -116 q106 6 96 112 q-14 -44 -40 -62 q-6 30 -52 34 q24 -22 18 -40 q-40 40 -126 72 z" fill="#1F2A36"/>
+    <circle cx="74" cy="120" r="9" fill="#1B1B22"/>
+    <circle cx="138" cy="120" r="9" fill="#1B1B22"/>
+    <path d="M90 158 q16 12 32 0" fill="none" stroke="#1B1B22" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="56" cy="146" r="13" fill="#E9A08F" opacity="0.5"/>
+    <circle cx="156" cy="146" r="13" fill="#E9A08F" opacity="0.5"/>
+  </g>
+
+  <!-- the table -->
+  <rect x="80" y="610" width="1040" height="60" rx="24" fill="url(#table)"/>
+  <rect x="120" y="660" width="40" height="200" rx="12" fill="#8C5A31"/>
+  <rect x="1040" y="660" width="40" height="200" rx="12" fill="#8C5A31"/>
+
+  <!-- notebook with a pencil -->
+  <g transform="translate(250 540) rotate(-6)">
+    <rect width="230" height="120" rx="12" fill="#FFFFFF" stroke="#DCE3E0" stroke-width="4"/>
+    <rect x="0" y="0" width="22" height="120" rx="10" fill="#E07A5F"/>
+    <rect x="44" y="26" width="150" height="8" rx="4" fill="#C9D6D1"/>
+    <rect x="44" y="50" width="120" height="8" rx="4" fill="#C9D6D1"/>
+    <rect x="44" y="74" width="140" height="8" rx="4" fill="#C9D6D1"/>
+    <rect x="150" y="66" width="110" height="14" rx="7" fill="#F2C14E" transform="rotate(-28 150 66)"/>
+    <path d="M247 13 l18 -6 l-8 16 z" fill="#3B2A26"/>
+  </g>
+  <!-- left hand on the notebook -->
+  <ellipse cx="420" cy="590" rx="34" ry="24" fill="#F6D2B5"/>
+
+  <!-- the phone, held up, showing this month -->
+  <g transform="translate(650 360) rotate(6)">
+    <rect width="190" height="330" rx="28" fill="#17211E"/>
+    <rect x="12" y="20" width="166" height="290" rx="18" fill="url(#screen)"/>
+    <rect x="12" y="20" width="166" height="46" rx="18" fill="#0E6B57"/>
+    <rect x="12" y="46" width="166" height="20" fill="#0E6B57"/>
+    <rect x="28" y="36" width="70" height="10" rx="5" fill="#FFFFFF" opacity="0.9"/>
+    <rect x="28" y="84" width="60" height="8" rx="4" fill="#5F6F68"/>
+    <rect x="28" y="98" width="110" height="16" rx="6" fill="#0E6B57"/>
+    <!-- bars -->
+    <rect x="34" y="210" width="18" height="60" rx="5" fill="#8CC3B3"/>
+    <rect x="60" y="180" width="18" height="90" rx="5" fill="#A2452C"/>
+    <rect x="86" y="196" width="18" height="74" rx="5" fill="#8CC3B3"/>
+    <rect x="112" y="160" width="18" height="110" rx="5" fill="#A2452C"/>
+    <rect x="138" y="190" width="18" height="80" rx="5" fill="#8CC3B3"/>
+    <rect x="28" y="276" width="134" height="4" rx="2" fill="#DCE3E0"/>
+  </g>
+  <!-- right hand on the phone -->
+  <ellipse cx="660" cy="560" rx="30" ry="36" fill="#EDC3A0"/>
+
+  <!-- calculator -->
+  <g transform="translate(880 520)">
+    <rect width="150" height="110" rx="16" fill="#2E3A36"/>
+    <rect x="14" y="12" width="122" height="28" rx="6" fill="#B7DCC8"/>
+    <g fill="#5F6F68">
+      <rect x="16" y="50" width="26" height="20" rx="5"/><rect x="50" y="50" width="26" height="20" rx="5"/>
+      <rect x="84" y="50" width="26" height="20" rx="5"/><rect x="16" y="78" width="26" height="20" rx="5"/>
+      <rect x="50" y="78" width="26" height="20" rx="5"/><rect x="84" y="78" width="26" height="20" rx="5"/>
+    </g>
+    <rect x="118" y="50" width="20" height="48" rx="5" fill="#E07A5F"/>
+  </g>
+
+  <!-- coins and a note -->
+  <g transform="translate(520 560)">
+    <rect x="-6" y="18" width="120" height="44" rx="8" fill="#9CCB8F" transform="rotate(-8)"/>
+    <circle cx="44" cy="28" r="14" fill="#7BB06E" transform="rotate(-8)"/>
+    <ellipse cx="150" cy="48" rx="30" ry="12" fill="#D9A21E"/>
+    <ellipse cx="150" cy="38" rx="30" ry="12" fill="#F2C14E"/>
+    <ellipse cx="150" cy="28" rx="30" ry="12" fill="#F6D06A"/>
+  </g>
+
+  <!-- piggy bank -->
+  <g transform="translate(140 470)">
+    <ellipse cx="70" cy="90" rx="74" ry="56" fill="#F4A9A0"/>
+    <circle cx="130" cy="78" r="22" fill="#F4A9A0"/>
+    <ellipse cx="144" cy="80" rx="10" ry="8" fill="#E98C82"/>
+    <path d="M44 42 l14 -26 l16 24 z" fill="#E98C82"/>
+    <circle cx="118" cy="68" r="5" fill="#3B2A26"/>
+    <rect x="44" y="40" width="40" height="8" rx="4" fill="#C9665D"/>
+    <rect x="22" y="130" width="18" height="22" rx="6" fill="#E98C82"/>
+    <rect x="96" y="130" width="18" height="22" rx="6" fill="#E98C82"/>
+  </g>
+
+  <!-- floating dong coin and a small pie -->
+  <g transform="translate(560 170)">
+    <circle r="46" fill="#F2C14E"/>
+    <circle r="36" fill="#F6D06A"/>
+    <text x="0" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="46" font-weight="700" fill="#A87A12">₫</text>
+  </g>
+  <g transform="translate(470 270)">
+    <circle r="30" fill="#0E6B57"/>
+    <path d="M0 0 L0 -30 A30 30 0 0 1 28 10 z" fill="#E07A5F"/>
+    <path d="M0 0 L28 10 A30 30 0 0 1 -10 28 z" fill="#F2C14E"/>
+  </g>
+</svg>
