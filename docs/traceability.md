@@ -21,6 +21,12 @@ a table without updating this file should not be approved (`docs/definition-of-d
 | US11 Choose the app's language | P2 | every screen | none: the app translates what the API sends | none | BR3 | [#72] | 2 | Done |
 | US12 See how spending changes month by month | P1 | `/stats`, and a card on `/` | `GET /api/stats/months` · `GET /api/stats/years` | transactions | BR4, BR12 | [#140] | 4 | Done |
 | US13 Keep track of debts and loans | P1 | `/debts`, `/debts/new`, and a card on `/` | `GET` and `POST /api/debts` · `POST /api/debts/{id}/settle` · `DELETE /api/debts/{id}` | debts | BR4, BR5, BR11, BR13, BR14 | [#141] | 4 | Done |
+| US14 Use the app from a link | P1 | every screen | `GET /health` | all | BR4 | [#186] | 5 | Done |
+| US15 The first screen | P2 | `/welcome` | none | none | none | [#187] | 5 | Done |
+| US16 A profile, and a greeting by name | P2 | `/profile`, the ☰ menu, `/` | `GET` and `PATCH /api/users/me` | users | BR15 | [#188] | 5 | Done |
+| US17 What each category holds | P1 | `/categories`, `/categories/:id` | `GET /api/categories/spending` · `GET /api/categories/{id}/spending` | transactions, categories | BR4 | [#189] | 5 | Done |
+| US18 Delete the account | P1 | `/account/delete` | `DELETE /api/users/me` | users, and by cascade transactions, budgets, debts | BR1, BR16 | [#190] | 5 | Done |
+| US19 Light or dark, and about the app | P2 | the ☰ menu, `/about` | `GET /health` | none | none | [#191] | 5 | Done |
 
 **Built in Sprint 2.** US02 by #58, #60, #61, #63 and #64; US05 by #60, #61, #62, #63 and #65. The
 pull request of #65 closes both stories and sets their Status to Done. US11, added on 28/09, is
@@ -55,7 +61,7 @@ US04 by #145, US05 by #149. Bug #142 gave BR5 its upper limit.
 
 | Route | Purpose | Access | Priority | Stories |
 | --- | --- | --- | --- | --- |
-| `/login` | Sign in to reach your own records | G | P0 | US02 |
+| `/login` | Sign in to reach your own records; opened from `/welcome` | G | P0 | US02 |
 | `/register` | Create an account and enter immediately | G | P0 | US01 |
 | `/` | This month's income, spending, remainder; cap warnings; recent entries; on a wide screen, cards for US10, US12 and US13 | U | P0 | US04, US05, US09, US10, US12, US13 |
 | `/transactions/new` | Log one amount of money spent or received | U | P0 | US03, US07 |
@@ -64,6 +70,12 @@ US04 by #145, US05 by #149. Bug #142 gave BR5 its upper limit.
 | `/stats` | Spending month by month and year by year; one month by kind of spending | U | P1 | US10, US12 |
 | `/debts` | Money borrowed and lent: who, how much, by when; mark it settled | U | P1 | US13 |
 | `/debts/new` | Write down one debt or loan | U | P1 | US13 |
+| `/welcome` | What the app is for; sign in, create an account, or the language | G | P2 | US15, US11 |
+| `/profile` | Name, the name to call you, phone and picture; the email read-only | U | P2 | US16 |
+| `/categories` | Every category with what went into it | U | P1 | US17 |
+| `/categories/:id` | One category: six months and its newest entries | U | P1 | US17 |
+| `/account/delete` | Delete the account after the email, the password and "Are you sure?" | U | P1 | US18 |
+| `/about` | What the app is for, its version, who made it | G, U | P2 | US19 |
 
 **Access:** G guest, not signed in · U signed-in user. No route needs A this semester: every
 account reads and changes only its own entries (BR4).
@@ -90,6 +102,8 @@ first, then here. Test cases are named by their ID from `docs/testing.md`, secti
 | BR12 | Months and years are compared on money spent. The month with the most spent and the month with the least are chosen among the months up to this one that have at least one entry; on a tie, the earlier month. A year later than this one cannot be chosen. | `stats_service.busiest_and_quietest` and `read_year` | TC-58 to TC-65 |
 | BR13 | A debt names who the money is with in 1 to 60 characters, and its amount follows BR5. It started today or earlier (BR11), and its due date, if it has one, is not before the day it started. | Database: CHECK on `debts.person` length and `due_on >= started_on`; `debt_service.add_debt` answers 422 `person_length` or `due_before_start` | TC-72 to TC-76 · `test_database_rules.py` |
 | BR14 | An open debt is overdue from the day after its due date; on the due date itself it is not yet overdue. A settled debt is never overdue and cannot be settled twice. | `debt_service.is_overdue` and `settle_debt`, 409 `already_settled`; the app's words in `src/utils/debts.js` | TC-68 to TC-71 · `mobile/__tests__/debts.test.js` |
+| BR15 | An account's email never changes. Its full name (at most 80 characters), the name to call it (at most 40), its phone number (8 to 15 digits) and its picture (a PNG, JPEG or WebP of at most 200 KB) are all optional; an empty field means "not given". | `ProfileUpdate` refuses `email` (400); `profile_service.update_profile` answers 422 with one code per field; the app makes a picture 256 × 256 before sending it | TC-87 to TC-94 |
+| BR16 | An account is deleted only after its email and current password are typed again and the deletion is confirmed; it takes every entry, cap and debt of the account with it, and cannot be undone. | `profile_service.delete_account` answers 422 `confirmation_mismatch`; the foreign keys of transactions, budgets and debts are ON DELETE CASCADE; `/account/delete` asks "Are you sure?" | TC-95 to TC-98 |
 
 [#14]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/14
 [#15]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/15
@@ -104,3 +118,9 @@ first, then here. Test cases are named by their ID from `docs/testing.md`, secti
 [#72]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/72
 [#140]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/140
 [#141]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/141
+[#186]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/186
+[#187]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/187
+[#188]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/188
+[#189]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/189
+[#190]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/190
+[#191]: https://github.com/SE-FDA-NEU/G5_AI66A_SE/issues/191

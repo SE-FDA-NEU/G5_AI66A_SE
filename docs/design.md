@@ -140,6 +140,9 @@ API, `server_error`, never a stack trace.
 | `already_settled` | 409 | BR14 | `POST /api/debts/{id}/settle` |
 | `person_length` | 422 | BR13 | `POST /api/debts` |
 | `due_before_start` | 422 | BR13 | `POST /api/debts` |
+| `name_too_long`, `nickname_too_long`, `invalid_phone`, `invalid_avatar` | 422 | BR15 | `PATCH /api/users/me` |
+| `confirmation_mismatch` | 422 | BR16 | `DELETE /api/users/me` |
+| `category_not_found` | 404 | no such category | `GET /api/categories/{id}/spending` |
 | `not_found` | 404 | a path the API does not have | any |
 | `server_error` | 500 | a fault in the API | any |
 
@@ -167,6 +170,12 @@ a small sub-resource named as a noun, a login: `POST /api/auth/login`.
 | 16  | POST   | `/api/debts`                 | Bearer token · JSON `direction` (`borrowed` or `lent`), `person`, `amount`, `note`, `started_on`, `due_on` or null | **201** · the stored debt, in the shape of row 15                                                                                                                 | **422** "Write a name of 1 to 60 characters" _(BR13)_ · "Enter an amount greater than 0" _(BR5)_ · "The date cannot be in the future" _(BR11)_ · "The due date cannot be before the start date" _(BR13)_ · **401** | US13 | **Sprint 4** |
 | 17  | POST   | `/api/debts/{id}/settle`     | Bearer token                                                                                   | **200** · the debt, `settled_on` today                                                                                                                                  | **409** "This debt is already settled" _(BR14)_ · **404** "Debt not found" _(BR4)_ · **401**                                                                 | US13 | **Sprint 4** |
 | 18  | DELETE | `/api/debts/{id}`            | Bearer token                                                                                   | **204** · nothing; the debt is gone                                                                                                                                     | **404** "Debt not found" _(BR4)_ · **401**                                                                                                                   | US13 | **Sprint 4** |
+| 19  | GET    | `/health`                    | none | **200** · `{status: ok, database: ok, version}`: the API runs and its database answers; `version` is the deployed commit | **503** `{status: unavailable, database: unreachable}` | US14 | **Sprint 5** |
+| 20  | GET    | `/api/users/me`              | Bearer token | **200** · `{id, email, full_name, nickname, phone, avatar}`; the profile fields may be null | **401** | US16 | **Sprint 5** |
+| 21  | PATCH  | `/api/users/me`              | Bearer token · JSON any of `full_name`, `nickname`, `phone`, `avatar`; an empty string clears one | **200** · the profile, as row 20 | **422** `name_too_long`, `nickname_too_long`, `invalid_phone`, `invalid_avatar` _(BR15)_ · **400** for `email` or any other field _(BR15)_ · **401** | US16 | **Sprint 5** |
+| 22  | DELETE | `/api/users/me`              | Bearer token · JSON `email`, `password` | **204** · the account and its entries, caps and debts are deleted | **422** "The email or password does not match this account" _(BR16)_ · **401** | US18 | **Sprint 5** |
+| 23  | GET    | `/api/categories/spending`   | Bearer token | **200** · every category, `{category, this_month, all_time, count}` | **401** | US17 _(BR4)_ | **Sprint 5** |
+| 24  | GET    | `/api/categories/{id}/spending` | Bearer token | **200** · as row 23, plus `months` (the last six, `{month, amount}`) and `recent` (the ten newest entries) | **404** `category_not_found` · **401** | US17 _(BR4)_ | **Sprint 5** |
 
 Rows 1 to 7 cover all five P0 stories, and all eight endpoints are built: four in Sprint 2, and
 rows 1, 5, 6 and 7 in Sprint 3, against the contract fixed here in Sprint 2. Building them changed
