@@ -1,8 +1,8 @@
 /**
- * Which screens exist. Signed out, only /login and /register; signed in, only the screens of an
- * account. A signed-in screen typed into the address bar without a session lands on /login
- * (BR4 as navigation), and signing in or creating an account lands on / by itself. The top bar
- * and the space behind each screen take the palette in use, light or dark (US19).
+ * Which screens exist. Signed out: /welcome first (US15), then /login and /register. Signed in,
+ * only the screens of an account. A signed-in screen typed into the address bar without a session
+ * lands on /welcome (BR4 as navigation), and signing in or creating an account lands on / by
+ * itself. The top bar takes the palette in use, light or dark (US19).
  */
 
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -21,6 +21,7 @@ import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import StatsScreen from '../screens/StatsScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 import { useTheme } from '../theme';
 import { linking } from './linking';
 
@@ -60,7 +61,7 @@ export default function AppNavigator() {
     };
   }, [colors, scheme]);
 
-  // While the stored token is read, show a spinner rather than flash the sign-in screen.
+  // While the stored token is read, show a spinner rather than flash the welcome screen.
   if (status === 'loading') {
     return (
       <View style={[styles.splash, { backgroundColor: colors.background }]}>
@@ -112,6 +113,11 @@ export default function AppNavigator() {
           </>
         ) : (
           <>
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{ title: t('welcome.title'), headerShown: false }}
+            />
             <Stack.Screen
               name="Login"
               component={LoginScreen}
