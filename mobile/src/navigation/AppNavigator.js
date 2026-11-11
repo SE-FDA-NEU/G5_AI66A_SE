@@ -1,5 +1,5 @@
 /**
- * Which screens exist. Signed out: /welcome first (US15), then /login and /register. Signed in,
+ * Which screens exist. Signed out: /welcome first (US15), then /login, /register and /about. Signed in,
  * only the screens of an account. A signed-in screen typed into the address bar without a session
  * lands on /welcome (BR4 as navigation), and signing in or creating an account lands on / by
  * itself. The top bar takes the palette in use, light or dark (US19).
@@ -13,6 +13,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
+import AboutScreen from '../screens/AboutScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import DebtsScreen from '../screens/DebtsScreen';
@@ -77,6 +78,10 @@ export default function AppNavigator() {
     formatter: (options, route) => `${options?.title ?? route?.name} · ${t('app.title')}`,
   };
 
+  const about = (
+    <Stack.Screen name="About" component={AboutScreen} options={{ title: t('about.title') }} />
+  );
+
   return (
     <NavigationContainer linking={linking} documentTitle={documentTitle} theme={navigationTheme}>
       <Stack.Navigator screenOptions={screenOptions}>
@@ -122,6 +127,7 @@ export default function AppNavigator() {
               component={CategoryScreen}
               options={{ title: t('categories.title') }}
             />
+            {about}
           </>
         ) : (
           <>
@@ -140,6 +146,7 @@ export default function AppNavigator() {
               component={RegisterScreen}
               options={{ title: t('register.title') }}
             />
+            {about}
           </>
         )}
       </Stack.Navigator>
