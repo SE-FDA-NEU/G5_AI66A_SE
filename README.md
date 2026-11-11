@@ -1,21 +1,39 @@
+**Open the app: https://g5-expense-web.onrender.com** — on a phone or a laptop, nothing to install. API: https://g5-expense-api.onrender.com/docs · health: https://g5-expense-api.onrender.com/health
+
+[![CI](https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/workflows/ci.yml?query=branch%3Amain)
+[![Live check](https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/workflows/live-check.yml/badge.svg)](https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/workflows/live-check.yml)
+
+**Test account:** `mai@example.com` with the password `demo1234`, for every role (the app has one
+kind of user). It is a test value for this project only, never a real password. The first visit
+after a quiet spell can take a minute: the free server wakes up.
+
 # Personal Expense Management App
 
 An application designed for individuals who want to **manage their daily income and expenses**, automatically categorize transactions, track monthly spending, and receive alerts when their spending exceeds the set budget.
 
-**Run it:** [docs/SETUP.md](docs/SETUP.md) takes a fresh clone to the running app, step by step.
+**Run it yourself:** [docs/SETUP.md](docs/SETUP.md) takes a fresh clone to the running app, step by
+step. **How it runs online:** [docs/operations.md](docs/operations.md) — the pipeline, monitoring,
+risks and maintenance.
 
 ## Try the P0 stories
 
-With the backend and the app running (SETUP.md, sections 4 and 5), open http://localhost:8081.
-Every story starts from a screen; no address needs typing.
+Open https://g5-expense-web.onrender.com in a private window, or http://localhost:8081 with the backend and the app running
+(SETUP.md, sections 4 and 5). Every story starts from a screen; no address needs typing.
 
 | Story | Where it starts | What to do |
 | --- | --- | --- |
-| US02 Sign in and stay signed in | `/login`, the first screen | Sign in with the test account below; reopen the page, no password asked |
+| US02 Sign in and stay signed in | **Sign in** on `/welcome`, the first screen → `/login` | Sign in with the test account above; reopen the page, no password asked |
 | US04 This month's position | `/`, the card at the top | Read Received, Spent and Left for this month |
 | US05 Look back over recent entries | `/`, the list under the card | The 20 most recent entries, newest first; **Refresh** reloads them |
 | US03 Log a purchase in seconds | **+ Add an entry** on `/` → `/transactions/new` | Amount, a kind of spending, **Save**; `/` shows the new totals |
-| US01 Create an account | **Create an account** on `/login` → `/register` | An email and a password of 6 to 128 characters; lands on `/` signed in |
+| US01 Create an account | **Create an account** on `/welcome` → `/register` | An email and a password of 6 to 128 characters; lands on `/` signed in |
+
+**Built in Sprint 5:** the app opens on a welcome screen with Sign in, Create an account and the
+language (US15). Once signed in, the **☰** menu at the top right holds your profile, where a name,
+the name to call you, a phone and a picture are all optional and the greeting on `/` uses them
+(US16); your categories, with what went into each (US17); Light, Dark or Device (US19); the
+language; About this app; Delete account, after your email, password and "Are you sure?" (US18);
+and Sign out.
 
 **Built in Sprint 4:** tap a row on `/` to correct or delete it (US06); the **Stats** tab shows
 spending month by month and year by year, and where a month's money went (US10, US12); the
@@ -24,9 +42,8 @@ spending month by month and year by year, and where a month's money went (US10, 
 **Test it:** `pytest` in the cloned folder runs every backend test, no server needed. Every test
 case, with its ID, is in [docs/testing.md](docs/testing.md).
 
-**Test account:** `mai@example.com` with the password `demo1234`, created by
-`python -m scripts.seed_data`. It is a test value for this project only, never a real password.
-To see a rule refused, date an entry tomorrow on `/transactions/new`: the screen says why and
+The test account above is created by `python -m scripts.seed_data` on a laptop, and at every
+start on the server. To see a rule refused, date an entry tomorrow on `/transactions/new`: the screen says why and
 what to do. Every message is listed in [docs/ui.md](docs/ui.md), section 3.
 
 **Group:** G5_AI66A

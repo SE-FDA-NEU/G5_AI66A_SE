@@ -103,6 +103,7 @@ Actions tab), the four DORA metrics of week 13:
 | 2 | 8.5 | 1.1 h | 0 of 17 | — |
 | 3 | 10.5 | 3.4 h | 0 of 21 | — |
 | 4 | 11.0 | 0.5 h | 0 of 22 | — |
+| 5 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 |
 
 `main` has never been red, because a red pull request cannot be merged. Our failures happen on
 branches, where they cost nobody else anything.
@@ -164,3 +165,13 @@ merges is noticed the same day, not by the instructor.
 | Monitoring | Read the failed-run emails of CI and the Live check; search the Render log for ` 500 ` and `WARNING` | @Chidokato5376 | Daily while the app is graded |
 | Secrets | `SECRET_KEY`, the Neon password and both deploy hooks: rotate at once if one is ever seen in Git, a log or a chat | @Chidokato5376 | When one leaks, and at the end of the course |
 | Keeping the docs true | A pull request that changes a behaviour, a setting or a command changes its line in `README.md`, `docs/SETUP.md` or this file; the reviewer checks it | the author, checked by the reviewer | Every pull request |
+
+## 6. Lessons learned
+
+Drafted from the retrospectives in `docs/retro.md` and confirmed at the Sprint 5 retrospective.
+
+| Lesson | What happened | What we changed | What we would do differently |
+| --- | --- | --- | --- |
+| Merge a little every day | Sprints 2 and 4 ended with several pull requests merged on the last evening, after the day before slipped; reviews of those were the shortest of the sprint | Sprint 4 retro: "a pull request a day"; the review rotation is posted and requested automatically at planning | Cut issues small enough to merge within a day, and give each a merge-by date at planning |
+| Fix a pull request, do not redo it | #129 was closed unmerged and redone as #131, 13.6 hours later; #137 reopened finished work and left card #93 stuck in *In Review* | Reviews ask for a change on the same branch; `board-in-review.yml` skips closed issues | Push the fix to the same branch: the review history and the board stay true |
+| Deploy the walking skeleton, not the finished app | Going online in Sprint 5 found three things no laptop showed: SQLite is emptied on every deploy, PostgreSQL enforces `VARCHAR` lengths, and Metro keeps an old `EXPO_PUBLIC_API_URL` | ADR 4, a PostgreSQL job in CI, `--clear` in the build, `/health` that checks the database | Put the walking skeleton on a URL in Sprint 2, with deploy-after-green, so every sprint is tested where users are |
