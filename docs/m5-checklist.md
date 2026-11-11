@@ -48,4 +48,4 @@ Sprint 5, up to #236, from GitHub (`tools/m5_repo_check.py` in the handoff pack)
 | The DORA metrics, `docs/operations.md`, section 2 | Sprint 5: 11.5 merges a week, lead time 0.5 h, 0 of 22 runs on `main` red |
 | No blank left in README or `docs` | pass · CI refuses any unfilled blank marker (job *No secrets committed*) |
 | Stories not built | US07, US08 and US09 (P1, P2), closed as not planned: #20, #21, #22 |
-| The Neon backup, #213 | Not done yet: #213 stays open, and the dump and the trial restore are done before the demo. `docs/operations.md`, sections 4 and 5, describe it |
+| The Neon backup, #213 | pass · `pg_dump` of Neon on 12/11/2026 (20 KB, PostgreSQL 16.15), restored into an empty PostgreSQL 16 database; both sides count users 2, categories 11, transactions 92, budgets 0, debts 4. The file is kept on the team drive, never in Git |

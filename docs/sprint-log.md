@@ -452,7 +452,7 @@ hours, as before.
 | #210 | design.md and traceability.md for Sprint 5; operations.md section 4 | @nguyennhien2412 | Done |  |
 | #211 | docs/ui.md messages for BR15 and BR16; operations.md section 5 | @vantran2801 | Done |  |
 | #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Done | Completes `docs/operations.md` and the README first screen, after this log |
-| #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Not done by 12/11 | Planned before the demo in week 15; the issue stays open until the dump and the trial restore are done |
+| #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Done | Dumped and restored on 12/11; the trial restore went into a local PostgreSQL 16, not a Neon branch, with the same row counts |
 | #237 | Final M5 check: the checklist, DORA for Sprint 5, the rulesets picture | @Chidokato5376 | Done | |
 
 **Completed: 16 points. Velocity this sprint: 16 points**: US14 #186 by #197, US15 #187 by #204, US16 #188 by #209, US17 #189 by #206, US18 #190 by #208, US19 #191 by #207.
