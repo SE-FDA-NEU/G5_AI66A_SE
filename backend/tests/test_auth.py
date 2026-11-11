@@ -23,7 +23,14 @@ def test_tc09_sign_in_returns_a_token_and_the_account(client, account):
     body = response.json()
     assert body["access_token"]
     assert body["token_type"] == "bearer"
-    assert body["user"] == {"id": account.id, "email": DEMO_EMAIL}
+    assert body["user"] == {
+        "id": account.id,
+        "email": DEMO_EMAIL,
+        "full_name": None,
+        "nickname": None,
+        "phone": None,
+        "avatar": None,
+    }
 
 
 def test_tc10_sign_in_ignores_capitals_in_the_address(client, account):
