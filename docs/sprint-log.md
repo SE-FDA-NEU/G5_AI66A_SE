@@ -451,7 +451,7 @@ hours, as before.
 | #209 | The ☰ menu, /profile with a picture, and the greeting by name | @vantran2801 | Done |  |
 | #210 | design.md and traceability.md for Sprint 5; operations.md section 4 | @nguyennhien2412 | Done |  |
 | #211 | docs/ui.md messages for BR15 and BR16; operations.md section 5 | @vantran2801 | Done |  |
-| #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Merges last | Completes `docs/operations.md` and the README first screen, after this log |
+| #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Done | Completes `docs/operations.md` and the README first screen, after this log |
 | #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Backup and restore completed 12/11/2026 | Issue remains open; record the dump date and row counts in its comment and complete its checklist |
 
 **Completed: 16 points. Velocity this sprint: 16 points**: US14 #186 by #197, US15 #187 by #204, US16 #188 by #209, US17 #189 by #206, US18 #190 by #208, US19 #191 by #207.
@@ -464,7 +464,7 @@ hours, as before.
 | 2 | 22/09 to 05/10 | @nguyennhien2412 | 9 | 9 | 9 | 17 |
 | 3 | 06/10 to 19/10 | @levanduc36 | 11 | 11 | 11 | 21 |
 | 4 | 20/10 to 02/11 | @Chidokato5376 | 18 | 18 | 18 | 22 |
-| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 21 |
+| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 24 |
 
 Velocity rose from 9 to 18 as the patterns of Sprints 2 and 3 were reused, and settled at 16 once
 the work moved from code to running it. The number never meant speed: each sprint committed what
