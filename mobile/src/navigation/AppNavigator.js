@@ -13,6 +13,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
+import CategoriesScreen from '../screens/CategoriesScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 import DebtsScreen from '../screens/DebtsScreen';
 import EditEntryScreen from '../screens/EditEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -109,6 +111,16 @@ export default function AppNavigator() {
               name="NewDebt"
               component={NewDebtScreen}
               options={{ title: t('newDebt.title') }}
+            />
+            <Stack.Screen
+              name="Categories"
+              component={CategoriesScreen}
+              options={{ title: t('categories.title') }}
+            />
+            <Stack.Screen
+              name="Category"
+              component={CategoryScreen}
+              options={{ title: t('categories.title') }}
             />
           </>
         ) : (
