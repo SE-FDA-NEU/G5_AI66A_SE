@@ -1,6 +1,6 @@
 {
   "name": "g5-expense-mobile",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "engines": {
@@ -20,6 +20,8 @@
     "@react-navigation/native-stack": "^7.18.8",
     "expo": "~54.0.37",
     "expo-constants": "~18.0.14",
+    "expo-image-manipulator": "~14.0.8",
+    "expo-image-picker": "~17.0.11",
     "expo-secure-store": "~15.0.8",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",

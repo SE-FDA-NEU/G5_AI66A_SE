@@ -2,7 +2,7 @@
   "expo": {
     "name": "Personal Expense Management App",
     "slug": "g5-expense",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "ios": {
