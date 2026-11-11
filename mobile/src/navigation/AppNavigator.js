@@ -17,6 +17,7 @@ import AboutScreen from '../screens/AboutScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import DebtsScreen from '../screens/DebtsScreen';
+import DeleteAccountScreen from '../screens/DeleteAccountScreen';
 import EditEntryScreen from '../screens/EditEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NewDebtScreen from '../screens/NewDebtScreen';
@@ -126,6 +127,11 @@ export default function AppNavigator() {
               name="Category"
               component={CategoryScreen}
               options={{ title: t('categories.title') }}
+            />
+            <Stack.Screen
+              name="DeleteAccount"
+              component={DeleteAccountScreen}
+              options={{ title: t('deleteAccount.title') }}
             />
             {about}
           </>
