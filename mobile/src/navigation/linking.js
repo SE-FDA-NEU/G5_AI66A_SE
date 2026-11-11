@@ -16,6 +16,7 @@ export const ROUTES = {
   Categories: 'categories',
   Category: 'categories/:id',
   About: 'about',
+  DeleteAccount: 'account/delete',
 };
 
 export const linking = {

@@ -19,6 +19,7 @@ test('each screen has the route of the requirements', () => {
     Categories: 'categories',
     Category: 'categories/:id',
     About: 'about',
+    DeleteAccount: 'account/delete',
   });
 });
 
