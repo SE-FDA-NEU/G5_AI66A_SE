@@ -27,6 +27,7 @@ import {
 } from 'react-native';
 
 import { api } from '../api/client';
+import Avatar from '../components/Avatar';
 import EntryRow from '../components/EntryRow';
 import ErrorMessage from '../components/ErrorMessage';
 import MainLayout from '../components/MainLayout';
@@ -35,6 +36,7 @@ import OverviewCards from '../components/OverviewCards';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
+import { displayName } from '../utils/profile';
 import { useStyles, useTheme, radius, spacing } from '../theme';
 
 export const RECENT_COUNT = 20;
@@ -120,12 +122,18 @@ export default function OverviewScreen({ navigation }) {
 
   const top = (
     <View>
-      <View style={styles.accountRow}>
-        <Text style={styles.account}>{user?.email ?? ''}</Text>
-        <Pressable onPress={signOut} accessibilityRole="button">
-          <Text style={styles.link}>{t('overview.signOut')}</Text>
-        </Pressable>
-      </View>
+      {/* US16: greeted by the name they chose, else their full name, else their email. A tap
+          opens the profile; signing out is in the ☰ menu. */}
+      <Pressable
+        style={styles.accountRow}
+        onPress={() => navigation.navigate('Profile')}
+        accessibilityRole="button"
+      >
+        <Avatar user={user} size={36} />
+        <Text style={styles.greeting} numberOfLines={1}>
+          {user ? t('greeting.hello', { name: displayName(user) }) : ''}
+        </Text>
+      </Pressable>
 
       <ErrorMessage problem={describeError(message, t, api.baseUrl)} />
 
@@ -237,11 +245,15 @@ const makeStyles = (colors) =>
     accountRow: {
       alignItems: 'center',
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: spacing.sm,
+      marginBottom: spacing.md,
     },
-    account: { color: colors.textMuted, fontSize: 14 },
-    link: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+    greeting: {
+      color: colors.text,
+      flex: 1,
+      fontSize: 18,
+      fontWeight: '700',
+      marginLeft: spacing.sm,
+    },
     primaryButton: {
       alignItems: 'center',
       backgroundColor: colors.primary,
