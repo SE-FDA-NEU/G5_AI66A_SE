@@ -103,7 +103,7 @@ Actions tab), the four DORA metrics of week 13:
 | 2 | 8.5 | 1.1 h | 0 of 17 | — |
 | 3 | 10.5 | 3.4 h | 0 of 21 | — |
 | 4 | 11.0 | 0.5 h | 0 of 22 | — |
-| 5 | ⟦S5_FREQ⟧ | ⟦S5_LEAD⟧ | ⟦S5_CFR⟧ | ⟦S5_MTTR⟧ |
+| 5 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 |
 
 `main` has never been red, because a red pull request cannot be merged. Our failures happen on
 branches, where they cost nobody else anything.
