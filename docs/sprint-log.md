@@ -452,7 +452,7 @@ hours, as before.
 | #210 | design.md and traceability.md for Sprint 5; operations.md section 4 | @nguyennhien2412 | Done |  |
 | #211 | docs/ui.md messages for BR15 and BR16; operations.md section 5 | @vantran2801 | Done |  |
 | #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Merges last | Completes `docs/operations.md` and the README first screen, after this log |
-| #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Done | Done on Neon, no pull request; closed by hand with the dump's date |
+| #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Backup and restore completed 12/11/2026 | Issue remains open; record the dump date and row counts in its comment and complete its checklist |
 
 **Completed: 16 points. Velocity this sprint: 16 points**: US14 #186 by #197, US15 #187 by #204, US16 #188 by #209, US17 #189 by #206, US18 #190 by #208, US19 #191 by #207.
 
@@ -464,7 +464,7 @@ hours, as before.
 | 2 | 22/09 to 05/10 | @nguyennhien2412 | 9 | 9 | 9 | 17 |
 | 3 | 06/10 to 19/10 | @levanduc36 | 11 | 11 | 11 | 21 |
 | 4 | 20/10 to 02/11 | @Chidokato5376 | 18 | 18 | 18 | 22 |
-| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | ⟦FILL: merged pull requests from #184 on, from tools/m5_repo_check.py⟧ |
+| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 21 |
 
 Velocity rose from 9 to 18 as the patterns of Sprints 2 and 3 were reused, and settled at 16 once
 the work moved from code to running it. The number never meant speed: each sprint committed what
@@ -472,8 +472,8 @@ its milestone needed and finished it.
 
 ### Sprint Review
 
-- What we demonstrated: the final demo, in week 15, on the URL in a private window.
-- Feedback received: ⟦FILL: what the instructor said at the final demo, or "the demo is after this log" if it is⟧
+- What we demonstrated: the final demo on the URL in a private window is planned for week 15; it has not happened yet.
+- Feedback received: The demo is after this log.
 - Backlog changes as a result: none; Sprint 5 is the last sprint.
 
 ### Retrospective
@@ -484,8 +484,7 @@ See Sprint 5 and the whole-semester retrospective in `docs/retro.md`.
 
 | Member | Planning | Review | Retro |
 | --- | --- | --- | --- |
-| @Chidokato5376 | ⟦FILL: Yes or No⟧ | With the instructor, week 15 | ⟦FILL: Yes or No⟧ |
-| @vantran2801 | ⟦FILL: Yes or No⟧ | With the instructor, week 15 | ⟦FILL: Yes or No⟧ |
-| @nguyennhien2412 | ⟦FILL: Yes or No⟧ | With the instructor, week 15 | ⟦FILL: Yes or No⟧ |
-| @levanduc36 | ⟦FILL: Yes or No⟧ | With the instructor, week 15 | ⟦FILL: Yes or No⟧ |
-
+| @Chidokato5376 | Not confirmed | Not held yet | No meeting held |
+| @vantran2801 | Not confirmed | Not held yet | No meeting held |
+| @nguyennhien2412 | Not confirmed | Not held yet | No meeting held |
+| @levanduc36 | Not confirmed | Not held yet | No meeting held |

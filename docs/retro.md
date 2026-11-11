@@ -181,8 +181,8 @@ Committed: 18 points · Completed: 18 points
 
 **Scrum Master:** @levanduc36
 
-Drafted from the sprint's facts; the team confirmed or changed every line at the retrospective on
-⟦FILL: the date of the Sprint 5 retrospective⟧.
+The team did not hold a Sprint 5 retrospective. The Keep / Stop / Start below remains the draft;
+it was not discussed or confirmed at a meeting.
 
 ### Keep / Stop / Start
 
@@ -191,9 +191,10 @@ Drafted from the sprint's facts; the team confirmed or changed every line at the
 | Deploying from CI: nobody copied files to a server, and a merge reached the URL only after green | Building for weeks on the laptop alone: PostgreSQL, Render's disk and Metro's cache showed their differences only once the app was online | Putting the walking skeleton on a URL in the first coding sprint |
 | Boundary test cases written in the issue before the code (BR15 and BR16 in #202) | Leaving a draft sentence in a document for later | Quoting the test count from the CI summary in every review |
 
-### Action for next sprint
+### Proposed action for the next project
 
-There is no Sprint 6. The action is for the team's next project.
+There is no Sprint 6. This is a proposed action for the team's next project, not an agreed retro
+action.
 
 | Action | Owner | Checked at |
 | --- | --- | --- |
@@ -203,7 +204,9 @@ There is no Sprint 6. The action is for the team's next project.
 
 The action was "Every new business rule arrives with its boundary test cases written in its issue
 before the code, and the reviewer runs them red once". The two new rules, BR15 and BR16, had their
-boundary cases in #202 before the code was written. ⟦FILL: did the reviewer of #205 run them red once? Say what the review shows⟧
+boundary cases in #202 before the code was written. The review of #228 records that
+@nguyennhien2412 changed `PHONE_DIGITS_MIN` from 8 to 7, and TC-91 failed on `0912 345`. The value
+was restored and the full suite passed with 219 tests. The action happened.
 
 ### Velocity
 
@@ -213,7 +216,8 @@ Committed: 16 points · Completed: 16 points
 
 ## Whole-semester retrospective
 
-Written for the Milestone 5 report, from five sprints and the five retrospectives above.
+Written for the Milestone 5 report from five sprint records and the retrospectives held in Sprints
+1 to 4. No Sprint 5 retrospective meeting was held.
 
 **What the velocity showed.** 0, 9, 11, 18, 16. Sprint 1 wrote requirements, so it has no velocity.
 The jump to 18 in Sprint 4 came from reusing the patterns of Sprints 2 and 3, not from working
