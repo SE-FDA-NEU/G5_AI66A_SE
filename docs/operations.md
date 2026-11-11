@@ -86,7 +86,7 @@ The jobs run side by side, so a run takes as long as its slowest job: **about on
 13 lecture sets. Each check job stops after **3 minutes**, so a hung test turns red rather than
 keeping a pull request waiting. A newer push cancels the run still going on the same branch.
 
-Latest green run on `main`: https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/runs/42662453565.
+Latest green run on `main`: https://github.com/SE-FDA-NEU/G5_AI66A_SE/actions/runs/43084995985.
 
 `main` is protected by two rulesets (Settings → Rules): a pull request with one approval, and the
 checks *Python tests*, *Python tests on PostgreSQL*, *Node build and tests* and *No secrets
@@ -103,9 +103,9 @@ Actions tab), the four DORA metrics of week 13:
 | 2 | 8.5 | 1.1 h | 0 of 17 | — |
 | 3 | 10.5 | 3.4 h | 0 of 21 | — |
 | 4 | 11.0 | 0.5 h | 0 of 22 | — |
-| 5 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 | Pending — Sprint 5 ends 16/11 |
+| 5 | 11.5 | 0.5 h | 0 of 22 | — |
 
-`main` has never been red, because a red pull request cannot be merged. Our failures happen on
+Sprint 5 is counted up to #236 on 12/11. `main` has never been red, because a red pull request cannot be merged. Our failures happen on
 branches, where they cost nobody else anything.
 
 ## 3. Monitoring
@@ -153,7 +153,7 @@ merges is noticed the same day, not by the instructor.
 | Metro caches `EXPO_PUBLIC_API_URL` between builds | infrastructure | A changed API address is ignored and the web app calls the old one | Fixed: `npm run build` clears the cache (`--clear`); Render builds on a clean machine |
 | Render settings live in its dashboard, not in Git | docs | A setting changed by hand is lost or never explained | Section 1 lists every setting; anyone changing one updates it in the same pull request |
 | Profile pictures are kept in the database | data | Many large pictures fill Neon's free 0.5 GB | Accepted: BR15 caps one at 200 KB and the app sends about 20 KB; 1,000 accounts take under 20 MB |
-| US07, US08 and US09 are not built | code | A user cannot cap spending or be warned before the cap | Accepted: P1 and P2, after every P0 story; they stay open on the board |
+| US07, US08 and US09 are not built | code | A user cannot cap spending or be warned before the cap | Accepted: P1 and P2, after every P0 story; closed as not planned (#20, #21, #22), their criteria kept in `docs/requirements.md` |
 
 ## 5. Maintenance plan
 
