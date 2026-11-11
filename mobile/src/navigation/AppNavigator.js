@@ -1,8 +1,8 @@
 /**
- * Which screens exist. Signed out: /welcome first (US15), then /login, /register and /about. Signed in,
- * only the screens of an account. A signed-in screen typed into the address bar without a session
- * lands on /welcome (BR4 as navigation), and signing in or creating an account lands on / by
- * itself. The top bar takes the palette in use, light or dark (US19).
+ * Which screens exist. Signed out: /welcome first (US15), then /login, /register and /about.
+ * Signed in: the screens of an account, each with the ☰ menu in its top bar (US16 to US19). A
+ * signed-in screen typed into the address bar without a session lands on /welcome (BR4 as
+ * navigation), and signing in or creating an account lands on / by itself.
  */
 
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import { MenuButton } from '../components/AppMenu';
 import LanguageSwitch from '../components/LanguageSwitch';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -23,6 +24,7 @@ import LoginScreen from '../screens/LoginScreen';
 import NewDebtScreen from '../screens/NewDebtScreen';
 import NewEntryScreen from '../screens/NewEntryScreen';
 import OverviewScreen from '../screens/OverviewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import StatsScreen from '../screens/StatsScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
@@ -42,11 +44,12 @@ export default function AppNavigator() {
       headerStyle: { backgroundColor: colors.header },
       headerTintColor: colors.headerText,
       headerTitleStyle: { fontWeight: '600' },
-      // The language switch sits in the top bar of every screen (US11).
-      headerRight: () => <LanguageSwitch />,
+      // Signed in, the ☰ menu holds the language and everything else; signed out, the language
+      // switch stays in the top bar of /login and /register (US11).
+      headerRight: () => (signedIn ? <MenuButton /> : <LanguageSwitch />),
       contentStyle: { backgroundColor: colors.background },
     }),
-    [colors],
+    [colors, signedIn],
   );
 
   // The navigator's own colours (the space behind a screen while it slides in) follow the theme.
@@ -117,6 +120,11 @@ export default function AppNavigator() {
               name="NewDebt"
               component={NewDebtScreen}
               options={{ title: t('newDebt.title') }}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{ title: t('profile.title') }}
             />
             <Stack.Screen
               name="Categories"

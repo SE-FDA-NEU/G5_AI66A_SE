@@ -16,6 +16,7 @@ test('each screen has the route of the requirements', () => {
     Stats: 'stats',
     Debts: 'debts',
     NewDebt: 'debts/new',
+    Profile: 'profile',
     Categories: 'categories',
     Category: 'categories/:id',
     About: 'about',

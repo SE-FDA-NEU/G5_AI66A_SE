@@ -13,6 +13,7 @@ export const ROUTES = {
   Stats: 'stats',
   Debts: 'debts',
   NewDebt: 'debts/new',
+  Profile: 'profile',
   Categories: 'categories',
   Category: 'categories/:id',
   About: 'about',
