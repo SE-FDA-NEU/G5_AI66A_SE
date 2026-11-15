@@ -112,6 +112,9 @@ export const api = {
 
   categorySpending: () => request('/categories/spending'),
 
+  // BR17: a category of the account's own, such as "Coffee" next to "Other".
+  addCategory: (name, kind) => request('/categories', { method: 'POST', body: { name, kind } }),
+
   categoryDetail: (id) => request(`/categories/${id}/spending`),
 
   // Not under /api: /health answers whether the server and its database are up (operations.md).

@@ -66,6 +66,8 @@ export const ERROR_KEYS = {
   invalid_avatar: 'error.invalidAvatar',
   confirmation_mismatch: 'error.confirmationMismatch',
   category_not_found: 'error.categoryNotFound',
+  category_name_length: 'error.categoryNameLength',
+  category_name_taken: 'error.categoryNameTaken',
   server_error: 'error.server',
 };
 

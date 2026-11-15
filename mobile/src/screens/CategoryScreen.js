@@ -16,6 +16,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
 import { radius, spacing, useStyles, useTheme } from '../theme';
 import { formatDong, formatMonth } from '../utils/format';
+import { categoryName } from '../utils/categories';
 
 export default function CategoryScreen({ navigation, route }) {
   const styles = useStyles(makeStyles);
@@ -35,7 +36,7 @@ export default function CategoryScreen({ navigation, route }) {
           if (cancelled) return;
           setDetail(answer);
           setError(null);
-          navigation.setOptions({ title: t(`category.${answer.category.name}`) });
+          navigation.setOptions({ title: categoryName(answer.category, t) });
         })
         .catch((err) => {
           if (cancelled) return;

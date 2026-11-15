@@ -28,6 +28,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { describeError } from '../i18n/translate';
 import { useStyles, useTheme, radius, spacing } from '../theme';
+import { categoryName } from '../utils/categories';
 import { dayBefore, emptyForm, parseAmount, parseDateInput, todayIso } from '../utils/entryForm';
 import { formatDate } from '../utils/format';
 
@@ -58,6 +59,9 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
   // Like every form: { key } for this form's own message, or the error the API client threw.
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
+  // "Other" chosen, a name for a new category of the account's own (BR17).
+  const [newName, setNewName] = useState('');
+  const [adding, setAdding] = useState(false);
 
   const handleApiError = useCallback(
     async (err, show) => {
@@ -89,6 +93,27 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
     setKind(next);
     // A kind of spending belongs to money spent, Salary to money received (BR6).
     setCategoryId(null);
+    setNewName('');
+  }
+
+  // BR17: the account names a category of its own; it joins the chips and is chosen at once.
+  async function addOwnCategory() {
+    setError(null);
+    if (!newName.trim()) {
+      setError({ key: 'error.categoryNameLength' });
+      return;
+    }
+    setAdding(true);
+    try {
+      const category = await api.addCategory(newName, kind);
+      setCategories((list) => [...(list ?? []), category]);
+      setCategoryId(category.id);
+      setNewName('');
+    } catch (err) {
+      await handleApiError(err, setError);
+    } finally {
+      setAdding(false);
+    }
   }
 
   async function save() {
@@ -122,6 +147,9 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
   const problem = describeError(error, t, api.baseUrl);
   const loadProblem = describeError(loadError, t, api.baseUrl);
   const choices = (categories ?? []).filter((category) => category.kind === kind);
+  const chosen = choices.find((category) => category.id === categoryId);
+  // "Other" and "Other income" are shared; choosing one offers to name something more precise.
+  const otherChosen = Boolean(chosen && !chosen.custom && chosen.name.startsWith('Other'));
   const today = todayIso();
 
   return (
@@ -192,7 +220,7 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
                 aria-checked={selected}
               >
                 <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                  {t(`category.${category.name}`)}
+                  {categoryName(category, t)}
                 </Text>
               </Pressable>
             );
@@ -200,6 +228,36 @@ export default function EntryForm({ initial, onSubmit, onCancel, submitLabel, ch
         </View>
         {choices.length > 0 ? (
           <Text style={formStyles.help}>{t('newEntry.kindOptional')}</Text>
+        ) : null}
+        {otherChosen ? (
+          <View>
+            <Text style={formStyles.label}>{t('newEntry.newCategory')}</Text>
+            <View style={styles.addRow}>
+              <TextInput
+                style={[formStyles.input, styles.addInput]}
+                value={newName}
+                onChangeText={setNewName}
+                maxLength={60}
+                placeholder={t('categories.addPlaceholder')}
+                placeholderTextColor={colors.textMuted}
+                onSubmitEditing={addOwnCategory}
+                accessibilityLabel={t('newEntry.newCategory')}
+              />
+              <Pressable
+                style={[styles.addButton, adding && formStyles.buttonDisabled]}
+                onPress={addOwnCategory}
+                disabled={adding}
+                accessibilityRole="button"
+              >
+                {adding ? (
+                  <ActivityIndicator color={colors.textInverse} />
+                ) : (
+                  <Text style={formStyles.buttonText}>{t('categories.add')}</Text>
+                )}
+              </Pressable>
+            </View>
+            <Text style={formStyles.help}>{t('newEntry.newCategoryHelp')}</Text>
+          </View>
         ) : null}
 
         <Text style={formStyles.label}>{t('newEntry.note')}</Text>
@@ -286,4 +344,14 @@ const makeStyles = (colors) =>
     chipText: { color: colors.text, fontSize: 14 },
     chipTextSelected: { color: colors.primary, fontWeight: '700' },
     cancel: { alignItems: 'center', marginTop: spacing.md, padding: spacing.sm },
+    addRow: { alignItems: 'stretch', flexDirection: 'row', gap: spacing.sm },
+    addInput: { flex: 1 },
+    addButton: {
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: radius.sm,
+      justifyContent: 'center',
+      minWidth: 88,
+      paddingHorizontal: spacing.md,
+    },
   });

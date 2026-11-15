@@ -17,6 +17,7 @@ const TABS = [
   { name: 'Overview', label: 'nav.overview', icon: '◐' },
   { name: 'Stats', label: 'nav.stats', icon: '▥' },
   { name: 'Debts', label: 'nav.debts', icon: '⇄' },
+  { name: 'Categories', label: 'nav.categories', icon: '▤' },
 ];
 
 export default function MainLayout({ current, children }) {

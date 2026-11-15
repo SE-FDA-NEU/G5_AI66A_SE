@@ -9,6 +9,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStyles, radius, spacing } from '../theme';
 import { formatAmount, formatDate } from '../utils/format';
+import { categoryName } from '../utils/categories';
 
 export default function EntryRow({ entry, onPress }) {
   const styles = useStyles(makeStyles);
@@ -16,7 +17,7 @@ export default function EntryRow({ entry, onPress }) {
   const received = entry.kind === 'income';
   const note = entry.note || t('entry.noNote');
   const kindOfSpending = entry.category
-    ? t(`category.${entry.category.name}`)
+    ? categoryName(entry.category, t)
     : t('entry.noKind');
   const amount = formatAmount(entry.amount, entry.kind, language);
   const date = formatDate(entry.occurred_on);

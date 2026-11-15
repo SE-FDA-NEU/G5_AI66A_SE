@@ -11,6 +11,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useStyles, radius, spacing } from '../theme';
 import { formatDong } from '../utils/format';
+import { categoryName } from '../utils/categories';
 
 export default function KindBreakdown({ breakdown, limit }) {
   const styles = useStyles(makeStyles);
@@ -24,7 +25,7 @@ export default function KindBreakdown({ breakdown, limit }) {
   return (
     <View>
       {items.map((item) => {
-        const name = item.category ? t(`category.${item.category.name}`) : t('entry.noKind');
+        const name = item.category ? categoryName(item.category, t) : t('entry.noKind');
         return (
           <View key={item.category?.id ?? 'none'} style={styles.row}>
             <View style={styles.line}>
