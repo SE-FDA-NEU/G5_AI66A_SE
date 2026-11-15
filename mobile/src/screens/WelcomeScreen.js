@@ -39,10 +39,10 @@ export default function WelcomeScreen({ navigation }) {
     navigation.navigate(screen);
   };
 
-  // Upright, the picture takes the width but never more than 40% of the height, so the buttons
-  // stay in view without scrolling on a small phone.
+  // Cap the image in both layouts so its intrinsic size cannot add large blank areas or push the
+  // choices below the fold.
   const pictureStyle = side
-    ? { aspectRatio: PICTURE_RATIO, width: '100%' }
+    ? { aspectRatio: PICTURE_RATIO, maxHeight: height * 0.72, width: '100%' }
     : { aspectRatio: PICTURE_RATIO, maxHeight: height * 0.4, width: '100%' };
 
   return (
@@ -109,7 +109,7 @@ const makeStyles = (colors) =>
     screen: { backgroundColor: colors.background, flex: 1 },
     container: { flexGrow: 1, paddingHorizontal: spacing.lg },
     containerSide: {
-      alignItems: 'center',
+      alignItems: 'flex-start',
       alignSelf: 'center',
       flexDirection: 'row',
       maxWidth: 1180,
@@ -119,7 +119,7 @@ const makeStyles = (colors) =>
     pictureSide: { flex: 1.15, paddingRight: spacing.xl },
     pictureStack: { alignItems: 'center', maxWidth: 520, width: '100%' },
     picture: { borderRadius: radius.md },
-    panelSide: { flex: 1, maxWidth: 440 },
+    panelSide: { alignSelf: 'center', flex: 1, maxWidth: 440 },
     panelStack: { maxWidth: 480, paddingTop: spacing.lg, width: '100%' },
     app: {
       color: colors.primary,
