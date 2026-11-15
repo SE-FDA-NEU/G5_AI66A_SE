@@ -454,6 +454,7 @@ hours, as before.
 | #212 | README first screen, operations.md section 6, M5 checklist, release v1.0 | @Chidokato5376 | Done | Completes `docs/operations.md` and the README first screen, after this log |
 | #213 | Back up the Neon database before the demo, and restore it once | @nguyennhien2412 | Done | Dumped and restored on 12/11; the trial restore went into a local PostgreSQL 16, not a Neon branch, with the same row counts |
 | #237 | Final M5 check: the checklist, DORA for Sprint 5, the rulesets picture | @Chidokato5376 | Done | |
+| #239 | Categories of your own, a search box and a Categories tab | @Chidokato5376 | Done | Polish asked by the PO before the demo, after v1.0; a task, outside the 16 points (BR17, TC-103 to TC-110) |
 
 **Completed: 16 points. Velocity this sprint: 16 points**: US14 #186 by #197, US15 #187 by #204, US16 #188 by #209, US17 #189 by #206, US18 #190 by #208, US19 #191 by #207.
 
@@ -465,7 +466,7 @@ hours, as before.
 | 2 | 22/09 to 05/10 | @nguyennhien2412 | 9 | 9 | 9 | 17 |
 | 3 | 06/10 to 19/10 | @levanduc36 | 11 | 11 | 11 | 21 |
 | 4 | 20/10 to 02/11 | @Chidokato5376 | 18 | 18 | 18 | 22 |
-| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 24 |
+| 5 | 03/11 to 16/11 | @levanduc36 | 16 | 16 | 16 | 25 |
 
 Velocity rose from 9 to 18 as the patterns of Sprints 2 and 3 were reused, and settled at 16 once
 the work moved from code to running it. The number never meant speed: each sprint committed what

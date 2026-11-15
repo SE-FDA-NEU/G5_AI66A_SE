@@ -201,7 +201,7 @@ Every test also runs on PostgreSQL 16 in CI, in the job *Python tests on Postgre
 that PostgreSQL refuses a 61-character name as too long for `VARCHAR(60)` before the CHECK of BR13
 does; `test_a_debt_that_breaks_br13_cannot_be_stored` now accepts either refusal.
 
-### 2.8 The Sprint 5 stories · `test_profile.py`, `test_category_spending.py`
+### 2.8 The Sprint 5 stories · `test_profile.py`, `test_category_spending.py`, `test_own_categories.py`
 
 US16 to US18. Each rule with a number is tested on both sides of its limit.
 
@@ -223,6 +223,14 @@ US16 to US18. Each rule with a number is tested on both sides of its limit.
 | TC-100 | US17 | 40,000 on the last day of last month, 15,000 on the 1st of this month | this month 15,000; in all 55,000 | edge |
 | TC-101 | US17 | 12 Food entries this month, 1 last month, 1 Transport | six months, oldest first, this month 78,000; the ten newest Food entries only | normal |
 | TC-102 | US17 | category 999 | 404 `category_not_found` | error |
+| TC-103 | US17 | Mai adds " Coffee " | 201, "Coffee", `custom` true; listed after the shared kinds of spending, before money received (BR17) | normal |
+| TC-104 | US17 | Lan lists, opens and files an entry under Mai's Coffee | not listed; 404; 422 `unknown_category` (BR4, BR17) | error |
+| TC-105 | US17 | 30,000 filed under Coffee | saved; Coffee this month 30,000, 1 entry | normal |
+| TC-106 | US17 | money spent filed under an own category of money received | 422 `unknown_category` (BR6) | error |
+| TC-107 | US17 | a name empty, of spaces only, of 1, 40 and 41 characters | 1 and 40 accepted; the rest refused, `category_name_length` (BR17) | edge |
+| TC-108 | US17 | "Coffee", "COFFEE", "food", "Salary" after Coffee | 409 `category_name_taken` each time (BR17) | edge |
+| TC-109 | US17 | Mai and Lan each add Coffee | both accepted: a name is unique per account | normal |
+| TC-110 | US17, US18 | delete an account that added Coffee | Coffee gone with it, the shared categories untouched (BR16) | normal |
 
 The screens of US15 to US19 are checked by Jest in `mobile/__tests__/`: the greeting falls back
 from the name to the full name to the email, the profile form sends only what changed, both
@@ -264,6 +272,7 @@ root on a machine that has never seen the project (`.github/workflows/ci.yml`).
 | `test_seed.py` | TC-85, TC-86 | the demo data at start-up | @nguyennhien2412 (Sprint 5) |
 | `test_profile.py` | TC-87 to TC-98 | US16, US18 | @levanduc36 (Sprint 5) |
 | `test_category_spending.py` | TC-99 to TC-102 | US17 | @nguyennhien2412 (Sprint 5) |
+| `test_own_categories.py` | TC-103 to TC-110 | US17, BR17 | @Chidokato5376 (Sprint 5) |
 | `test_repositories.py` | the queries behind US04 to US13 | | @nguyennhien2412 |
 | `test_database_rules.py`, `test_seed.py`, `test_errors.py` | the constraints, the demo data, the error shape | | @levanduc36, @nguyennhien2412 |
 
