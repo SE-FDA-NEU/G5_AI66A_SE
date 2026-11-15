@@ -150,7 +150,8 @@ def alembic_config(database_url: str) -> Config:
 
 
 def add_categories(db: Session) -> dict[str, Category]:
-    existing = {category.name: category for category in db.scalars(select(Category))}
+    shared = select(Category).where(Category.user_id.is_(None))
+    existing = {category.name: category for category in db.scalars(shared)}
     for name, kind in CATEGORIES:
         if name not in existing:
             existing[name] = Category(name=name, kind=kind)

@@ -51,6 +51,7 @@ def check_amount(amount: int | None) -> None:
 def check_entry(
     db: Session,
     *,
+    user_id: int | None = None,
     kind: str,
     amount: int | None,
     occurred_on: date | None,
@@ -63,12 +64,14 @@ def check_entry(
     are checked in the order the form lists its fields, and the first one broken is the answer:
     - BR5: check_amount.
     - BR6: a kind of spending, when chosen, is one from the list, of the same kind as the entry:
-      money spent is never filed under Salary. None chosen is allowed; nothing is guessed.
+      money spent is never filed under Salary. The list is the shared one and the account's own
+      (BR17); another account's own category is not on it. None chosen is allowed; nothing is
+      guessed.
     - BR11: the date is today or earlier. No date means today.
     """
     check_amount(amount)
     if category_id is not None:
-        category = category_repo.get_by_id(db, category_id)
+        category = category_repo.get_by_id(db, category_id, user_id)
         if category is None or category.kind != kind:
             raise RuleBroken(UNKNOWN_CATEGORY, code="unknown_category")
     occurred_on = occurred_on or today
@@ -95,6 +98,7 @@ def log_entry(
     """
     occurred_on = check_entry(
         db,
+        user_id=user_id,
         kind=kind,
         amount=amount,
         occurred_on=occurred_on,
@@ -144,6 +148,7 @@ def correct_entry(
     entry = get_entry(db, user_id, entry_id)
     occurred_on = check_entry(
         db,
+        user_id=user_id,
         kind=kind,
         amount=amount,
         occurred_on=occurred_on,

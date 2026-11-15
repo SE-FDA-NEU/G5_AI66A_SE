@@ -12,6 +12,9 @@ class CategoryOut(BaseModel):
     id: int
     name: str
     kind: str
+    # True for a category the account added (BR17): the app shows its name as typed, where it
+    # translates the name of a shared one such as "Food".
+    custom: bool = False
 
 
 class TransactionOut(BaseModel):

@@ -42,7 +42,7 @@ def test_an_entry_is_stored_and_returned(client, db, auth_headers):
     assert body["note"] == "tra sua"
     assert body["kind"] == "expense"
     assert body["occurred_on"] == date.today().isoformat()
-    assert body["category"] == {"id": food.id, "name": "Food", "kind": "expense"}
+    assert body["category"] == {"id": food.id, "name": "Food", "kind": "expense", "custom": False}
 
 
 def test_tc17_55000_on_food_adds_exactly_55000_to_spending(client, db, auth_headers):

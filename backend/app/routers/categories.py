@@ -3,10 +3,10 @@ signed-in account put in each (US17)."""
 
 from datetime import date
 
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from app.core.deps import SIGN_IN_AGAIN, CurrentUser, DbSession
-from app.schemas.category import CategoryDetailOut, CategorySpendingOut, MonthAmount
+from app.schemas.category import CategoryDetailOut, CategoryIn, CategorySpendingOut, MonthAmount
 from app.schemas.error import ErrorOut
 from app.schemas.transaction import CategoryOut, TransactionOut
 from app.services import category_service
@@ -19,11 +19,27 @@ SIGNED_OUT = {401: {"model": ErrorOut, "description": f'"{SIGN_IN_AGAIN}"'}}
 @router.get(
     "",
     response_model=list[CategoryOut],
-    summary="The 11 categories, kinds of spending first (US03)",
+    summary="The 11 shared categories and the account's own, kinds of spending first (US03)",
     responses=SIGNED_OUT,
 )
-def list_categories(db: DbSession, _user: CurrentUser) -> list[CategoryOut]:
-    return [CategoryOut.model_validate(c) for c in category_service.list_categories(db)]
+def list_categories(db: DbSession, user: CurrentUser) -> list[CategoryOut]:
+    return [CategoryOut.model_validate(c) for c in category_service.list_categories(db, user.id)]
+
+
+@router.post(
+    "",
+    response_model=CategoryOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Add a category of the account's own, such as Coffee (BR17)",
+    responses={
+        **SIGNED_OUT,
+        409: {"model": ErrorOut, "description": f'"{category_service.NAME_TAKEN}"'},
+        422: {"model": ErrorOut, "description": f'"{category_service.NAME_LENGTH}"'},
+    },
+)
+def add_category(body: CategoryIn, db: DbSession, user: CurrentUser) -> CategoryOut:
+    category = category_service.add_category(db, user.id, name=body.name, kind=body.kind)
+    return CategoryOut.model_validate(category)
 
 
 @router.get(

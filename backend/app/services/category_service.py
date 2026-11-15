@@ -1,5 +1,5 @@
-"""The categories: the fixed list of kinds of spending and of money received (BR6, BR8), and
-how much an account put in each (US17)."""
+"""The categories: the shared list of kinds of spending and of money received (BR6, BR8), the
+ones an account added for itself (BR17), and how much an account put in each (US17)."""
 
 from dataclasses import dataclass
 from datetime import date
@@ -8,9 +8,12 @@ from sqlalchemy.orm import Session
 
 from app.db.models import Category, Transaction
 from app.db.repositories import category_repo, transaction_repo
-from app.services.errors import NotFound
+from app.services.errors import AlreadyExists, NotFound, RuleBroken
 
 CATEGORY_NOT_FOUND = "Category not found"
+NAME_LENGTH = "A category name is 1 to 40 characters"
+NAME_TAKEN = "You already have a category with this name"
+NAME_MAX = 40
 MONTHS_SHOWN = 6
 RECENT_SHOWN = 10
 
@@ -29,9 +32,25 @@ class CategoryDetail(CategorySpending):
     recent: list[Transaction]
 
 
-def list_categories(db: Session) -> list[Category]:
-    """All 11, the kinds of spending first, for the picker on /transactions/new (US03)."""
-    return category_repo.list_all(db)
+def list_categories(db: Session, user_id: int) -> list[Category]:
+    """The 11 shared ones and the account's own, kinds of spending first, for the picker on
+    /transactions/new (US03)."""
+    return category_repo.list_all(db, user_id)
+
+
+def add_category(db: Session, user_id: int, *, name: str, kind: str) -> Category:
+    """Add a category of the account's own, such as "Coffee" next to "Other" (BR17).
+
+    The name is kept as typed, without the spaces around it: 1 to 40 characters, and never a name
+    the account already sees in its list, the shared ones included, whatever the capitals. Only
+    this account sees it, and it follows BR6 like the others: a kind of spending for money spent.
+    """
+    name = " ".join(name.split())
+    if not 1 <= len(name) <= NAME_MAX:
+        raise RuleBroken(NAME_LENGTH, code="category_name_length")
+    if category_repo.name_taken(db, user_id, name):
+        raise AlreadyExists(NAME_TAKEN, code="category_name_taken")
+    return category_repo.create(db, user_id=user_id, name=name, kind=kind)
 
 
 def spending_per_category(db: Session, user_id: int, *, today: date) -> list[CategorySpending]:
@@ -49,7 +68,7 @@ def spending_per_category(db: Session, user_id: int, *, today: date) -> list[Cat
             all_time=all_time.get(category.id, (0, 0))[0],
             count=all_time.get(category.id, (0, 0))[1],
         )
-        for category in category_repo.list_all(db)
+        for category in category_repo.list_all(db, user_id)
     ]
 
 
@@ -64,7 +83,7 @@ def _months_back(today: date, count: int) -> list[date]:
 
 def category_detail(db: Session, user_id: int, category_id: int, *, today: date) -> CategoryDetail:
     """One category for this account: its totals, the last six months and its newest entries."""
-    category = category_repo.get_by_id(db, category_id)
+    category = category_repo.get_by_id(db, category_id, user_id)
     if category is None:
         raise NotFound(CATEGORY_NOT_FOUND, code="category_not_found")
     totals = next(
